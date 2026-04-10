@@ -4,6 +4,7 @@
 #include "reception.h"
 
 void menuReception() {
+     system("cls");
     printf("\n=======================================\n");
     printf("\t=+=+=+=MENU=+=+=+=\n");
     printf("\t*+*+*RECEPTION*+*+*\n");
@@ -43,6 +44,7 @@ Ticket *AddTicket(ListeTicket *ListeT, Patient *patient) {
 }
 Patient *AddPatient(Patient *ListeP,ListeTicket *ListeT, char Nom[],char Prenom[],char ID[],int Age, char Sexe[]) {
     Patient *P = (Patient*)malloc(sizeof(Patient));
+    
         if(P == NULL){
             printf("Erreur : Impossible d'enregister le patient.");
             exit(1);
