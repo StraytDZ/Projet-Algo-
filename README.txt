@@ -8,7 +8,7 @@
 ----------------------------------------------------------------
 
   1 - Enregistrer un patient
-        > Saisir : Nom, Prenom, ID, Age, Sexe (Etat par defaut : ATTENTE)
+        > Saisir : Nom, Prenom, ID, Age, Sexe ( Etat par defaut : ATTENTE )
         > Creer un ticket numerote automatiquement
         > Ajouter le patient a la file d'attente
 
@@ -39,8 +39,10 @@
   2 - Enregistrer la consultation
         > Saisir le diagnostic
         > Saisir le traitement prescrit
-        > Marquer le patient comme consulte (Etat : CONSULTATION)
-
+        > Decision :
+            1 - Sorti avec ordonnance  ( Etat : SORTI )
+            2 - Mettre en observation  ( Etat : EN_OBSERVATION )
+            3 - Transférer             ( Etat : TRANSFERE, saisir département )
   3 - Observation
         3.1 - Mettre en observation un patient
                 > Assigner un lit
@@ -52,7 +54,7 @@
                 > Modifier le lit
                 > Modifier la duree
 
-        3.3 - (A definir)
+        3.3 - Liberer un patient de l'observation ( Etat : Sorti )
 
 ----------------------------------------------------------------
                     OBSERVATIONS A FAIRE

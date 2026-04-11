@@ -57,6 +57,9 @@ Patient *AddPatient(Patient *ListeP,ListeTicket *ListeT, char Nom[],char Prenom[
     P->suivant = NULL;
     P->numticket = AddTicket(ListeT,P);
     P->etat = ATTENTE;
+    strcpy(P->departement,""); // Pas encore transeferer, c'est le medecin qui en decidera
+    P->heure.arrive = time(NULL); // Recuperer l'heure actuelle (De l'enregistrment du patient du coup)
+    P->heure.sorti = 0; // Pas encore sortie, on initialise a 0
     if(ListeP == NULL) return P;
     Patient *courant = ListeP;
     while(courant->suivant != NULL)

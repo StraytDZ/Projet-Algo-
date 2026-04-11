@@ -1,6 +1,8 @@
 #ifndef RECEPTION_H
 #define RECEPTION_H
 
+#include <time.h>  // Pour la structure de Heure, utile pour l'historique.
+
 typedef struct Patient Patient;
 typedef struct Ticket {
     int numero;
@@ -18,6 +20,10 @@ typedef enum {
     TRANSFERER,
     SORTI,
 }Etat;
+typedef struct Heure {
+    time_t arrive;
+    time_t sorti;
+}Heure;
 struct Patient{
     char nom[30];
     char prenom[30];
@@ -26,6 +32,8 @@ struct Patient{
     char sexe[4];
     Ticket *numticket;
     Etat etat;
+    Heure heure;
+    char departement[30];
     struct Patient *suivant;
 
 };
