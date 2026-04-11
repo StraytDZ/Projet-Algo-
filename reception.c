@@ -4,7 +4,7 @@
 #include "reception.h"
 
 void menuReception() {
-     system("cls");
+    system("cls");
     printf("\n=======================================\n");
     printf("\t=+=+=+=MENU=+=+=+=\n");
     printf("\t*+*+*RECEPTION*+*+*\n");
