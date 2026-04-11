@@ -8,7 +8,7 @@
 ----------------------------------------------------------------
 
   1 - Enregistrer un patient
-        > Saisir : Nom, Prenom, ID, Age, Sexe
+        > Saisir : Nom, Prenom, ID, Age, Sexe (Etat par defaut : ATTENTE)
         > Creer un ticket numerote automatiquement
         > Ajouter le patient a la file d'attente
 
@@ -39,7 +39,7 @@
   2 - Enregistrer la consultation
         > Saisir le diagnostic
         > Saisir le traitement prescrit
-        > Marquer le patient comme consulte
+        > Marquer le patient comme consulte (Etat : CONSULTATION)
 
   3 - Observation
         3.1 - Mettre en observation un patient
