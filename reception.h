@@ -11,6 +11,13 @@ typedef struct ListeTicket {
     Ticket *tete;
     int compteur;
 }ListeTicket;
+typedef enum {
+    ATTENTE,
+    CONSULTATION,
+    OBSERVATION,
+    TRANSFERER,
+    SORTI,
+}Etat;
 struct Patient{
     char nom[30];
     char prenom[30];
@@ -18,6 +25,7 @@ struct Patient{
     char id[20];
     char sexe[4];
     Ticket *numticket;
+    Etat etat;
     struct Patient *suivant;
 
 };

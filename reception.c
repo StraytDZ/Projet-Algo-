@@ -56,6 +56,7 @@ Patient *AddPatient(Patient *ListeP,ListeTicket *ListeT, char Nom[],char Prenom[
     P->age = Age;
     P->suivant = NULL;
     P->numticket = AddTicket(ListeT,P);
+    P->etat = ATTENTE;
     if(ListeP == NULL) return P;
     Patient *courant = ListeP;
     while(courant->suivant != NULL)
