@@ -1,30 +1,47 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "reception.h"
+#include "medecin.h"
+#include "menu.h"
 
-void menu(){
-    system("cls");
-    printf("\t+++++URGENCE+++++\n");
-    printf("\t=+=+=+=MENU=+=+=+=\n");
-    printf("=======================================\n\n");
-    printf("\t 1 - Medecin\n");
-    printf("\t 2 - Reception\n");
-    printf("\t 3 - Quitter\n\n");
-    printf("=======================================\n");
-    printf("                          Choix : ");
-}
 
 int main() {
-    int choix,choixReception,choixMedecin,Age;
-    char Nom[30],Prenom[30],ID[20],Sexe[4];
-    Patient *ListePatient = NULL;
+    int choix,choixReception,choixMedecin,choixMedecinConsult;
+    ListePatient patient = {NULL, 0, 0, 0, 0, 0};
     ListeTicket ticket = {NULL, 0};
-
+    Patient *PatientEnConsult;
     do {
-        menu();
+        menuPrincipal();
         scanf("%d",&choix);
         switch(choix) {
             case 1 : 
+                do {
+                     menuMedecin();
+                     scanf("%d",&choixMedecin);
+                     switch(choixMedecin) {
+                        case 1 : 
+                            PatientEnConsult = CallPatient(&ticket);
+                            do{
+                                menuConsultation();
+                                scanf("%d",&choixMedecinConsult);
+                                switch(choixMedecinConsult) {
+                                    case 1 : 
+                                        PatientDiagnostic(PatientEnConsult);
+                                    break;
+                                    case 2 : 
+                                        PatientTraitement(PatientEnConsult);
+                                    break;
+                                    case 3 :
+                                        PatientOrdonnance(PatientEnConsult);
+                                    break;
+                                    case 4 : 
+
+                                    break;
+                                }
+                            }
+                        break;
+                     }
+                }while(choixMedecin != 3);
             break;
             
             case 2 : 
@@ -32,22 +49,11 @@ int main() {
                         menuReception();
                         scanf("%d",&choixReception);
                         switch(choixReception) {
-                            case 1: 
-                                printf("Veuiller fournir les informations suivante du patient :");
-                                printf("\t\nNom : ");
-                                scanf(" %[^\n]",Nom);
-                                printf("\t\nPrenom : ");
-                                scanf(" %[^\n]",Prenom);
-                                printf("\t\nID : ");
-                                scanf(" %[^\n]",ID);
-                                printf("\t\nAge : ");
-                                scanf("%d",&Age);
-                                printf("\t\nSexe(H/F): ");
-                                scanf("%s",Sexe);
-                                ListePatient = AddPatient(ListePatient,&ticket,Nom,Prenom,ID,Age,Sexe);
+                            case 1:
+                                patient = AddPatient(&patient,&ticket);
                             break;
-                            case 2 : 
-                                DisplayQueue(ListePatient);
+                            case 2 :
+                                DisplayQueue(&patient);
                             break;
                         }
                     }while(choixReception != 3);

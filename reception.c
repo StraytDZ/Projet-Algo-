@@ -3,19 +3,6 @@
 #include <string.h>
 #include "reception.h"
 
-void menuReception() {
-    system("cls");
-    printf("\n=======================================\n");
-    printf("\t=+=+=+=MENU=+=+=+=\n");
-    printf("\t*+*+*RECEPTION*+*+*\n");
-    printf("=======================================\n\n");
-    printf("\t 1 - Enregister un patient\n");
-    printf("\t 2 - Afficher la liste d'attente\n");
-    printf("\t 3 - Quitter\n\n");
-    printf("=======================================\n");
-    printf("                          Choix : ");
-}
-
 Ticket *CreateTicket(Patient *patient, int num) {
     Ticket *T = (Ticket*)malloc(sizeof(Ticket));
         if(T == NULL) {
@@ -42,34 +29,56 @@ Ticket *AddTicket(ListeTicket *ListeT, Patient *patient) {
 
     return nouveauTicket;
 }
-Patient *AddPatient(Patient *ListeP,ListeTicket *ListeT, char Nom[],char Prenom[],char ID[],int Age, char Sexe[]) {
+ListePatient *AddPatient(ListePatient *ListeP,ListeTicket *ListeT) {
+    char Nom[30],Prenom[30],ID[20],Sexe[4];
+    int Age;
     Patient *P = (Patient*)malloc(sizeof(Patient));
-    
         if(P == NULL){
             printf("Erreur : Impossible d'enregister le patient.");
             exit(1);
         }
+    printf("Veuiller fournir les informations suivante du patient :");
+    printf("\t\nNom : ");
+    scanf(" %[^\n]",Nom);
+    printf("\t\nPrenom : ");
+    scanf(" %[^\n]",Prenom);
+    printf("\t\nID : ");
+    scanf(" %[^\n]",ID);
+    printf("\t\nAge : ");
+    scanf("%d",&Age);
+    printf("\t\nSexe(H/F): ");
+    scanf("%s",Sexe);
     strcpy(P->nom, Nom);
     strcpy(P->prenom, Prenom);
     strcpy(P->id, ID);
     strcpy(P->sexe, Sexe);
     P->age = Age;
     P->suivant = NULL;
-    P->numticket = AddTicket(ListeT,P);
+    P->ticket = AddTicket(ListeT,P);
     P->etat = ATTENTE;
     strcpy(P->departement,""); // Pas encore transeferer, c'est le medecin qui en decidera
     P->heure.arrive = time(NULL); // Recuperer l'heure actuelle (De l'enregistrment du patient du coup)
     P->heure.sorti = 0; // Pas encore sortie, on initialise a 0
-    if(ListeP == NULL) return P;
-    Patient *courant = ListeP;
+    strcpy(P->diagnostique,"");
+    strcpy(P->traitement,"");
+    strcpy(P->ordonnance,"");
+    if(ListeP->tete == NULL) {
+       ListeP->tete = P;
+        ListeP->attente++;
+        ListeP->total++;
+    return ListeP;  
+}
+    Patient *courant = ListeP->tete;
     while(courant->suivant != NULL)
         courant = courant->suivant;
     courant->suivant = P;
-
+    ListeP->attente++;
+    ListeP->total++;
     return ListeP;
 }
-void DisplayQueue(Patient *ListeP) {
+void DisplayQueue(ListePatient *ListeP) {
     Patient *courant = ListeP;
+    
     int i = 1;
     while(courant != NULL) {
         printf("Patient %d \n",i);
