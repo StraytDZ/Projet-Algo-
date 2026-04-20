@@ -6,7 +6,7 @@
 
 
 int main() {
-    int choix,choixReception,choixMedecin,choixMedecinConsult;
+    int choix,choixReception,choixMedecin,choixConsult;
     ListePatient patient = {NULL, 0, 0, 0, 0, 0};
     ListeTicket ticket = {NULL, 0};
     Patient *PatientEnConsult;
@@ -23,8 +23,8 @@ int main() {
                             PatientEnConsult = CallPatient(&ticket);
                             do{
                                 menuConsultation();
-                                scanf("%d",&choixMedecinConsult);
-                                switch(choixMedecinConsult) {
+                                scanf("%d",&choixConsult);
+                                switch(choixConsult) {
                                     case 1 : 
                                         PatientDiagnostic(PatientEnConsult);
                                     break;
@@ -38,7 +38,7 @@ int main() {
 
                                     break;
                                 }
-                            }
+                            }while(choixConsult != 6);
                         break;
                      }
                 }while(choixMedecin != 3);
@@ -50,7 +50,7 @@ int main() {
                         scanf("%d",&choixReception);
                         switch(choixReception) {
                             case 1:
-                                patient = AddPatient(&patient,&ticket);
+                                patient.tete = AddPatient(&patient,&ticket);
                             break;
                             case 2 :
                                 DisplayQueue(&patient);
