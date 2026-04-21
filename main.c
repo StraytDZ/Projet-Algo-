@@ -8,7 +8,6 @@ void menu(){
     printf("\t=+=+=+=MENU=+=+=+=\n");
     printf("=======================================\n\n");
     printf("\t 1 - Medecin\n");
-    
     printf("\t 2 - Reception\n");
     printf("\t 3 - Quitter\n\n");
     printf("=======================================\n");
