@@ -7,8 +7,8 @@
 
 
 
-ListeObservation * donnerlit(Patient *patientEnConsult, ListeObservation *lits, int *numeroprecedent){
-    ListeObservation *lit=malloc(sizeof(ListeObservation));
+Observation * donnerlit(Patient *patientEnConsult, Observation *lits, int *numeroprecedent){
+    Observation *lit=malloc(sizeof(Observation));
     if (lit == NULL) {
         printf("Erreur : plus de mémoire pour les lits.\n");
         return lits;
@@ -17,7 +17,7 @@ ListeObservation * donnerlit(Patient *patientEnConsult, ListeObservation *lits, 
     lit->suivant=NULL;
     lit->numlit=*numeroprecedent;
     lit->patient=patientEnConsult;
-    ListeObservation *temp=lits;
+    Observation *temp=lits;
     if (temp==NULL){
         return lit;    
     }
@@ -30,10 +30,10 @@ ListeObservation * donnerlit(Patient *patientEnConsult, ListeObservation *lits, 
     return lits;   
 }
 
-ListeObservation * supprimerlit(ListeObservation *lits, int numlit){
-    ListeObservation *lit = lits;
+Observation * supprimerlit(Observation *lits, int numlit){
+    Observation *lit = lits;
     if (lit->numlit==numlit){
-        ListeObservation *temp=lit;
+        Observation *temp=lit;
         lit=lit->suivant;
         temp->patient->etat=SORTI;
         temp->suivant=NULL;
@@ -43,7 +43,7 @@ ListeObservation * supprimerlit(ListeObservation *lits, int numlit){
     while( lit->suivant!=NULL && lit->suivant->numlit!=numlit) {
          lit=lit->suivant;
     }
-    ListeObservation *temp=lit->suivant;
+    Observation *temp=lit->suivant;
     lit->suivant=lit->suivant->suivant;
     temp->suivant=NULL;
     temp->patient->etat=SORTI;
