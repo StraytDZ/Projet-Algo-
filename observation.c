@@ -4,14 +4,16 @@
 #include "reception.h"
 
 void donnerlit(Patient *patientEnConsult, int lit){
-    
-   patientEnConsult->lit=lit+1;
+   lit++;
+   patientEnConsult->lit=lit;
    printf("Le patient %s %s a été assigné au lit %d\n",patientEnConsult->prenom,patientEnConsult->nom,patientEnConsult->lit);
 }
 
 void transferer(Patient *patientEnConsult){
+    printf("Saisi du nom du département de transfert : ");
+    scanf("%s",patientEnConsult->traitement);
     patientEnConsult->etat=TRANSFERER;
-    printf("Le patient %s %s a été transféré vers un autre service.\n9le nom du departement et dans le traitement\n",patientEnConsult->prenom,patientEnConsult->nom);
+    printf("Le patient %s %s a été transféré vers un departement de %s\n",patientEnConsult->prenom,patientEnConsult->nom, patientEnConsult->traitement);
 }
 
 void saisirduree(Patient *patientEnConsult){
