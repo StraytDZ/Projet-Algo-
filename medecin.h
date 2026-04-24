@@ -16,5 +16,5 @@ typedef struct PatientObservation {
 Patient *CallPatient(ListeTicket *listT);
 void PatientDiagnostic(Patient *patientEnConsult);
 void PatientTraitement(Patient *patientEnConsult);
-void PatientOrdonnance(Patient *patientEnConsult) {
+void PatientOrdonnance(Patient *patientEnConsult);
 #endif

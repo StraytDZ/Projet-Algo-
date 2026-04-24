@@ -1,7 +1,14 @@
 #ifndef OBSERVATION_H
 #define OBSERVATION_H
 
-void donnerlit(Patient *patientEnConsult, int lit);
+typedef struct ListeLit{
+
+    int numlit;
+    Patient *patient;
+    struct ListeLit *suivant;
+}ListeLit;
+
+ListeLit * donnerlit(Patient *patientEnConsult, ListeLit *lits, int *numeroprecedent);
 void transferer(Patient *patientEnConsult);
 void saisirduree(Patient *patientEnConsult);
 void  modifierdiagnostique(Patient *patientEnConsult);

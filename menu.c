@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "structure.h"
+
 void menuPrincipal() {
     printf("\t+++++URGENCE+++++\n");
     printf("\t=+=+=+=MENU=+=+=+=\n");

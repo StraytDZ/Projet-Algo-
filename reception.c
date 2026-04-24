@@ -77,7 +77,7 @@ ListePatient *AddPatient(ListePatient *ListeP,ListeTicket *ListeT) {
     return ListeP;
 }
 void DisplayQueue(ListePatient *ListeP) {
-    Patient *courant = ListeP;
+    Patient *courant = ListeP->tete;
     
     int i = 1;
     while(courant != NULL) {

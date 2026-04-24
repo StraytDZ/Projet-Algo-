@@ -3,15 +3,36 @@
 #include <time.h>
 #include "reception.h"
 
-void donnerlit(Patient *patientEnConsult, int lit){
-   lit++;
-   patientEnConsult->lit=lit;
-   printf("Le patient %s %s a été assigné au lit %d\n",patientEnConsult->prenom,patientEnConsult->nom,patientEnConsult->lit);
+
+
+
+ListeLit * donnerlit(Patient *patientEnConsult, ListeLit *lits, int *numeroprecedent){
+    ListeLit *lit=malloc(sizeof(ListeLit));
+    if (lit == NULL) {
+        printf("Erreur : plus de mémoire pour les lits.\n");
+        return lits;
+        exit(1);
+    } 
+    (*numeroprecedent)++;
+    lit->suivant=NULL;
+    lit->numlit=*numeroprecedent;
+    lit->patient=patientEnConsult;
+    ListeLit *temp=lits;
+    if (temp==NULL){
+        return lit;    
+    }
+    else{
+        while (temp->suivant!=NULL){
+            temp=temp->suivant;
+        }
+        temp->suivant=lit;     
+    }
+    return lits;   
 }
 
 void transferer(Patient *patientEnConsult){
     printf("Saisi du nom du département de transfert : ");
-    scanf("%s",patientEnConsult->traitement);
+    scanf("%[\n]s",patientEnConsult->traitement);
     patientEnConsult->etat=TRANSFERER;
     printf("Le patient %s %s a été transféré vers un departement de %s\n",patientEnConsult->prenom,patientEnConsult->nom, patientEnConsult->traitement);
 }
@@ -22,22 +43,22 @@ void saisirduree(Patient *patientEnConsult){
     scanf("%d",&duree);
     time_t currentTime = time(NULL);
     patientEnConsult->heure.arrive = currentTime;
-    patientEnConsult->heure.sorti = currentTime + duree*24*3600; 
+    patientEnConsult->heure.sorti = currentTime+duree*24*3600; 
 }
 
 void  modifierdiagnostique(Patient *patientEnConsult){
     printf("Saisi du nouveau diagnostique : ");
-    scanf("%s",patientEnConsult->diagnostique);
+    scanf("[\n]%s",patientEnConsult->diagnostique);
 }
 
 void  modifiertraitement(Patient *patientEnConsult){
     printf("Saisi du nouveau traitement : ");
-    scanf("%s",patientEnConsult->traitement);
+    scanf("[\n]%s",patientEnConsult->traitement);
 }
 
 void  modifierordonnance(Patient *patientEnConsult){
      printf("Saisi de la nouvelle ordonnance : ");
-     scanf("%s",patientEnConsult->ordonnance);
+     scanf("[\n]%s",patientEnConsult->ordonnance);
 }
 
 void verifierStatut(Patient *patientEnConsult){
@@ -57,5 +78,3 @@ Patient* libererpatient(Patient *patientEnConsult){
     printf("Le patient %s %s a été libéré.\n",patientEnConsult->prenom,patientEnConsult->nom);
     return patientEnConsult;
 }
-
-
