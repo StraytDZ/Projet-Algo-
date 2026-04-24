@@ -1,23 +1,23 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
-#include "reception.h"
+#include "observation.h"
+#include "structure.h"
 
 
 
 
-ListeLit * donnerlit(Patient *patientEnConsult, ListeLit *lits, int *numeroprecedent){
-    ListeLit *lit=malloc(sizeof(ListeLit));
+ListeObservation * donnerlit(Patient *patientEnConsult, ListeObservation *lits, int *numeroprecedent){
+    ListeObservation *lit=malloc(sizeof(ListeObservation));
     if (lit == NULL) {
         printf("Erreur : plus de mémoire pour les lits.\n");
         return lits;
-        exit(1);
     } 
     (*numeroprecedent)++;
     lit->suivant=NULL;
     lit->numlit=*numeroprecedent;
     lit->patient=patientEnConsult;
-    ListeLit *temp=lits;
+    ListeObservation *temp=lits;
     if (temp==NULL){
         return lit;    
     }
