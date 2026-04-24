@@ -44,7 +44,7 @@
             2 - Mettre en observation  ( Etat : EN_OBSERVATION )
             3 - Transférer             ( Etat : TRANSFERE, saisir département )
   3 - Observation
-        3.1 - Mettre en observation un patient
+        3.1 - Mettre en observation un patient ( Etat : Observation )
                 > Assigner un lit
                 > Saisir le traitement
                 > Saisir la duree d'observation

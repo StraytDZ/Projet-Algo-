@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "structure.h"
 void menuPrincipal() {
-    printf("\t+++++URGENCE+++++\n");
+    printf("\t ++++URGENCE+++++\n");
     printf("\t=+=+=+=MENU=+=+=+=\n");
     printf("=======================================\n\n");
     printf("\t 1 - Medecin\n");
@@ -17,6 +17,7 @@ void menuMedecin() {
     printf("=======================================\n\n");
     printf("\t 1 - Appeler le patient suivant\n");
     printf("\t 2 - Afficher la liste d'attente\n");
+    printf("\t 3 - Observation\n");
     printf("\t 4 - Quitter\n\n");
     printf("=======================================\n");
     printf("                          Choix : ");
