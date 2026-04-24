@@ -50,9 +50,10 @@ void verifierStatut(Patient *patientEnConsult){
     }
 }
 
-void libererpatient(Patient *patientEnConsult){
+Patient* libererpatient(Patient *patientEnConsult){
     patientEnConsult->etat=SORTI;
-    printf("Le patient %s %s a été libéré de l'observation.\n",patientEnConsult->prenom,patientEnConsult->nom);
+    printf("Le patient %s %s a été libéré.\n",patientEnConsult->prenom,patientEnConsult->nom);
+    return patientEnConsult;
 }
 
 

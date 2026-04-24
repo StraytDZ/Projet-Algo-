@@ -8,6 +8,6 @@ void  modifierdiagnostique(Patient *patientEnConsult);
 void  modifiertraitement(Patient *patientEnConsult);
 void  modifierordonnance(Patient *patientEnConsult);
 void verifierStatut(Patient *patientEnConsult);
-
+void libererpatient(Patient *patientEnConsult);
 
 #endif
