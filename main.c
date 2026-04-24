@@ -17,7 +17,7 @@ int main() {
     do {
         menuPrincipal();
         scanf("%d",&choix);
-        switch(choix) {}
+        switch(choix) {
             case 1 : 
                 do {
                      menuMedecin();

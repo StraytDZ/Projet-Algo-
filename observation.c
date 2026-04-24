@@ -30,6 +30,27 @@ ListeObservation * donnerlit(Patient *patientEnConsult, ListeObservation *lits, 
     return lits;   
 }
 
+ListeObservation * supprimerlit(ListeObservation *lits, int numlit){
+    ListeObservation *lit = lits;
+    if (lit->numlit==numlit){
+        ListeObservation *temp=lit;
+        lit=lit->suivant;
+        temp->patient->etat=SORTI;
+        temp->suivant=NULL;
+        free(temp);
+        return lit;
+    }
+    while( lit->suivant!=NULL && lit->suivant->numlit!=numlit) {
+         lit=lit->suivant;
+    }
+    ListeObservation *temp=lit->suivant;
+    lit->suivant=lit->suivant->suivant;
+    temp->suivant=NULL;
+    temp->patient->etat=SORTI;
+    free(temp);
+    return lits;     
+}
+
 void transferer(Patient *patientEnConsult){
     printf("Saisi du nom du département de transfert : ");
     scanf("%[\n]s",patientEnConsult->traitement);
