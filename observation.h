@@ -3,7 +3,7 @@
 
 
 
-ListeObservation * donnerlit(Patient *patientEnConsult, ListeObservation *lits, int *numeroprecedent);
+Observation * donnerlit(Patient *patientEnConsult, Observation *lits, int *numeroprecedent);
 void transferer(Patient *patientEnConsult);
 void saisirduree(Patient *patientEnConsult);
 void  modifierdiagnostique(Patient *patientEnConsult);

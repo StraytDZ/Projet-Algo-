@@ -50,11 +50,15 @@ typedef struct ListePatient {
     int transferes;
 }ListePatient;
 
-typedef struct ListeObservation{
+typedef struct Observation{
 
     int numlit;
     Patient *patient;
-    struct ListeObservation *suivant;
+    struct Observation *suivant;
+}Observation;
+typedef struct ListeObservation {
+    Observation *tete;
+    int compteur;
 }ListeObservation;
 
 #endif
