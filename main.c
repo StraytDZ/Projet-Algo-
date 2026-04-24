@@ -17,7 +17,7 @@ int main() {
     do {
         menuPrincipal();
         scanf("%d",&choix);
-        switch(choix) {
+        switch(choix) {}
             case 1 : 
                 do {
                      menuMedecin();
@@ -33,12 +33,36 @@ int main() {
                                         PatientDiagnostic(PatientEnConsult);
                                     break;
                                     case 2 : 
+                                        PatientTraitement(PatientEnConsult);
+                                    break;
+                                    case 3 :
+                                        PatientOrdonnance(PatientEnConsult);
+                                    break;
+                                    case 4 : 
+
+                                    break;
+                                }
+                            }while(choixConsult != 6);
+                        break;
+                     }
+                }while(choixMedecin != 3);
+            break;
+            
+            case 2 : 
+                    do{
+                        menuReception();
+                        scanf("%d",&choixReception);
+                        switch(choixReception) {
+                            case 1:
+                                patient.tete = AddPatient(&patient,&ticket);
+                            break;
+                            case 2 :
+                                DisplayQueue(&patient);
+                            break;
                         }
                     }while(choixReception != 3);
             break;
         }  
     }while(choix != 3);
     return 0;
-}
-}
 }

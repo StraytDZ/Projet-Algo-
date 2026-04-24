@@ -62,7 +62,7 @@ ListePatient *AddPatient(ListePatient *ListeP,ListeTicket *ListeT) {
     strcpy(P->diagnostique,"");
     strcpy(P->traitement,"");
     strcpy(P->ordonnance,"");
-    if(ListeP->tete == NULL) {
+    if(ListeT->tete == NULL) {
        ListeP->tete = P;
         ListeP->attente++;
         ListeP->total++;
