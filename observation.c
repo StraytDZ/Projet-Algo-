@@ -30,7 +30,7 @@ Observation * donnerlit(Patient *patientEnConsult, Observation *lits, int *numer
     return lits;   
 }
 
-Observation * supprimerlit(Observation *lits, int numlit){
+Observation * supprimerObservation(Observation *lits, int numlit){
     Observation *lit = lits;
     if (lit->numlit==numlit){
         Observation *temp=lit;
@@ -53,7 +53,7 @@ Observation * supprimerlit(Observation *lits, int numlit){
 
 void transferer(Patient *patientEnConsult){
     printf("Saisi du nom du département de transfert : ");
-    scanf("%[\n]s",patientEnConsult->traitement);
+    scanf("% [\n]s",patientEnConsult->traitement);
     patientEnConsult->etat=TRANSFERER;
     printf("Le patient %s %s a été transféré vers un departement de %s\n",patientEnConsult->prenom,patientEnConsult->nom, patientEnConsult->traitement);
 }
@@ -69,17 +69,17 @@ void saisirduree(Patient *patientEnConsult){
 
 void  modifierdiagnostique(Patient *patientEnConsult){
     printf("Saisi du nouveau diagnostique : ");
-    scanf("[\n]%s",patientEnConsult->diagnostique);
+    scanf(" [\n]%s",patientEnConsult->diagnostique);
 }
 
 void  modifiertraitement(Patient *patientEnConsult){
     printf("Saisi du nouveau traitement : ");
-    scanf("[\n]%s",patientEnConsult->traitement);
+    scanf(" [\n]%s",patientEnConsult->traitement);
 }
 
 void  modifierordonnance(Patient *patientEnConsult){
      printf("Saisi de la nouvelle ordonnance : ");
-     scanf("[\n]%s",patientEnConsult->ordonnance);
+     scanf(" [\n]%s",patientEnConsult->ordonnance);
 }
 
 void verifierStatut(Patient *patientEnConsult){
@@ -94,8 +94,3 @@ void verifierStatut(Patient *patientEnConsult){
     }
 }
 
-Patient* libererpatient(Patient *patientEnConsult){
-    patientEnConsult->etat=SORTI;
-    printf("Le patient %s %s a été libéré.\n",patientEnConsult->prenom,patientEnConsult->nom);
-    return patientEnConsult;
-}
