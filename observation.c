@@ -5,7 +5,7 @@
 #include "structure.h"
 
 
-void choixlit(Patient *patientEnConsult, Observation ** lits){
+void choixlit(Patient *patientEnConsult,ListeObservation ** liste, Observation ** lits){
 
     int temp;
     printf("veillez choisir un lit pour le patient %s %s : ", patientEnConsult->prenom, patientEnConsult->nom);
@@ -20,10 +20,11 @@ void choixlit(Patient *patientEnConsult, Observation ** lits){
     }
     if (tempObservation != NULL){
         printf("Ce lit est déjà occupé. Veuillez choisir un autre lit.\n");
-        choixlit(patientEnConsult, lits);
+        choixlit(patientEnConsult,liste, lits);
     }
     else{
         *lits=donnerlit(patientEnConsult, *lits, temp);
+        (*liste)->compteur=(*liste)->compteur+1;
         printf("Le patient %s %s a été placé en observation dans le lit %d.\n", patientEnConsult->prenom, patientEnConsult->nom, temp);
     }
 }
