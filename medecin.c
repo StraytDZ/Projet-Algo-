@@ -31,3 +31,11 @@ void PatientOrdonnance(Patient *patientEnConsult) {
     }
     else printf("Veuillez d'abord saisir un traitement.\n");
 }
+
+ListeObservation *AddObservation(Patient *patientEnConsult, ListeObservation *tete) {
+    Observation *nouvelleOB = (Observation*)malloc(sizeof(Observation));
+    nouvelleOB->patient = patientEnConsult;
+    nouvelleOB.
+
+
+}

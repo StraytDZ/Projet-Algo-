@@ -39,7 +39,7 @@ int main() {
                                         PatientOrdonnance(PatientEnConsult);
                                     break;
                                     case 4 : 
-
+                                        
                                     break;
                                 }
                             }while(choixConsult != 6);

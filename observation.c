@@ -4,6 +4,88 @@
 #include "observation.h"
 #include "structure.h"
 
+//==================================================================================================================================
+//============================================================CHIHAB================================================================
+Lit *CreateLit(ListeLit* ListeL) { // Fonciton juste pour cree le ' noeud ', ici on ne l'ajoute pas encore vers notre 'lsite de noeud' (ListeLit)
+    if(ListeL->indispo >= ListeL->total ) {  // Si on depasse le nombre de lit disponible dans l'hopitale, tel que ListeL->total est donner dans le main,
+        printf("Erreur : plus de lit disponible !\n");
+        return NULL; 
+    }
+
+    Lit *lit =(Lit*)malloc(sizeof(Lit)); // on crée le lit
+        if(lit == NULL) {
+            printf("Erreur : Impossible de donner un lit");
+            return lit;
+        }
+        lit->num = ListeL->indispo+1; // on inisitalise ici nos informations sur le lit
+        lit->etat = NOCCUPE;
+        lit->patient = NULL;
+        lit->suivant = NULL;
+        if(ListeL->tete == NULL) {
+            ListeL->tete = lit;
+            ListeL->indispo++;
+            return lit;
+        }
+        Lit *courant = ListeL->tete;
+        while(courant->suivant != NULL) 
+            courant = courant->suivant;
+        
+        courant->suivant = lit;
+        ListeL->indispo++;
+        return lit;
+}
+Lit *AddLit(ListeObservation *patientOB, ListeLit *ListeL) {
+
+    Lit *lit = ListeL->tete; // Juste pour ne pas ecrire a chaque fois ListeL->tete
+    while(lit != NULL && lit->etat == OCCUPE) { // si aucun lit n'est libre + n'est pas NULL
+        lit = lit->suivant;
+    }
+    if(lit == NULL) { // si aucun lit libre n'as été trouver, on cree un nouveau lit
+        lit = CreateLit(ListeL);
+        if(lit == NULL) return NULL;  
+    }
+    lit->patient = patientOB;
+    lit->etat = OCCUPE; // le lit a été donner, on change son etat
+
+    return lit;
+    
+}
+
+ListeObservation *AddObservation(Patient *patientEnConsultation, ListeObservation *tete, ListeLit *ListeL) {
+
+    Observation *patientOB = (Observation*)malloc(sizeof(Observation));
+        if(patientOB == NULL) {
+            printf("Erreur : Impossible d'enregister une observation.\n");
+            return tete;
+        }
+    printf("Veuillez indiquer la duree de l'observation : (En jour)");
+    scanf("%d",&patientOB->duree);
+    printf("Veuillez indiquer le traitement a suivre : ");
+    scanf(" %[^\n]", patientOB->traitment);
+    patientOB->lit = AddLit(patientOB,ListeL);
+    if( patientOB->lit == NULL ) {
+        printf("Erreur : Impossible d'atribuer une lit, Hopitale complet !"); // plus de lit dispo, on peut plus recevoir de patient pour les observer
+        free(patientOB);
+        return tete;
+    }
+    printf("Le patient est transeferer au lit %d.",patientOB->lit->num);
+
+    patientOB->suivant = NULL; // onl l'ajoute a notre liste chainer de patient en observation
+    if(tete == NULL) return patientOB;
+
+    Observation *courant = tete;
+    while(courant->suivant != NULL) 
+        courant = courant->suivant;
+    courant->suivant = patientOB;
+    return tete;
+}
+
+
+
+
+
+//==================================================================================================================================
+//============================================================JUBA==================================================================
 
 void choixlit(Patient *patientEnConsult, Observation * lits){
 

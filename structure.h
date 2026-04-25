@@ -49,14 +49,30 @@ typedef struct ListePatient {
     int sortis;
     int transferes;
 }ListePatient;
-
-typedef struct Observation{
-
-    int numlit;
+typedef enum {
+    OCCUPE,
+    NOCCUPE,
+}EtatLit;
+typedef struct Lit{ // Un noeud Lit
     Patient *patient;
+    EtatLit etat;
+    int num;
+    struct Lit *suivant;
+}Lit;
+typedef struct ListeLit{ // // Liste de tout les noeuds Lit
+    Lit *tete;
+    int total;
+    int indispo; // On peut pas connaitre combien de lit disponible car on a ici une lsite Chainer, faudra alors faire total - indispo
+}ListeLit;
+typedef struct Observation{ // Un noeud Observation
+    Patient *patient;
+    Lit *lit;
+    char traitment[100];
+    int duree;
     struct Observation *suivant;
 }Observation;
-typedef struct ListeObservation {
+
+typedef struct ListeObservation { // Liste de tout les noeuds Observation
     Observation *tete;
     int compteur;
 }ListeObservation;
