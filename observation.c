@@ -5,7 +5,7 @@
 #include "structure.h"
 
 
-void choixlit(Patient *patientEnConsult, Observation * lits){
+void choixlit(Patient *patientEnConsult, Observation ** lits){
 
     int temp;
     printf("veillez choisir un lit pour le patient %s %s : ", patientEnConsult->prenom, patientEnConsult->nom);
@@ -13,13 +13,8 @@ void choixlit(Patient *patientEnConsult, Observation * lits){
     while (temp<1 || temp>100){
         printf("Numéro de lit invalide. Veuillez choisir un numéro entre 1 et 100.\n");
         scanf("%d", &temp);
-    }
-     if (lits == NULL) {
-        donnerlit(patientEnConsult, lits, temp);
-        printf("Le patient %s %s a été placé au lit %d.\n", patientEnConsult->prenom, patientEnConsult->nom, temp);
-        return; 
-    }
-    Observation *tempObservation=lits;
+    } 
+    Observation *tempObservation=*lits;
     while (tempObservation!=NULL && tempObservation->numlit!=temp){
         tempObservation=tempObservation->suivant;
     }
@@ -28,7 +23,7 @@ void choixlit(Patient *patientEnConsult, Observation * lits){
         choixlit(patientEnConsult, lits);
     }
     else{
-        donnerlit(patientEnConsult, lits, temp);
+        *lits=donnerlit(patientEnConsult, *lits, temp);
         printf("Le patient %s %s a été placé en observation dans le lit %d.\n", patientEnConsult->prenom, patientEnConsult->nom, temp);
     }
 }
@@ -44,9 +39,9 @@ void afficherObservation(Observation *lits){
         printf("Lit %d : %s %s\n", temp->numlit, temp->patient->prenom, temp->patient->nom);
         temp=temp->suivant;
     }
+}
 
-
-Observation * donnerlit(Patient *patientEnConsult, Observation *lits, int *numerolit){
+Observation * donnerlit(Patient *patientEnConsult, Observation *lits, int numerolit){
     Observation *lit=malloc(sizeof(Observation));
     if (lit == NULL) {
         printf("Erreur : plus de mémoire pour les lits.\n");
@@ -54,7 +49,7 @@ Observation * donnerlit(Patient *patientEnConsult, Observation *lits, int *numer
     } 
     
     lit->suivant=NULL;
-    lit->numlit=*numerolit;
+    lit->numlit=numerolit;
     lit->patient=patientEnConsult;
     Observation *temp=lits;
     if (temp==NULL){
