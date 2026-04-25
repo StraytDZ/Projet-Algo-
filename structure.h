@@ -54,6 +54,8 @@ typedef struct Observation{
 
     int numlit;
     Patient *patient;
+    time_t duree;
+    char traitement[100];
     struct Observation *suivant;
 }Observation;
 typedef struct ListeObservation {

@@ -88,9 +88,9 @@ Observation * supprimerObservation(Observation *lits, int numlit){
 
 void transferer(Patient *patientEnConsult){
     printf("Saisi du nom du département de transfert : ");
-    scanf(" %[\n]",patientEnConsult->traitement);
+    scanf(" %[\n]",patientEnConsult->departement);
     patientEnConsult->etat=TRANSFERER;
-    printf("Le patient %s %s a été transféré vers un departement de %s\n",patientEnConsult->prenom,patientEnConsult->nom, patientEnConsult->traitement);
+    printf("Le patient %s %s a été transféré vers un departement de %s\n",patientEnConsult->prenom,patientEnConsult->nom, patientEnConsult->departement);
 }
 
 void saisirduree(Patient *patientEnConsult){
