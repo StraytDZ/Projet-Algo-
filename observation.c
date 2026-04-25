@@ -5,17 +5,56 @@
 #include "structure.h"
 
 
+void choixlit(Patient *patientEnConsult, Observation * lits){
+
+    int temp;
+    printf("veillez choisir un lit pour le patient %s %s : ", patientEnConsult->prenom, patientEnConsult->nom);
+    scanf("%d", &temp);
+    while (temp<1 || temp>100){
+        printf("Numéro de lit invalide. Veuillez choisir un numéro entre 1 et 100.\n");
+        scanf("%d", &temp);
+    }
+     if (lits == NULL) {
+        donnerlit(patientEnConsult, lits, temp);
+        printf("Le patient %s %s a été placé au lit %d.\n", patientEnConsult->prenom, patientEnConsult->nom, temp);
+        return; 
+    }
+    Observation *tempObservation=lits;
+    while (tempObservation!=NULL && tempObservation->numlit!=temp){
+        tempObservation=tempObservation->suivant;
+    }
+    if (tempObservation != NULL){
+        printf("Ce lit est déjà occupé. Veuillez choisir un autre lit.\n");
+        choixlit(patientEnConsult, lits);
+    }
+    else{
+        donnerlit(patientEnConsult, lits, temp);
+        printf("Le patient %s %s a été placé en observation dans le lit %d.\n", patientEnConsult->prenom, patientEnConsult->nom, temp);
+    }
+}
+
+void afficherObservation(Observation *lits){
+    Observation *temp=lits;
+    if (temp==NULL){
+        printf("Aucun patient en observation.\n");
+        return;
+    }
+    printf("Patients en observation :\n");
+    while (temp!=NULL){
+        printf("Lit %d : %s %s\n", temp->numlit, temp->patient->prenom, temp->patient->nom);
+        temp=temp->suivant;
+    }
 
 
-Observation * donnerlit(Patient *patientEnConsult, Observation *lits, int *numeroprecedent){
+Observation * donnerlit(Patient *patientEnConsult, Observation *lits, int *numerolit){
     Observation *lit=malloc(sizeof(Observation));
     if (lit == NULL) {
         printf("Erreur : plus de mémoire pour les lits.\n");
         return lits;
     } 
-    (*numeroprecedent)++;
+    
     lit->suivant=NULL;
-    lit->numlit=*numeroprecedent;
+    lit->numlit=*numerolit;
     lit->patient=patientEnConsult;
     Observation *temp=lits;
     if (temp==NULL){
@@ -53,7 +92,7 @@ Observation * supprimerObservation(Observation *lits, int numlit){
 
 void transferer(Patient *patientEnConsult){
     printf("Saisi du nom du département de transfert : ");
-    scanf("% [\n]s",patientEnConsult->traitement);
+    scanf(" %[\n]",patientEnConsult->traitement);
     patientEnConsult->etat=TRANSFERER;
     printf("Le patient %s %s a été transféré vers un departement de %s\n",patientEnConsult->prenom,patientEnConsult->nom, patientEnConsult->traitement);
 }
@@ -69,17 +108,17 @@ void saisirduree(Patient *patientEnConsult){
 
 void  modifierdiagnostique(Patient *patientEnConsult){
     printf("Saisi du nouveau diagnostique : ");
-    scanf(" [\n]%s",patientEnConsult->diagnostique);
+    scanf(" %[\n]",patientEnConsult->diagnostique);
 }
 
 void  modifiertraitement(Patient *patientEnConsult){
     printf("Saisi du nouveau traitement : ");
-    scanf(" [\n]%s",patientEnConsult->traitement);
+    scanf(" %[\n]",patientEnConsult->traitement);
 }
 
 void  modifierordonnance(Patient *patientEnConsult){
      printf("Saisi de la nouvelle ordonnance : ");
-     scanf(" [\n]%s",patientEnConsult->ordonnance);
+     scanf(" %[\n]",patientEnConsult->ordonnance);
 }
 
 void verifierStatut(Patient *patientEnConsult){

@@ -2,7 +2,7 @@
 #define OBSERVATION_H
 
 
-
+void choixlit(Patient *patientEnConsult, Observation *lits);
 Observation * donnerlit(Patient *patientEnConsult, Observation *lits, int *numeroprecedent);
 Observation * supprimerObservation(Observation *lits, int numlit);
 void transferer(Patient *patientEnConsult);
