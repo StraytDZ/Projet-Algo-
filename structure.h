@@ -55,7 +55,7 @@ typedef enum {
 }EtatLit;
 typedef struct Lit{ // Un noeud Lit
     Patient *patient;
-<<<<<<< HEAD
+
     EtatLit etat;
     int num;
     struct Lit *suivant;
@@ -70,10 +70,8 @@ typedef struct Observation{ // Un noeud Observation
     Lit *lit;
     char traitment[100];
     int duree;
-=======
     time_t duree;
     char traitement[100];
->>>>>>> 18942647839594ab316306a57306cf958eaa7fc6
     struct Observation *suivant;
 }Observation;
 
