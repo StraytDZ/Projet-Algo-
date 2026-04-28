@@ -65,3 +65,21 @@
   - Sauvegarder les donnees dans un fichier
 
 ================================================================
+
+
+void SavePatient(Patient *patient, int index) {
+    FILE *P = fopen("historique.bin","ab");
+        if(P == NULL) {
+            printf("Erreur : Impossbile d'enregister dans l'historique.\n");
+            return;
+        }
+    if(patient->etat == ATTENTE) {
+        fwrite(patient,sizeof(Patient),1,P);
+        return;
+    }
+    else {
+        fseek(P,index,SEEK_SET);
+        fwrite(patient,sizeof(Patient),1,P);
+        return;
+    }
+}
