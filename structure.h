@@ -37,7 +37,6 @@ struct Patient{
     char diagnostique[100];
     char traitement[100];
     char ordonnance[100];
-    int lit;
     struct Patient *suivant;
 
 };
@@ -55,26 +54,22 @@ typedef enum {
 }EtatLit;
 typedef struct Lit{ // Un noeud Lit
     Patient *patient;
-
     EtatLit etat;
     int num;
     struct Lit *suivant;
 }Lit;
 typedef struct ListeLit{ // // Liste de tout les noeuds Lit
-    Lit *tete;
+    Lit *teteLit;
     int total;
     int indispo; // On peut pas connaitre combien de lit disponible car on a ici une lsite Chainer, faudra alors faire total - indispo
 }ListeLit;
 typedef struct Observation{ // Un noeud Observation
     Patient *patient;
-    Lit *lit;
-    char traitment[100];
-    int duree;
-    time_t duree;
+    ListeLit *lit;
     char traitement[100];
+    int duree;
     struct Observation *suivant;
 }Observation;
-
 typedef struct ListeObservation { // Liste de tout les noeuds Observation
     Observation *tete;
     int compteur;
