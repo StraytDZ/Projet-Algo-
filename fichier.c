@@ -25,12 +25,11 @@ typedef struct {
     int  lit;
 } PatientData;
 
-
-/* 
-   SAUVEGARDER PATIENTS
-   - "wb" = write binary : ouvre en ecriture binaire
-   - Parcourt la liste et ecrit chaque patient
-   */
+    /*
+    SAUVEGARDER PATIENTS
+    - "wb" = write binary : ouvre en ecriture binaire
+    - Parcourt la liste et ecrit chaque patient
+     */
 void sauvegarderPatients(ListePatient *liste) {
     FILE *f = fopen("patients.bin", "wb");
     if (f == NULL) {
@@ -40,14 +39,13 @@ void sauvegarderPatients(ListePatient *liste) {
 
     Patient *courant = liste->tete;//tban dayi acu 3elegh 
     while (courant != NULL) {
-        PatientData data;
+        PatientData data;  
         strcpy(data.nom,          courant->nom);
         strcpy(data.prenom,       courant->prenom);
         strcpy(data.id,           courant->id);
         strcpy(data.sexe,         courant->sexe);
         strcpy(data.departement,  courant->departement);
         strcpy(data.diagnostique, courant->diagnostique);
-        strcpy(data.traitement,   courant->traitement);
         strcpy(data.ordonnance,   courant->ordonnance);
         data.age          = courant->age;
         data.etat         = courant->etat;
@@ -62,9 +60,8 @@ void sauvegarderPatients(ListePatient *liste) {
     }
 
     fclose(f);
-    printf("Patients sauvegardes dans patients.bin\n");
+    printf("Patients sauvegarder dans patients.bin\n");
 }
-
 
 /* charger patients
    - "rb" = read binary : 
@@ -90,7 +87,6 @@ void chargerPatients(ListePatient *liste, ListeTicket *listeT) {
         strcpy(p->sexe,         data.sexe);
         strcpy(p->departement,  data.departement);
         strcpy(p->diagnostique, data.diagnostique);
-        strcpy(p->traitement,   data.traitement);
         strcpy(p->ordonnance,   data.ordonnance);
         p->age     = data.age;
         p->etat    = data.etat;
@@ -132,7 +128,6 @@ void chargerPatients(ListePatient *liste, ListeTicket *listeT) {
     printf("Donnees chargees depuis patients.bin\n");
 }
 
-
 /*
    SAUVEGARDER HISTORIQUE
    - "ab" = append binary : ajoute a la fin sans ecraser
@@ -141,7 +136,7 @@ void chargerPatients(ListePatient *liste, ListeTicket *listeT) {
 void sauvegarderHistorique(Patient *p) {
     FILE *f = fopen("historique.bin", "ab");
     if (f == NULL) {
-        printf("Erreur : impossible d'ouvrir historique.bin\n");
+        printf("Erreur : Impossible d'ouvrir historique.bin\n");
         return;
     }
 
@@ -152,7 +147,6 @@ void sauvegarderHistorique(Patient *p) {
     strcpy(data.sexe,         p->sexe);
     strcpy(data.departement,  p->departement);
     strcpy(data.diagnostique, p->diagnostique);
-    strcpy(data.traitement,   p->traitement);
     strcpy(data.ordonnance,   p->ordonnance);
     data.age          = p->age;
     data.etat         = p->etat;
@@ -163,7 +157,6 @@ void sauvegarderHistorique(Patient *p) {
     fwrite(&data, sizeof(PatientData), 1, f);
     fclose(f);
 }
-
 
 /* 
    AFFICHER HISTORIQUE
@@ -208,23 +201,21 @@ void afficherHistorique() {
     fclose(f);
 }
 
-
 /* ============================================================
    SAUVEGARDER OBSERVATIONS
    - Sauvegarde : numero de lit + ID du patient
    - On sauvegarde l'ID car c'est l'identifiant unique
      qui permet de retrouver le patient au chargement
    ============================================================ */
-void sauvegarderObservations(Observation *lits) {
+void sauvegarderObservations(ListeObservation *ListeO) {
     FILE *f = fopen("observations.bin", "wb");
     if (f == NULL) {
         printf("Erreur : impossible d'ouvrir observations.bin\n");
         return;
     }
-
-    Observation *courant = lits;
+    Observation *courant = ListeO->tete;
     while (courant != NULL) {
-        int  numlit = courant->numlit;
+        int  numlit = courant->lit->num;
         char idPatient[20];
         strcpy(idPatient, courant->patient->id);
 
@@ -236,7 +227,6 @@ void sauvegarderObservations(Observation *lits) {
     fclose(f);
     printf("Observations sauvegardees dans observations.bin\n");
 }
-
 
 /* ============================================================
    CHARGER OBSERVATIONS
@@ -266,7 +256,7 @@ Observation *chargerObservations(ListePatient *liste, int *numeroPrecedent) {
         if (p != NULL) {
             Observation *obs = malloc(sizeof(Observation));
             if (obs == NULL) break;
-            obs->numlit  = numlit;
+            obs->lit->num  = numlit;
             obs->patient = p;
             obs->suivant = NULL;
 
@@ -283,7 +273,6 @@ Observation *chargerObservations(ListePatient *liste, int *numeroPrecedent) {
                 *numeroPrecedent = numlit;
         }
     }
-
     fclose(f);
     return lits; /* Retourner au lieu de ** */
 }

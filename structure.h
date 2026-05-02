@@ -11,6 +11,7 @@ typedef struct Ticket {
 }Ticket;
 typedef struct ListeTicket {
     Ticket *tete;
+    time_t dernierReset;
     int compteur;
 }ListeTicket;
 typedef enum {
@@ -33,10 +34,9 @@ struct Patient{
     Ticket *ticket;
     Etat etat;
     Heure heure;
-    char departement[30];
     char diagnostique[100];
-    char traitement[100];
     char ordonnance[100];
+    char departement[30];
     struct Patient *suivant;
 
 };
@@ -65,14 +65,41 @@ typedef struct ListeLit{ // // Liste de tout les noeuds Lit
 }ListeLit;
 typedef struct Observation{ // Un noeud Observation
     Patient *patient;
-    ListeLit *lit;
+    Lit *lit;
     char traitement[100];
-    int duree;
+    Heure duree;
     struct Observation *suivant;
 }Observation;
 typedef struct ListeObservation { // Liste de tout les noeuds Observation
     Observation *tete;
     int compteur;
 }ListeObservation;
+
+typedef enum {
+    DISPONIBLE,
+    EN_UTILISATION,
+    EN_MAINTENANCE,
+    HORS_SERVICE,
+} EtatEquipement;
+
+typedef enum {
+    MEDICAL,        // Stethoscope, tensiometre...
+    CHIRURGICAL,    // Scalpel, pince...
+    INFORMATIQUE,   // Ordinateur, imprimante...
+    MOBILIER,       // Lit, chaise... 
+    AUTRE,
+} TypeEquipement;
+typedef struct Equipement{
+    int id;
+    char nom[50];
+    TypeEquipement type;
+    EtatEquipement etat;
+    int quantite;
+    int quantiteDisponible;
+    char service[30];       // quel service l'utilise
+    time_t dateAchat;
+    float prix;
+
+}Equipements;
 
 #endif

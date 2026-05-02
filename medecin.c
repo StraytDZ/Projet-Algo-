@@ -17,15 +17,9 @@ void PatientDiagnostic(Patient *patientEnConsult) {
     printf("Saisir le diagnostique :\n");
     scanf(" %[^\n]",patientEnConsult->diagnostique);
 }
-void PatientTraitement(Patient *patientEnConsult) {
-    if(strcmp(patientEnConsult->diagnostique, "") != 0) {
-    printf("Saisir le traitement : \n");
-    scanf(" %[^\n]",patientEnConsult->traitement);
-    }
-    else printf("Veuillez d'abord saisir un diagnostique.\n");
-}
+
 void PatientOrdonnance(Patient *patientEnConsult) {
-    if(strcmp(patientEnConsult->traitement, "") != 0) {
+    if(strcmp(patientEnConsult->diagnostique, "") != 0) {
     printf("Inscrire l'ordonnance : \n");
     scanf(" %[^\n]",patientEnConsult->ordonnance);
     }

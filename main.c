@@ -14,6 +14,12 @@ int main() {
     ListePatient patient = {NULL, 0, 0, 0, 0, 0};
     ListeTicket ticket = {NULL, 0};
     Patient *PatientEnConsult;
+    ListeObservation Observation = {NULL,0};
+    ListeLit lit = {NULL, 0 , 0};
+    chargerTicket(&ticket);
+    chargerPatient(&patient);
+    verifierNouveauJour(&ticket); // Pour réinitialiser le compteur de ticket a chaque minuit.
+
     do {
         menuPrincipal();
         scanf("%d",&choix);
@@ -32,14 +38,11 @@ int main() {
                                     case 1 : 
                                         PatientDiagnostic(PatientEnConsult);
                                     break;
-                                    case 2 : 
-                                        PatientTraitement(PatientEnConsult);
-                                    break;
-                                    case 3 :
+                                    case 2 :
                                         PatientOrdonnance(PatientEnConsult);
                                     break;
-                                    case 4 : 
-                                        
+                                    case 3 : 
+                                        AddObservation(PatientEnConsult,&Observation,&lit);
                                     break;
                                 }
                             }while(choixConsult != 6);

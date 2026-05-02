@@ -68,7 +68,7 @@ ListeObservation *AddObservation(Patient *patientEnConsultation, ListeObservatio
         free(patientOB);
         return tete;
     }
-    printf("Le patient est transeferer au lit %d.",patientOB->lit->teteLit->num);
+    printf("Le patient est transeferer au lit %d.",patientOB->lit->num);
 
     patientOB->suivant = NULL; // onl l'ajoute a notre liste chainer de patient en observation
     if(tete == NULL) return patientOB;
@@ -77,6 +77,7 @@ ListeObservation *AddObservation(Patient *patientEnConsultation, ListeObservatio
     while(courant->suivant != NULL) 
         courant = courant->suivant;
     courant->suivant = patientOB;
+    tete->compteur++;
     return tete;
 }
 
@@ -87,7 +88,7 @@ void afficherObservation(ListeObservation *ListeO){
         printf("Aucun patient en observation.\n");
         return;
     }
-    Lit *lit = ListeO->tete->lit->teteLit;
+    Lit *lit = ListeO->tete->lit->num;
     printf("Patients en observation :\n");
     while (tete != NULL){
         printf("Lit %d : %s %s\n", lit->num, tete->patient->nom, tete->patient->prenom);
@@ -95,21 +96,21 @@ void afficherObservation(ListeObservation *ListeO){
     }
 }
 
-ListeObservation * supprimerObservation(ListeObservation *ListeO, int numlit){
+Observation * supprimerObservation(ListeObservation *ListeO, int numlit){
     if( numlit < 0|| numlit > MAX ) {
         printf("Erreur : Numero invaliDE !");
         return NULL;
     }
     Observation *tete = ListeO->tete;
     Observation *temp=tete; // Pour pas perdre l'adresse a free
-    if (tete->lit->teteLit->num == 1){ // Enlever au debut de la liste chainer ListeObservation
+    if (tete->lit->num == 1){ // Enlever au debut de la liste chainer ListeObservation
         temp->patient->etat=SORTI;
-        temp->lit->teteLit->etat = NOCCUPE;
+        temp->lit->etat = NOCCUPE;
         tete=tete->suivant;
         free(temp); // On free de la liste chainer ListeObservation, Mais le patient est toujours present dans ListePatient
         return tete;
     }
-    while( tete != NULL && tete->lit->teteLit->num != numlit ) {
+    while( tete != NULL && tete->lit->num != numlit ) {
          tete=tete->suivant;
     }
     temp->patient->etat=SORTI;
@@ -125,10 +126,6 @@ void transferer(Patient *patientEnConsult){
     printf("Le patient %s %s a été transféré vers un departement de %s\n",patientEnConsult->prenom,patientEnConsult->nom, patientEnConsult->departement);
 }
 
-void  modifiertraitement(Patient *patientEnConsult){
-    printf("Saisi du nouveau traitement : ");
-    scanf(" %[\n]",patientEnConsult->traitement);
-}
 
 void verifierStatut(Patient *patientEnConsult){
     time_t maintenant = time(NULL);

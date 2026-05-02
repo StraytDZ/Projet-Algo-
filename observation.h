@@ -1,16 +1,16 @@
 #ifndef OBSERVATION_H
 #define OBSERVATION_H
 
+#include "structure.h"
 
-void choixlit(Patient *patientEnConsult, Observation **lits);
-void afficherObservation(Observation *lits);
-Observation * donnerlit(Patient *patientEnConsult, Observation *lits, int *numeroprecedent);
+Lit *CreateLit(ListeLit* ListeL);
+Lit *AddLit(ListeObservation *patientOB, ListeLit *ListeL);
+void afficherObservation(ListeObservation *patientO);
+ListeObservation *AddObservation(Patient *patientEnConsultation, ListeObservation *tete, ListeLit *ListeL);
 Observation * supprimerObservation(Observation *lits, int numlit);
 void transferer(Patient *patientEnConsult);
 void saisirduree(Patient *patientEnConsult);
-void  modifierdiagnostique(Patient *patientEnConsult);
-void  modifiertraitement(Patient *patientEnConsult);
-void  modifierordonnance(Patient *patientEnConsult);
+void modifiertraitement(Patient *patientEnConsult);
 void verifierStatut(Patient *patientEnConsult);
 
 #endif

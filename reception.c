@@ -60,7 +60,6 @@ ListePatient *AddPatient(ListePatient *ListeP,ListeTicket *ListeT) {
     P->heure.arrive = time(NULL); // Recuperer l'heure actuelle (De l'enregistrment du patient du coup)
     P->heure.sorti = 0; // Pas encore sortie, on initialise a 0
     strcpy(P->diagnostique,"");
-    strcpy(P->traitement,"");
     strcpy(P->ordonnance,"");
     if(ListeT->tete == NULL) {
        ListeP->tete = P;
@@ -89,5 +88,38 @@ void DisplayQueue(ListePatient *ListeP) {
         printf("\tSexe(H/F): %s\n",courant->sexe);
         courant = courant->suivant;
         i++;
+    }
+}
+void SaveTicket(ListeTicket *listeT) {
+    FILE *f = fopen("systeme.bin", "wb");
+    if (f == NULL) return;
+
+    fwrite(&listeT->compteur,     sizeof(int),    1, f);
+    fwrite(&listeT->dernierReset, sizeof(time_t), 1, f);
+
+    fclose(f);
+}
+
+void chargerTicket(ListeTicket *listeT) {
+    FILE *f = fopen("systeme.bin", "rb");
+    if (f == NULL) return;
+
+    fread(&listeT->compteur,     sizeof(int),    1, f);
+    fread(&listeT->dernierReset, sizeof(time_t), 1, f);
+
+    fclose(f);
+}
+void verifierNouveauJour(ListeTicket *ListeT) {
+    time_t maintenant = time(NULL);
+    struct tm *tmMaintenant = localtime(&maintenant);
+    struct tm *tmDernier    = localtime(&ListeT->dernierReset);
+    // Si le jour a changé → réinitialiser
+    if (tmMaintenant->tm_mday != tmDernier->tm_mday ||
+        tmMaintenant->tm_mon  != tmDernier->tm_mon  ||
+        tmMaintenant->tm_year != tmDernier->tm_year) {
+    
+        ListeT->compteur     = 0;
+        ListeT->dernierReset = maintenant;
+        printf("Nouveau jour : compteur de tickets reinitialise.\n");
     }
 }
