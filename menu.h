@@ -1,9 +1,9 @@
 #ifndef MENU_H
 #define MENU_H
 
-void menuPrincipale();
+void menuPrincipal();
 void menuMedecin();
-void menuConsultation();
+void menuConsultation(Patient *patientEnConsultation);
 void menuReception();
 
 #endif

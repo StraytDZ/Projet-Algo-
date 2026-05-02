@@ -4,7 +4,7 @@
 #include "structure.h"
 
 Lit *CreateLit(ListeLit* ListeL);
-Lit *AddLit(ListeObservation *patientOB, ListeLit *ListeL);
+Lit *AddLit(Observation *patientOB, ListeLit *ListeL);
 void afficherObservation(ListeObservation *patientO);
 ListeObservation *AddObservation(Patient *patientEnConsultation, ListeObservation *tete, ListeLit *ListeL);
 Observation * supprimerObservation(Observation *lits, int numlit);

@@ -5,16 +5,16 @@
 #include "medecin.h"
 #include "menu.h"
 #include "observation.h"
+#include "historique.h"
 
 
 
 int main() {
-    int lit=0;
     int choix,choixReception,choixMedecin,choixConsult;
     ListePatient patient = {NULL, 0, 0, 0, 0, 0};
     ListeTicket ticket = {NULL, 0};
     Patient *PatientEnConsult;
-    ListeObservation Observation = {NULL,0};
+    ListeObservation observation = {NULL,0};
     ListeLit lit = {NULL, 0 , 0};
     chargerTicket(&ticket);
     chargerPatient(&patient);
@@ -32,7 +32,7 @@ int main() {
                         case 1 : 
                             PatientEnConsult = CallPatient(&ticket);
                             do{
-                                menuConsultation();
+                                menuConsultation(PatientEnConsult);
                                 scanf("%d",&choixConsult);
                                 switch(choixConsult) {
                                     case 1 : 
@@ -42,7 +42,7 @@ int main() {
                                         PatientOrdonnance(PatientEnConsult);
                                     break;
                                     case 3 : 
-                                        AddObservation(PatientEnConsult,&Observation,&lit);
+                                        AddObservation(PatientEnConsult,&observation,&lit);
                                     break;
                                 }
                             }while(choixConsult != 6);
@@ -57,11 +57,14 @@ int main() {
                         scanf("%d",&choixReception);
                         switch(choixReception) {
                             case 1:
-                                patient.tete = AddPatient(&patient,&ticket);
+                                AddPatient(&patient,&ticket);
                             break;
                             case 2 :
                                 DisplayQueue(&patient);
                             break;
+                            case 4 :
+                                afficherHistorique(&patient,&observation);
+                                break;
                         }
                     }while(choixReception != 3);
             break;

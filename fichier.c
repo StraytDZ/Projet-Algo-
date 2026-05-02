@@ -20,9 +20,7 @@ typedef struct {
     Heure heure;
     char departement[30];
     char diagnostique[100];
-    char traitement[100];
     char ordonnance[100];
-    int  lit;
 } PatientData;
 
     /*

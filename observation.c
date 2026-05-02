@@ -34,7 +34,7 @@ Lit *CreateLit(ListeLit* ListeL) { // Fonciton juste pour cree le ' noeud ', ici
         ListeL->indispo++;
         return lit;
 }
-Lit *AddLit(ListeObservation *patientOB, ListeLit *ListeL) {
+Lit *AddLit(Observation *patientOB, ListeLit *ListeL) {
 
     Lit *lit = ListeL->teteLit; // Juste pour ne pas ecrire a chaque fois ListeL->tete
     while(lit != NULL && lit->etat == OCCUPE) { // si aucun lit n'est libre + n'est pas NULL
@@ -51,12 +51,12 @@ Lit *AddLit(ListeObservation *patientOB, ListeLit *ListeL) {
     
 }
 
-ListeObservation *AddObservation(Patient *patientEnConsultation, ListeObservation *tete, ListeLit *ListeL) {
+ListeObservation *AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, ListeLit *ListeL) {
 
     Observation *patientOB = (Observation*)malloc(sizeof(Observation));
         if(patientOB == NULL) {
             printf("Erreur : Impossible d'enregister une observation.\n");
-            return tete;
+            return ListeO;
         }
     printf("Veuillez indiquer la duree de l'observation : (En jour)");
     scanf("%d",&patientOB->duree);
@@ -66,19 +66,21 @@ ListeObservation *AddObservation(Patient *patientEnConsultation, ListeObservatio
     if( patientOB->lit == NULL ) {
         printf("Erreur : Impossible d'atribuer un lit, Hopitale complet !"); // plus de lit dispo, on peut plus recevoir de patient pour les observer
         free(patientOB);
-        return tete;
+        return ListeO;
     }
     printf("Le patient est transeferer au lit %d.",patientOB->lit->num);
 
     patientOB->suivant = NULL; // onl l'ajoute a notre liste chainer de patient en observation
-    if(tete == NULL) return patientOB;
-
-    Observation *courant = tete;
+    if(ListeO == NULL) 
+        ListeO->tete = patientOB;
+    else {
+    Observation *courant = ListeO->tete;
     while(courant->suivant != NULL) 
         courant = courant->suivant;
     courant->suivant = patientOB;
-    tete->compteur++;
-    return tete;
+    }
+    ListeO->compteur++;
+    return ListeO;
 }
 
 
@@ -88,10 +90,9 @@ void afficherObservation(ListeObservation *ListeO){
         printf("Aucun patient en observation.\n");
         return;
     }
-    Lit *lit = ListeO->tete->lit->num;
     printf("Patients en observation :\n");
     while (tete != NULL){
-        printf("Lit %d : %s %s\n", lit->num, tete->patient->nom, tete->patient->prenom);
+        printf("Lit %d : %s %s\n", tete->lit->num, tete->patient->nom, tete->patient->prenom);
         tete=tete->suivant;
     }
 }
@@ -121,7 +122,7 @@ Observation * supprimerObservation(ListeObservation *ListeO, int numlit){
 
 void transferer(Patient *patientEnConsult){
     printf("Saisi du nom du département de transfert : ");
-    scanf(" %[\n]",patientEnConsult->departement);
+    scanf(" %[^\n]",patientEnConsult->departement);
     patientEnConsult->etat=TRANSFERER;
     printf("Le patient %s %s a été transféré vers un departement de %s\n",patientEnConsult->prenom,patientEnConsult->nom, patientEnConsult->departement);
 }

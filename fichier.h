@@ -5,7 +5,7 @@
 
 /* wayi pour Sauvegarder */
 void         sauvegarderPatients(ListePatient *liste);
-void         sauvegarderObservations(Observation *lits);
+void         sauvegarderObservations(ListeObservation *ListeO);
 void         sauvegarderHistorique(Patient *p);
 
 /* pour  Chargement */

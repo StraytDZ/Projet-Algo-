@@ -99,7 +99,26 @@ typedef struct Equipement{
     char service[30];       // quel service l'utilise
     time_t dateAchat;
     float prix;
+}Equipement;
 
-}Equipements;
+typedef struct Medicament {
+    char nom[50];
+    char forme[30];       // comprimé, injection, perfusion...
+    int quantite;
+    int quantiteMin;      // seuil d'alerte stock bas
+    float prix;
+} Medicament;
 
+#define NB_MEDICAMENTS 50
+#define NB_EQUIPEMENTS 30
+
+typedef struct {
+    Medicament medicaments[NB_MEDICAMENTS];
+    int total;
+} ListeMedicament;
+
+typedef struct {
+    Equipement equipements[NB_EQUIPEMENTS];
+    int total;
+} ListeEquipement;
 #endif
