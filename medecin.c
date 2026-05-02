@@ -2,7 +2,13 @@
 #include <stdlib.h>
 #include "medecin.h"
 
-Patient *CallPatient(ListeTicket *ListT) {
+Patient *CallPatient(ListeTicket *ListT, ListeUrgence *ListU){
+    if(ListU->tete != NULL) {
+        Patient *patientUrgence = ListU->tete;
+        patientUrgence->etat = CONSULTATION;
+        ListU->tete = ListU->tete->suivant;
+        return patientUrgence;
+    }
     if(ListT->tete == NULL) {
         printf("Aucun patient en fille d'attente.\n");
         return NULL;

@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "reception.h"
+#include "structure.h"
+
 
 Ticket *CreateTicket(Patient *patient, int num) {
     Ticket *T = (Ticket*)malloc(sizeof(Ticket));
@@ -16,7 +18,7 @@ Ticket *CreateTicket(Patient *patient, int num) {
 }
 Ticket *AddTicket(ListeTicket *ListeT, Patient *patient) {
     ListeT->compteur++;
-    Ticket *nouveauTicket = CreateTicket(patient,ListeT->compteur);
+    Ticket *nouveauTicket = CreateTicket(patient,ListeU->compteur);
     if(ListeT->tete == NULL) { 
         ListeT->tete = nouveauTicket;  
         return nouveauTicket;
@@ -29,6 +31,7 @@ Ticket *AddTicket(ListeTicket *ListeT, Patient *patient) {
 
     return nouveauTicket;
 }
+    
 ListePatient *AddPatient(ListePatient *ListeP,ListeTicket *ListeT) {
     char Nom[30],Prenom[30],ID[20],Sexe[4];
     int Age;

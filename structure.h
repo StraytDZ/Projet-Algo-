@@ -19,6 +19,7 @@ typedef enum {
     CONSULTATION,
     OBSERVATION,
     TRANSFERER,
+    URGENCE,
     SORTI,
 }Etat;
 typedef struct Heure {
@@ -121,4 +122,18 @@ typedef struct {
     Equipement equipements[NB_EQUIPEMENTS];
     int total;
 } ListeEquipement;
+
+typedef struct Urgence{
+    char nom[30];
+    char prenom[30];
+    Urgence *suivant;
+    char traitement[100];  
+} Urgence;
+
+typedef struct ListeUrgence {
+    Patient *tete;
+    int attente;
+    int total;
+} ListeUrgence;
+
 #endif
