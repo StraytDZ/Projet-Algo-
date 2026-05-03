@@ -104,7 +104,7 @@ void verifierStatut(Patient *patientEnConsult){
     }
 }
 
-void AfficherObservation(ListeObservation *ListeO) {
+void AfficherListeObservation(ListeObservation *ListeO) {
     if(ListeO == NULL) {    
         printf("Aucun patient en observations.\n");
         return;
@@ -121,7 +121,7 @@ void AfficherObservation(ListeObservation *ListeO) {
 }
 
 void ModifierObservation(ListeObservation *ListeO) {
-    AfficherObservation(ListeO);
+    AfficherListeObservation(ListeO);
     int choix;
     int index = 1;
     int i = 1;
