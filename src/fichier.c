@@ -288,3 +288,14 @@ void chargerObservations(ListePatient *liste, ListeObservation *ListeO, ListeLit
     fclose(f);
 }
 
+void convertissuerFtxt(char nomfichier[], char nomfichierbin[]){
+    FILE *f = fopen(nomfichier, "w");
+    FILE *fb = fopen(nomfichierbin, "rb");
+    Patient p;
+    while(fread(&p, sizeof(Patient), 1, fb) == 1){
+        fprintf(f, "%s %s %d %s %s %d %d %d %d\n", p.nom, p.prenom, p.age, p.id, p.sexe, p.etat, p.heure.arrive, p.heure.sorti, p.ticket->numero);
+    }
+    fclose(f);
+    fclose(fb);
+}
+
