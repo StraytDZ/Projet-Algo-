@@ -4,7 +4,8 @@
 
 Patient *CallPatient(ListeTicket *ListT, ListeUrgence *ListU){
     if(ListU->tete != NULL) {
-        Patient *patientUrgence = ListU->tete;
+        Urgence *urgence = ListU->tete;           
+        Patient *patientUrgence = urgence->patient; 
         patientUrgence->etat = CONSULTATION;
         ListU->tete = ListU->tete->suivant;
         return patientUrgence;

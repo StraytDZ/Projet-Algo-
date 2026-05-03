@@ -35,6 +35,7 @@ struct Patient{
     Ticket *ticket;
     Etat etat;
     Heure heure;
+    int index;
     char diagnostique[100];
     char ordonnance[100];
     char departement[30];
@@ -77,14 +78,13 @@ typedef struct ListeObservation { // Liste de tout les noeuds Observation
 }ListeObservation;
 
 typedef struct Urgence{
-    char nom[30];
-    char prenom[30];
+    Patient *patient;
     char traitement[100];  
     struct Urgence *suivant;
 } Urgence;
 
 typedef struct ListeUrgence {
-    Patient *tete;
+    Urgence *tete;
     int attente;
     int total;
 } ListeUrgence;

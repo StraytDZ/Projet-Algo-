@@ -14,7 +14,8 @@ int main() {
     ListeTicket tickets = {NULL, 0};
     Patient *PatientEnConsult;
     ListeObservation observations = {NULL,0};
-    ListeLit lit = {NULL, 0 , 0};
+    ListeUrgence urgences = {NULL, 0, 0};
+    ListeLit lit = {{0}, 0 , 0};
     chargerTicket(&tickets);
     chargerPatient(&patients);
     verifierNouveauJour(&tickets); // Pour réinitialiser le compteur de ticket a chaque minuit.
@@ -29,7 +30,7 @@ int main() {
                      scanf("%d",&choixMedecin);
                      switch(choixMedecin) {
                         case 1 : 
-                            PatientEnConsult = CallPatient(&tickets);
+                            PatientEnConsult = CallPatient(&tickets,&urgences);
                             do{
                                 menuConsultation(PatientEnConsult);
                                 scanf("%d",&choixConsult);
@@ -50,11 +51,12 @@ int main() {
                             AfficherAttente(&tickets);
                         break;
                         case 3 : 
+                            do {
                             menuObservation();
                             scanf("%d",&choixObservation);
                             switch(choixObservation) {
                                 case 1 : 
-                                    ModifierObservation(&observations);
+                                    ModifierObservation(&observations,&lit);
                                 break;
                                 case 2 : 
                                     AfficherObservation(&observations);
@@ -63,6 +65,7 @@ int main() {
                                     RechercheObservation(&observations);
                                 break;
                             }
+                        }while(choixObservation != 4);
                         break;
                      }
                 }while(choixMedecin != 3);
@@ -79,8 +82,8 @@ int main() {
                             case 2 :
                                 DisplayQueue(&patients);
                             break;
-                            case 4 :
-                                afficherHistorique(&patients,&observations);
+                            case 3 :
+                                afficherHistorique();
                                 break;
                         }
                     }while(choixReception != 3);

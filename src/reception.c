@@ -18,7 +18,7 @@ Ticket *CreateTicket(Patient *patient, int num) {
 }
 Ticket *AddTicket(ListeTicket *ListeT, Patient *patient) {
     ListeT->compteur++;
-    Ticket *nouveauTicket = CreateTicket(patient,ListeU->compteur);
+    Ticket *nouveauTicket = CreateTicket(patient,ListeT->compteur);
     if(ListeT->tete == NULL) { 
         ListeT->tete = nouveauTicket;  
         return nouveauTicket;
