@@ -3,40 +3,12 @@
 #include <time.h>
 #include "observation.h"
 #include "structure.h"
+#include "menu.h"
 
 
-
-Lit *CreateLit(ListeLit* ListeL) { // Fonciton juste pour cree le ' noeud ', ici on ne l'ajoute pas encore vers notre 'lsite de noeud' (ListeLit)
-    if(ListeL->indispo >= ListeL->total ) {  // Si on depasse le nombre de lit disponible dans l'hopitale, tel que ListeL->total est donner dans le main,
-        printf("Erreur : plus de lit disponible !\n");
-        return NULL; 
-    }
-
-    Lit *lit =(Lit*)malloc(sizeof(Lit)); // on crée le lit
-        if(lit == NULL) {
-            printf("Erreur : Impossible de donner un lit");
-            return lit;
-        }
-        lit->num = ListeL->indispo+1; // on inisitalise ici nos informations sur le lit
-        lit->etat = NOCCUPE;
-        lit->patient = NULL;
-        lit->suivant = NULL;
-        if(ListeL->teteLit == NULL) {
-            ListeL->teteLit = lit;
-            ListeL->indispo++;
-            return lit;
-        }
-        Lit *courant = ListeL->teteLit;
-        while(courant->suivant != NULL) 
-            courant = courant->suivant;
-        
-        courant->suivant = lit;
-        ListeL->indispo++;
-        return lit;
-}
 Lit *AddLit(Observation *patientOB, ListeLit *ListeL) {
 
-    Lit *lit = ListeL->teteLit; // Juste pour ne pas ecrire a chaque fois ListeL->tete
+  
     while(lit != NULL && lit->etat == OCCUPE) { // si aucun lit n'est libre + n'est pas NULL
      lit = lit->suivant;
     }
@@ -58,11 +30,16 @@ ListeObservation *AddObservation(Patient *patientEnConsultation, ListeObservatio
             printf("Erreur : Impossible d'enregister une observation.\n");
             return ListeO;
         }
-    printf("Veuillez indiquer la duree de l'observation : (En jour)");
-    scanf("%d",&patientOB->duree);
-    printf("Veuillez indiquer le traitement a suivre : ");
+    int duree;
+    printf("Duree de l'observation (en jours) : ");
+    scanf("%d", &duree);
+    patientOB->debutObservation = time(NULL);
+    patientOB->finObservation   = patientOB->debutObservation + (duree * 24 * 60 * 60); // convertir jours en secondes
+    printf("Indiquez le traitement a suivre : ");
     scanf(" %[^\n]", patientOB->traitement);
+    patientOB->debutObservation = time(NULL);
     patientOB->lit = AddLit(patientOB,ListeL);
+    patientOB->patient->etat = OBSERVATION;
     if( patientOB->lit == NULL ) {
         printf("Erreur : Impossible d'atribuer un lit, Hopitale complet !"); // plus de lit dispo, on peut plus recevoir de patient pour les observer
         free(patientOB);
@@ -71,7 +48,7 @@ ListeObservation *AddObservation(Patient *patientEnConsultation, ListeObservatio
     printf("Le patient est transeferer au lit %d.",patientOB->lit->num);
 
     patientOB->suivant = NULL; // onl l'ajoute a notre liste chainer de patient en observation
-    if(ListeO == NULL) 
+    if(ListeO->tete == NULL) 
         ListeO->tete = patientOB;
     else {
     Observation *courant = ListeO->tete;
@@ -120,13 +97,6 @@ Observation * supprimerObservation(ListeObservation *ListeO, int numlit){
     return tete;     
 }
 
-void transferer(Patient *patientEnConsult){
-    printf("Saisi du nom du département de transfert : ");
-    scanf(" %[^\n]",patientEnConsult->departement);
-    patientEnConsult->etat=TRANSFERER;
-    printf("Le patient %s %s a été transféré vers un departement de %s\n",patientEnConsult->prenom,patientEnConsult->nom, patientEnConsult->departement);
-}
-
 
 void verifierStatut(Patient *patientEnConsult){
     time_t maintenant = time(NULL);
@@ -140,3 +110,109 @@ void verifierStatut(Patient *patientEnConsult){
     }
 }
 
+void AfficherObservation(ListeObservation *ListeO) {
+    if(ListeO == NULL) {    
+        printf("Aucun patient en observations.\n");
+        return;
+    }
+    int i = 0;
+    Observation *courant = ListeO->tete;
+    while(courant != NULL) {
+        char buffer[30];
+        strftime(buffer, 30, "%H:%M:%S", localtime(&courant->debutObservation));
+        printf("[%d] - %s  %s | %d Ans | %s | %s | Lit  %d | Traitement : %s | Sortie : %s\n", i, courant->patient->nom, courant->patient->age, courant->patient->sexe, courant->patient->id,courant->lit->num,courant->traitement,buffer);
+        i++;
+        courant = courant->suivant;
+    }
+}
+
+void ModifierObservation(ListeObservation *ListeO) {
+    AfficherObservation(ListeO);
+    int choix;
+    int index = 1;
+    int i = 1;
+    do{
+        if(index < 0 || index > ListeO->compteur) printf("Erreur : Numero invalide ! Reessayez.\n");
+        printf("----Choix : ");
+        scanf("%d",&index);
+     }while(index < 0 || index > ListeO->compteur);
+    Observation *courant = ListeO->tete;
+    while(i < index) {
+        courant = courant->suivant;
+        i++;
+    }
+    Observation *patientCible = courant;
+    do {
+        menuModifierObservation(courant);
+         canf("%d",&choix);
+    switch(choix)  {
+        case 1 : {
+            int numlit;
+            printf("Donner le num du nouveau lit : ");
+            scanf("%d",&numlit);
+        break; }
+        case 2 : {
+            printf("Donner le nouveau traitement a suivre : ");
+            scanf(" %[^\n]", patientCible->traitement);
+        break; }
+        case 3 : {
+            int duree;
+            printf("Ajouter une retier des jours (Exemple : 2 ou -1) :");
+            scanf("%d",&duree);
+
+            patientCible->finObservation = patientCible->finObservation + (duree * 24 * 60 * 60); // on ajoute ou reduire par rapport a la date deja donnée
+            char buffer[20];
+            strftime(buffer, 20, "%d/%m/%Y", localtime(&patientCible->finObservation));
+            printf("Nouvelle date de fin : %s\n", buffer);
+        break;}
+        }
+    }while(choix != 4);
+}
+void RechercheObservation(ListeObservation *ListeO) {
+    int choix;
+    do {
+        printf("Rechercher par : \n");
+        printf("\t 1 - ID\n");
+        printf("\t 2 - Nom et Prenom\n");
+        printf("\t 3 - Quitter\n");
+        scanf("%d", &choix);
+        switch(choix) {
+        case 1 : {
+            char IDcible[20];
+            printf("ID :");
+            scanf("%s", IDcible);
+            int trouve = 0;
+            Observation *courant = ListeO->tete;
+            while(courant != NULL) {
+                if(strcmp(courant->patient->id, IDcible) == 0) {
+                    char buffer[30];
+                    strftime(buffer, 30, "%d/%m/%Y", localtime(&courant->finObservation));
+                    printf("%s  %s | %d Ans | %s | %s | Lit  %d | Traitement : %s | Sortie : %s\n",courant->patient->nom, courant->patient->prenom, courant->patient->age, courant->patient->sexe, courant->patient->id,courant->lit->num,courant->traitement,buffer);
+                    trouve = 1;
+                }
+                courant = courant->suivant;
+            }
+            if(trouve == 0) printf("Patient introuvable.\n");
+        break; }
+        case 2 : {
+            char nomCible[30],prenomCible[30];
+            printf("Nom :");
+            scanf(" %[^\n]", nomCible);
+            printf("Prenom :");
+            scanf(" %[^\n]", prenomCible);
+            int trouve = 0;
+            Observation *courant = ListeO->tete; 
+            while(courant != NULL) {
+                if((strcmp(courant->patient->nom, nomCible) == 0) && (strcmp(courant->patient->prenom, prenomCible) == 0)) {
+                    char buffer[20];
+                    strftime(buffer, 20, "%d/%m/%Y", localtime(&courant->finObservation));
+                    printf("%s  %s | %d Ans | %s | %s | Lit  %d | Traitement : %s | Sortie : %s\n",courant->patient->nom, courant->patient->prenom, courant->patient->age, courant->patient->sexe, courant->patient->id,courant->lit->num,courant->traitement,buffer);
+                    trouve = 1;
+                }
+                courant = courant->suivant;
+            }
+            if(trouve == 0) printf("Patient introuvable.\n");
+        break; }
+        }
+    }while(choix != 3);
+}

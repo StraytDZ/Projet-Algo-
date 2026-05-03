@@ -31,3 +31,26 @@ void PatientOrdonnance(Patient *patientEnConsult) {
     }
     else printf("Veuillez d'abord saisir un traitement.\n");
 }
+
+void transferer(Patient *patientEnConsult){
+    printf("Saisi du nom du département de transfert : ");
+    scanf(" %[^\n]",patientEnConsult->departement);
+    patientEnConsult->etat=TRANSFERER;
+    printf("Le patient %s %s a été transféré vers un departement de %s.\n",patientEnConsult->prenom,patientEnConsult->nom, patientEnConsult->departement);
+}
+void AfficherAttente(ListeTicket *ListeT) {
+    Ticket *courant = ListeT->tete;
+    if(courant == NULL) {
+        printf("Aucun patient en file d'attente.\n");
+        return;
+    }
+    int i = 1;
+    while(courant != NULL) {
+        char buffer[30];
+        strftime(buffer, 30, "%d/%m/%Y %H:%M:%S", localtime(&courant->client->heure.arrive));
+        printf("[%d] - %s  %s | %d Ans | %s | %s | Ticket  %d | %s\n", i, courant->client->nom, courant->client->prenom, courant->client->age, courant->client->sexe, courant->client->id,courant->numero,buffer);
+        i++;
+        courant = courant->suivant;
+    }
+
+}

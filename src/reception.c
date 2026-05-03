@@ -76,6 +76,7 @@ ListePatient *AddPatient(ListePatient *ListeP,ListeTicket *ListeT) {
     courant->suivant = P;
     ListeP->attente++;
     ListeP->total++;
+    P->index = ListeP->total;
     return ListeP;
 }
 void DisplayQueue(ListePatient *ListeP) {

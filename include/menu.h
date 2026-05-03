@@ -1,9 +1,12 @@
 #ifndef MENU_H
 #define MENU_H
 
+#include "structure.h"
+
 void menuPrincipal();
 void menuMedecin();
 void menuConsultation(Patient *patientEnConsultation);
 void menuReception();
-
+void menuObservation();
+void menuModifierObservation(Observation *patientEnObservation);
 #endif

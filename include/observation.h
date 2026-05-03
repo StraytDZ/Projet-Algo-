@@ -3,14 +3,14 @@
 
 #include "structure.h"
 
-Lit *CreateLit(ListeLit* ListeL);
 Lit *AddLit(Observation *patientOB, ListeLit *ListeL);
-void afficherObservation(ListeObservation *patientO);
+void AfficherObservation(ListeObservation *patientO);
 ListeObservation *AddObservation(Patient *patientEnConsultation, ListeObservation *tete, ListeLit *ListeL);
-Observation * supprimerObservation(Observation *lits, int numlit);
+Observation * SupprimerObservation(Observation *lits, int numlit);
 void transferer(Patient *patientEnConsult);
 void saisirduree(Patient *patientEnConsult);
 void modifiertraitement(Patient *patientEnConsult);
 void verifierStatut(Patient *patientEnConsult);
-
+void ModifierObservation(ListeObservation *ListeO);
+void RechercheObservation(ListeObservation *ListeO);
 #endif

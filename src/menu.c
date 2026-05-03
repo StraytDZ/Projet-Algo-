@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "menu.h"
+
 #include "structure.h"
 
 void menuPrincipal() {
@@ -26,6 +27,45 @@ void menuMedecin() {
     printf("=======================================\n");
     printf("                          Choix : ");
 }
+void menuConsultation(Patient *patientEnConsult) {
+
+    printf("\n=======================================\n");
+    printf("\tPatient %d : %s %s | %d | %s | %s \n",patientEnConsult->ticket->numero, patientEnConsult->nom,patientEnConsult->prenom, patientEnConsult->age,patientEnConsult->sexe,patientEnConsult->id);
+    printf("=======================================\n\n");
+    printf("\t 1 - Enregistrer le diagnostic\n");
+    printf("\t 2 - Inscrire une ordonnance\n");
+    printf("\t 3 - Mettre en observation\n");
+    printf("\t 4 - Transferer a un autre departement\n");
+    printf("\t 5- Quitter\n\n");
+    printf("=======================================\n");
+    printf("                          Choix : ");
+}
+void menuObservation() {
+
+    printf("\n=======================================\n");
+    printf("\t=+=+=+=MENU=+=+=+=\n");
+    printf("\t*+*+*OBSERVATION*+*+*\n");
+    printf("=======================================\n\n");
+    printf("\t 1 - Modifier une observation\n");
+    printf("\t 2 - Afficher la liste d'observation\n");
+    printf("\t 3 - Rechercher un patient\n");
+    printf("\t 4 - Quitter\n\n");
+    printf("=======================================\n");
+    printf("                          Choix : ");
+}
+void menuModifierObservation(Observation *patientEnObservation) {
+    char buffer[30];
+    strftime(buffer, 30, "%d/%m/%Y", localtime(&patientEnObservation->finObservation));
+    printf("\n=======================================\n");
+    printf("\t%s %s | Lit %d | Traitement : %s. | Fin Observation : %s\n", patientEnObservation->patient->nom, patientEnObservation->patient->prenom,patientEnObservation->lit->num,patientEnObservation->traitement,buffer);
+    printf("=======================================\n\n");
+    printf("\t 1 - Modifier le lit\n");
+    printf("\t 2 - Modifier le traitement");
+    printf("\t 3 - Modifier la durée de l'observation\n");
+    printf("\t 4 - Quitter\n\n");
+    printf("=======================================\n");
+    printf("                          Choix : ");
+}
 
 void menuReception() {
 
@@ -41,30 +81,5 @@ void menuReception() {
     printf("                          Choix : ");
 }
 
-void menuConsultation(Patient *patientEnConsult) {
 
-    printf("\n=======================================\n");
-    printf("\tPatient %d : %s %s | %d | %s | %s \n",patientEnConsult->ticket->numero, patientEnConsult->nom,patientEnConsult->prenom, patientEnConsult->age,patientEnConsult->sexe,patientEnConsult->id);
-    printf("=======================================\n\n");
-    printf("\t 1 - Enregistrer le diagnostic\n");
-    printf("\t 2 - Inscrire une ordonnance\n");
-    printf("\t 3 - Mettre en observation\n");
-    printf("\t 4 - Transferer a un autre departement\n");
-    printf("\t 5- Quitter\n\n");
-    printf("=======================================\n");
-    printf("                          Choix : ");
-}
-void menuOservation() {
-
-    printf("\n=======================================\n");
-    printf("\t=+=+=+=MENU=+=+=+=\n");
-    printf("\t*+*+*OBSERVATION*+*+*\n");
-    printf("=======================================\n\n");
-    printf("\t 1 - Modifier une observation\n");
-    printf("\t 2 - Afficher la liste d'observation\n");
-    printf("\t 3 - Rechercher un patient\n");
-    printf("\t 4 - Quitter\n\n");
-    printf("=======================================\n");
-    printf("                          Choix : ");
-}
 
