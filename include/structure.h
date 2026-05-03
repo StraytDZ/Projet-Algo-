@@ -2,7 +2,7 @@
 #define STRUCTURE_H
 
 #include <time.h>  // Pour la structure de Heure, utile pour l'historique.
-
+ #define MAX_LIT 100
 typedef struct Patient Patient;
 typedef struct Ticket {
     int numero;
@@ -57,16 +57,15 @@ typedef struct Lit{ // Un noeud Lit
     Patient *patient;
     EtatLit etat;
     int num;
-    struct Lit *suivant;
 }Lit;
 typedef struct ListeLit{ // // Liste de tout les noeuds Lit
-    Lit *teteLit;
+    Lit Tlit[MAX_LIT];
     int total;
     int indispo; // On peut pas connaitre combien de lit disponible car on a ici une lsite Chainer, faudra alors faire total - indispo
 }ListeLit;
 typedef struct Observation{ // Un noeud Observation
     Patient *patient;
-    Lit *lit;
+    Lit lit;
     char traitement[100];
     Heure duree;
     struct Observation *suivant;
