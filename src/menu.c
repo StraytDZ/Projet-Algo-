@@ -5,13 +5,16 @@
 #include "structure.h"
 
 void pause() {
+    int c;
+    // Vider tout ce qui reste dans le buffer (le \n du scanf precedent)
+    while ((c = getchar()) != '\n' && c != EOF);
+    // Maintenant attendre un vrai Entree de l'utilisateur
     printf("\nAppuyez sur Entree pour continuer...");
-    while(getchar() != '\n');
+    getchar();
 }
 
 void menuPrincipal() {
-    pause();
-    system("cls");
+
     printf("\t ++++URGENCE+++++\n");
     printf("\t=+=+=+=MENU=+=+=+=\n");
     printf("=======================================\n\n");
@@ -23,7 +26,6 @@ void menuPrincipal() {
     printf("                          Choix : ");
 }
 void menuMedecin() {
-    pause();
     system("cls");
     printf("\n=======================================\n");
     printf("\t=+=+=+=MENU=+=+=+=\n");
@@ -37,7 +39,6 @@ void menuMedecin() {
     printf("                          Choix : ");
 }
 void menuConsultation(Patient *patientEnConsult) {
-    pause();
     system("cls");
     printf("\n=======================================\n");
     printf("\tPatient %d : %s %s | %d | %s | %s \n",patientEnConsult->ticket->numero, patientEnConsult->nom,patientEnConsult->prenom, patientEnConsult->age,patientEnConsult->sexe,patientEnConsult->id);
@@ -51,7 +52,6 @@ void menuConsultation(Patient *patientEnConsult) {
     printf("                          Choix : ");
 }
 void menuObservation() {
-    pause();
     system("cls");
     printf("\n=======================================\n");
     printf("\t=+=+=+=MENU=+=+=+=\n");
@@ -66,7 +66,6 @@ void menuObservation() {
     printf("                          Choix : ");
 }
 void menuModifierObservation(Observation *patientEnObservation) {
-    pause();
     char buffer[30];
     strftime(buffer, 30, "%d/%m/%Y", localtime(&patientEnObservation->finObservation));
     system("cls");
@@ -82,7 +81,6 @@ void menuModifierObservation(Observation *patientEnObservation) {
 }
 
 void menuReception() {
-    pause();
     system("cls");
     printf("\n=======================================\n");
     printf("\t=+=+=+=MENU=+=+=+=\n");
@@ -98,21 +96,19 @@ void menuReception() {
 }
 
 void menuUrgence() {
-    pause();
     system("cls");
     printf("\n=======================================\n");
     printf("\t=+=+=+=MENU=+=+=+=\n");
     printf("\t*+*+*URGENEC*+*+*\n");
     printf("=======================================\n\n");
     printf("\t 1 - Enregister une urgence\n");
-    printf("\t 2 - Afficher la liste d'urgenec\n"); 
-    printf("\t 4 - Quitter\n\n");
+    printf("\t 2 - Afficher la liste d'urgence\n"); 
+    printf("\t 3 - Quitter\n\n");
     printf("=======================================\n");
     printf("                          Choix : ");
 }
 
 void menuAdmin() {
-    pause();
     system("cls");
     printf("\n=======================================\n");
     printf("\t=+=+=+=MENU=+=+=+=\n");

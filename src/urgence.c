@@ -4,6 +4,7 @@
 #include "urgence.h"
 #include "structure.h"
 #include "reception.h"
+#include "menu.h"
 
 ListeUrgence* AddUrgence(ListeUrgence *ListeU, ListeTicket *ListeT){
     Patient *patientEnUrgence = (Patient*)malloc(sizeof(Patient));
@@ -24,7 +25,7 @@ ListeUrgence* AddUrgence(ListeUrgence *ListeU, ListeTicket *ListeT){
     printf("Nom : ");    scanf(" %[^\n]", patientEnUrgence->nom);
     printf("Prenom : "); scanf(" %[^\n]", patientEnUrgence->prenom);
     printf("ID : ");     scanf(" %[^\n]", patientEnUrgence->id);
-    printf("Age : ");    scanf("%d", &patientEnUrgence->age);
+    printf("Age : ");    scanf("%d", &patientEnUrgence->age); while(getchar() != '\n');
     printf("Sexe : ");   scanf("%s", patientEnUrgence->sexe);
     strcpy(patientEnUrgence->departement,"");
     strcpy(patientEnUrgence->diagnostique,"");
@@ -58,9 +59,10 @@ void afficherUrgence(ListeUrgence *ListeU) {
         Urgence *courant = ListeU->tete;
         while(courant != NULL) {
             char buffer[20];
-            strftime(buffer, 20, "%H/%M/%S", localtime(&courant->patient->heure.arrive));
+            strftime(buffer, 20, "%H:%M:%S", localtime(&courant->patient->heure.arrive));
             printf("[%d] - %s  %s | %d Ans | %s | %s | Ticket  %d | Debut d'attente : %s\n", i, courant->patient->nom, courant->patient->prenom, courant->patient->age, courant->patient->sexe, courant->patient->id,courant->patient->ticket->numero,buffer);
         i++;
         courant = courant->suivant;
         }
+        pause();
 }

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "medecin.h"
 #include <string.h>
+#include "menu.h"
 
 Patient *CallPatient(ListeTicket *ListT, ListeUrgence *ListU){
     if(ListU->tete != NULL) {
@@ -35,17 +36,19 @@ void PatientOrdonnance(Patient *patientEnConsult) {
 }
 
 void transferer(Patient *patientEnConsult){
-    printf("Saisi du nom du département de transfert : ");
+    if(strcmp(patientEnConsult->diagnostique, "") != 0) {
+    printf("Saisi du nom du departement de transfert : ");
     scanf(" %[^\n]",patientEnConsult->departement);
     patientEnConsult->etat=TRANSFERER;
-    printf("Le patient %s %s a été transféré vers un departement de %s.\n",patientEnConsult->prenom,patientEnConsult->nom, patientEnConsult->departement);
+    printf("Le patient %s %s a été transfere vers un departement de %s.\n",patientEnConsult->prenom,patientEnConsult->nom, patientEnConsult->departement);
+    }else printf("Veuillez d'abord saisir un diagnostique.\n");
 }
 void AfficherAttente(ListeTicket *ListeT) {
-    Ticket *courant = ListeT->tete;
-    if(courant == NULL) {
+    if(ListeT->tete == NULL) {
         printf("Aucun patient en file d'attente.\n");
         return;
     }
+    Ticket *courant = ListeT->tete;
     int i = 1;
     while(courant != NULL) {
         char buffer[30];

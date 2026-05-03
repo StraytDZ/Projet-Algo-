@@ -3,6 +3,7 @@
 
 #include "structure.h"
 
+void pause();
 void menuPrincipal();
 void menuMedecin();
 void menuConsultation(Patient *patientEnConsultation);

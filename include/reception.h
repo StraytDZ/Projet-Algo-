@@ -5,7 +5,7 @@
 
 Ticket *CreateTicket(Patient *, int num);
 Ticket * AddTicket(ListeTicket *, Patient *);
-ListePatient * AddPatient(ListePatient *,ListeTicket*);
+void AddPatient(ListePatient *,ListeTicket*);
 void afficherAttente(ListeTicket *ListeT);
 void SaveTicket(ListeTicket *listeT);
 void chargerTickets(ListeTicket *listeT);

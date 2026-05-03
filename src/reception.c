@@ -32,7 +32,7 @@ Ticket *AddTicket(ListeTicket *ListeT, Patient *patient) {
     return nouveauTicket;
 }
     
-ListePatient *AddPatient(ListePatient *ListeP,ListeTicket *ListeT) {
+void AddPatient(ListePatient *ListeP,ListeTicket *ListeT) {
     char Nom[30],Prenom[30],ID[20],Sexe[4];
     int Age;
     Patient *P = (Patient*)malloc(sizeof(Patient));
@@ -40,17 +40,18 @@ ListePatient *AddPatient(ListePatient *ListeP,ListeTicket *ListeT) {
             printf("Erreur : Impossible d'enregister le patient.");
             exit(1);
         }
-    printf("Veuiller fournir les informations suivante du patient :");
-    printf("\t\nNom : ");
+    printf("Veuiller fournir les informations suivante du patient :\n");
+    printf("\tNom : ");
     scanf(" %[^\n]",Nom);
-    printf("\t\nPrenom : ");
+    printf("\tPrenom : ");
     scanf(" %[^\n]",Prenom);
-    printf("\t\nID : ");
+    printf("\tID : ");
     scanf(" %[^\n]",ID);
-    printf("\t\nAge : ");
+    printf("\tAge : ");
     scanf("%d",&Age);
-    printf("\t\nSexe(H/F): ");
-    scanf("%s",Sexe);
+    while(getchar() != '\n');
+    printf("\tSexe(H/F): ");
+    scanf("%s", Sexe);
     strcpy(P->nom, Nom);
     strcpy(P->prenom, Prenom);
     strcpy(P->id, ID);
@@ -64,11 +65,11 @@ ListePatient *AddPatient(ListePatient *ListeP,ListeTicket *ListeT) {
     P->heure.sorti = 0; // Pas encore sortie, on initialise a 0
     strcpy(P->diagnostique,"");
     strcpy(P->ordonnance,"");
-    if(ListeT->tete == NULL) {
+    if(ListeP->tete == NULL) {
        ListeP->tete = P;
         ListeP->attente++;
         ListeP->total++;
-    return ListeP;  
+    return;  
 }
     Patient *courant = ListeP->tete;
     while(courant->suivant != NULL)
@@ -77,21 +78,24 @@ ListePatient *AddPatient(ListePatient *ListeP,ListeTicket *ListeT) {
     ListeP->attente++;
     ListeP->total++;
     P->index = ListeP->total;
-    return ListeP;
 }
 void afficherAttente(ListeTicket *ListeT) {
+    if(ListeT->tete == NULL) {
+        printf("Aucun patient en fille d'attente.\n");
+        return;
+    }
     Ticket *courant = ListeT->tete;
     int i = 1;
     while(courant != NULL) {
         char buffer[20];
-        strftime(buffer, 20, "%H/%M/%S", localtime(&courant->client->heure.arrive));
-        printf("[%d] - %s  %s | %d Ans | %s | %s | Ticekt  %d | Debut d'attente : %s\n", i, courant->client->nom, courant->client->prenom, courant->client->age, courant->client->sexe, courant->client->id,courant->numero,buffer);
+        strftime(buffer, 20, "%H:%M:%S", localtime(&courant->client->heure.arrive));
+        printf("[%d] - %s  %s | %d Ans | %s | %s | Ticket  %d | Debut d'attente : %s\n", i, courant->client->nom, courant->client->prenom, courant->client->age, courant->client->sexe, courant->client->id,courant->numero,buffer);
         courant = courant->suivant;
         i++;
     }
 }
 void SaveTicket(ListeTicket *listeT) {
-    FILE *f = fopen("systeme.bin", "wb");
+    FILE *f = fopen("data/tickets.bin", "wb");
     if (f == NULL) return;
 
     fwrite(&listeT->compteur,     sizeof(int),    1, f);
@@ -101,7 +105,7 @@ void SaveTicket(ListeTicket *listeT) {
 }
 
 void chargerTickets(ListeTicket *listeT) {
-    FILE *f = fopen("data/systeme.bin", "rb");
+    FILE *f = fopen("data/tickets.bin", "rb");
     if (f == NULL) return;
 
     fread(&listeT->compteur,     sizeof(int),    1, f);

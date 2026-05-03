@@ -11,11 +11,11 @@
 int main() {
     int choix,choixReception,choixMedecin,choixConsult,choixObservation,ChoixUrgence;
     ListePatient patients = {NULL, 0, 0, 0, 0, 0};
-    ListeTicket tickets = {NULL, 0};
+    ListeTicket tickets = {NULL, 0, 0};
     Patient *PatientEnConsult;
     ListeObservation observations = {NULL,0};
     ListeUrgence urgences = {NULL, 0, 0};
-    ListeLit lit = {{0}, 0 , 0};
+    ListeLit lit = {{0}, MAX_LIT , 0};
     chargerTickets(&tickets);
     chargerPatients(&patients,&tickets);
     chargerObservations(&patients,&observations,&lit);
@@ -32,27 +32,36 @@ int main() {
                      switch(choixMedecin) {
                         case 1 : 
                             PatientEnConsult = CallPatient(&tickets,&urgences);
+                            if(PatientEnConsult == NULL) break;
                             do{
                                 menuConsultation(PatientEnConsult);
                                 scanf("%d",&choixConsult);
                                 switch(choixConsult) {
                                     case 1 : 
                                         PatientDiagnostic(PatientEnConsult);
+                                        pause();
                                     break;
                                     case 2 :
                                         PatientOrdonnance(PatientEnConsult);
+                                        pause();
                                     break;
                                     case 3 : 
                                         AddObservation(PatientEnConsult,&observations,&lit);
+                                        choixConsult = 5;
+                                        pause();
                                     break;
                                     case 4: 
                                         transferer(PatientEnConsult);
+                                        choixConsult = 5;
+                                        pause();
+                                        continue;
                                     break;
                                 }
                             }while(choixConsult != 5);
                         break;
                         case 2 : 
                             AfficherAttente(&tickets);
+                            pause();
                         break;
                         case 3 : 
                             do {
@@ -61,25 +70,25 @@ int main() {
                             switch(choixObservation) {
                                 case 1 : 
                                     ModifierObservation(&observations,&lit);
+                                    pause();
                                 break;
                                 case 2 : 
                                     AfficherListeObservation(&observations);
+                                    pause();
                                 break;
                                 case 3 : 
                                     RechercheObservation(&observations);
+                                    pause();
                                 break;
                                 case 4 : 
-                                    AfficherListeObservation(&observations);
-                                    int numlit;
-                                    printf("Numero du lit a liberer : ");
-                                    scanf("%d", &numlit);
-                                    SupprimerObservation(&observations,&lit,numlit);
+                                    SupprimerObservation(&observations,&lit);
+                                    pause();
                                 break;
                             }
                         }while(choixObservation != 5);
                         break;
                      }
-                }while(choixMedecin != 3);
+                }while(choixMedecin != 4);
             break;
             
             case 2 : 
@@ -89,6 +98,7 @@ int main() {
                         switch(choixReception) {
                             case 1:
                                 AddPatient(&patients,&tickets);
+                                pause();
                             break;
                             case 2 :
                                 do{ 
@@ -97,18 +107,22 @@ int main() {
                                 switch(ChoixUrgence) {
                                     case 1: 
                                         AddUrgence(&urgences,&tickets);
+                                        pause();
                                     break;
                                     case 2 :
                                         afficherUrgence(&urgences);
+                                        pause();
                                     break;
                                 }
                                 }while(ChoixUrgence != 3);
                             break;
                             case 3 : 
                                 afficherAttente(&tickets);
+                                pause();
                             break;
                             case 4 :
                                 afficherHistorique();
+                                pause();
                             break;
                               }   
                     }while(choixReception != 5);

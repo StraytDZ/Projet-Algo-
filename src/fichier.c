@@ -4,7 +4,7 @@
 #include <time.h>
 #include "fichier.h"
 #include "reception.h"
-
+#include "menu.h"
 /*
 ad 3edregh s te9baylit rapide dayi 3eleghed tayi structure sans pointeur car on ne peut pas sauvegarder des pointeurs dans un fishier
 on sauvegarde uniquement les donne brutes
@@ -206,6 +206,7 @@ void sauvegarderObservations(ListeObservation *ListeO) {
     FILE *f = fopen("data/observations.bin", "wb");
     if (f == NULL) {
         printf("Erreur : impossible d'ouvrir observations.bin\n");
+        
         return;
     }
     Observation *courant = ListeO->tete;
