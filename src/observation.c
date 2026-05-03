@@ -162,13 +162,15 @@ void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL) {
         case 1 : {
             int numlit;
             printf("Donner le numero du nouveau lit : ");
-            scanf("%d",&numlit);
+            scanf("%d", &numlit);
             if (numlit < 1 || numlit > ListeL->total) {
                 printf("Erreur : lit invalide.\n");
+                pause();
                 break;
             }
             if (ListeL->Tlit[numlit-1].etat == OCCUPE) {
               printf("Erreur : lit %d deja occupe.\n", numlit);
+              pause();
               break;
             }
             ListeL->Tlit[patientCible->lit - 1].etat =  NOCCUPE;
@@ -190,6 +192,7 @@ void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL) {
             char buffer[20];
             strftime(buffer, 20, "%d/%m/%Y", localtime(&patientCible->finObservation));
             printf("Nouvelle date de fin : %s\n", buffer);
+            pause();
         break;}
         }
     }while(choix != 4);

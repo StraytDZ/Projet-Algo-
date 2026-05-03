@@ -70,10 +70,10 @@ void menuModifierObservation(Observation *patientEnObservation) {
     strftime(buffer, 30, "%d/%m/%Y", localtime(&patientEnObservation->finObservation));
     system("cls");
     printf("\n=======================================\n");
-    printf("\t%s %s | Lit %d | Traitement : %s. | Fin Observation : %s\n", patientEnObservation->patient->nom, patientEnObservation->patient->prenom,patientEnObservation->lit,patientEnObservation->traitement,buffer);
+    printf("\t%s %s | Lit %d | Traitement : %s | Fin Observation : %s\n", patientEnObservation->patient->nom, patientEnObservation->patient->prenom,patientEnObservation->lit,patientEnObservation->traitement,buffer);
     printf("=======================================\n\n");
     printf("\t 1 - Modifier le lit\n");
-    printf("\t 2 - Modifier le traitement");
+    printf("\t 2 - Modifier le traitement\n");
     printf("\t 3 - Modifier la durée de l'observation\n");
     printf("\t 4 - Quitter\n\n");
     printf("=======================================\n");

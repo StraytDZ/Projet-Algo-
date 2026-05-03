@@ -32,7 +32,10 @@ int main() {
                      switch(choixMedecin) {
                         case 1 : 
                             PatientEnConsult = CallPatient(&tickets,&urgences);
-                            if(PatientEnConsult == NULL) break;
+                            if(PatientEnConsult == NULL){
+                                pause();
+                                break;
+                            }
                             do{
                                 menuConsultation(PatientEnConsult);
                                 scanf("%d",&choixConsult);
@@ -71,7 +74,6 @@ int main() {
                             switch(choixObservation) {
                                 case 1 : 
                                     ModifierObservation(&observations,&lit);
-                                    pause();
                                 break;
                                 case 2 : 
                                     AfficherListeObservation(&observations);
