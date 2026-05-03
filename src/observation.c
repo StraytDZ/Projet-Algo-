@@ -169,7 +169,7 @@ void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL) {
     }
     Observation *patientCible = courant;
     do {
-        menuModifierObservation(courant);
+        menuModifierObservation(patientCible);
         scanf("%d",&choix);
     switch(choix)  {
         case 1 : {
