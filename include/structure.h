@@ -65,7 +65,7 @@ typedef struct ListeLit{ // // Liste de tout les noeuds Lit
 }ListeLit;
 typedef struct Observation{ // Un noeud Observation
     Patient *patient;
-    Lit lit;
+    int lit;
     char traitement[100];
     Heure duree;
     struct Observation *suivant;
