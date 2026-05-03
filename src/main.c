@@ -46,17 +46,17 @@ int main() {
                                     break;
                                     case 2 :
                                         PatientOrdonnance(PatientEnConsult);
-                                        choixConsult = 5;
+                                        if(strcmp(PatientEnConsult->diagnostique,"") !=0)choixConsult = 5;
                                         pause();
                                     break;
                                     case 3 : 
                                         AddObservation(PatientEnConsult,&observations,&lit,&tickets,&patients);
-                                        choixConsult = 5;
+                                        if(strcmp(PatientEnConsult->diagnostique,"") !=0)choixConsult = 5;
                                         pause();
                                     break;
                                     case 4: 
                                         transferer(PatientEnConsult);
-                                        choixConsult = 5;
+                                        if(strcmp(PatientEnConsult->diagnostique,"") !=0)choixConsult = 5;
                                         pause();
                                         continue;
                                     break;
@@ -74,6 +74,7 @@ int main() {
                             switch(choixObservation) {
                                 case 1 : 
                                     ModifierObservation(&observations,&lit);
+                                    pause();
                                 break;
                                 case 2 : 
                                     AfficherListeObservation(&observations);
