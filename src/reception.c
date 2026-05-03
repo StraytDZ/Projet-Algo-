@@ -78,6 +78,7 @@ void AddPatient(ListePatient *ListeP,ListeTicket *ListeT) {
     ListeP->attente++;
     ListeP->total++;
     P->index = ListeP->total;
+     sauvegarderHistorique(P);
 }
 void afficherAttente(ListeTicket *ListeT) {
     if(ListeT->tete == NULL) {
@@ -100,7 +101,6 @@ void SaveTicket(ListeTicket *listeT) {
 
     fwrite(&listeT->compteur,     sizeof(int),    1, f);
     fwrite(&listeT->dernierReset, sizeof(time_t), 1, f);
-
     fclose(f);
 }
 
