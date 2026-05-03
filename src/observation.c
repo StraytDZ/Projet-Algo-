@@ -24,7 +24,7 @@ int AddLit(Patient *patientEnonsultation,ListeLit *ListeL) { // Fonciton juste p
 
 
 void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, ListeLit *ListeL) {
-    if(strcmp(patientEnConsultation->diagnostique,"" == 0)) {
+    if(strcmp(patientEnConsultation->diagnostique,"") == 0) {
         printf("Veuilelz d'abord saisir un diagnostique.\n");
 
     }
