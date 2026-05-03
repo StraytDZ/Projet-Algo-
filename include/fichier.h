@@ -10,7 +10,7 @@ void         sauvegarderHistorique(Patient *p);
 
 /* pour  Chargement */
 void         chargerPatients(ListePatient *liste, ListeTicket *listeT);
-Observation *chargerObservations(ListePatient *liste, int *numeroPrecedent);
+void chargerObservations(ListePatient *liste, ListeObservation *ListeO, ListeLit *ListeL); 
 
 /*pour  Historique */
 void         afficherHistorique();

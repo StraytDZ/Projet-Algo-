@@ -29,7 +29,7 @@ typedef struct {
     - Parcourt la liste et ecrit chaque patient
      */
 void sauvegarderPatients(ListePatient *liste) {
-    FILE *f = fopen("patients.bin", "wb");
+    FILE *f = fopen("data/patients.bin", "wb");
     if (f == NULL) {
         printf("Erreur : impossible d'ouvrir patients.bin\n");
         return;
@@ -66,7 +66,7 @@ void sauvegarderPatients(ListePatient *liste) {
    - Recrée aussi le Ticket avec le bon numero
    */
 void chargerPatients(ListePatient *liste, ListeTicket *listeT) {
-    FILE *f = fopen("patients.bin", "rb");
+    FILE *f = fopen("data/patients.bin", "rb");
     if (f == NULL)
         return; /* Premiere execution, fichier inexistant : normal */
 
@@ -130,7 +130,7 @@ void chargerPatients(ListePatient *liste, ListeTicket *listeT) {
    - Appeler quand un patient est SORTI ou TRANSFERE
     */
 void sauvegarderHistorique(Patient *p) {
-    FILE *f = fopen("historique.bin", "ab");
+    FILE *f = fopen("data/historique.bin", "ab");
     if (f == NULL) {
         printf("Erreur : Impossible d'ouvrir historique.bin\n");
         return;
@@ -158,7 +158,7 @@ void sauvegarderHistorique(Patient *p) {
    - Lit historique.bin et affiche tous les patients sortis
     */
 void afficherHistorique() {
-    FILE *f = fopen("historique.bin", "rb");
+    FILE *f = fopen("data/historique.bin", "rb");
     if (f == NULL) {
         printf("Aucun historique disponible.\n");
         return;
@@ -203,7 +203,7 @@ void afficherHistorique() {
      qui permet de retrouver le patient au chargement
    ============================================================ */
 void sauvegarderObservations(ListeObservation *ListeO) {
-    FILE *f = fopen("observations.bin", "wb");
+    FILE *f = fopen("data/observations.bin", "wb");
     if (f == NULL) {
         printf("Erreur : impossible d'ouvrir observations.bin\n");
         return;
@@ -212,10 +212,16 @@ void sauvegarderObservations(ListeObservation *ListeO) {
     while (courant != NULL) {
         int  numlit = courant->lit;
         char idPatient[20];
+        char   traitement[100];
+        time_t fin   = courant->finObservation;
+        time_t debut = courant->debutObservation;
         strcpy(idPatient, courant->patient->id);
-
+        strcpy(traitement, courant->traitement);
         fwrite(&numlit,   sizeof(int),  1,  f);
         fwrite(idPatient, sizeof(char), 20, f);
+        fwrite(traitement,  sizeof(char),   100, f);
+        fwrite(&fin,        sizeof(time_t), 1,   f);
+        fwrite(&debut,      sizeof(time_t), 1,   f);
 
         courant = courant->suivant;
     }
@@ -231,19 +237,21 @@ void sauvegarderObservations(ListeObservation *ListeO) {
    - Retourne la liste d'observations reconstruite
      (pas de ** : on retourne le pointeur directement)
    ============================================================ */
-Observation *chargerObservations(ListePatient *liste, int *numeroPrecedent) {
-    FILE *f = fopen("observations.bin", "rb");
-    if (f == NULL)
-        return NULL; /* Premiere execution : normal */
+void chargerObservations(ListePatient *liste, ListeObservation *ListeO, ListeLit *ListeL) {
+    FILE *f = fopen("data/observations.bin", "rb");
+    if (f == NULL) return;
 
-    Observation *lits = NULL;
     int  numlit;
     char idPatient[20];
-
+    char traitement[100];
+    time_t fin, debut;
     while (fread(&numlit, sizeof(int), 1, f) == 1) {
-        fread(idPatient, sizeof(char), 20, f);
+        fread(idPatient,  sizeof(char),   20,  f);
+        fread(traitement, sizeof(char),   100, f);
+        fread(&fin,       sizeof(time_t), 1,   f);
+        fread(&debut,     sizeof(time_t), 1,   f); 
 
-        /* Rechercher le patient par ID dans la liste */
+        // Retrouver le patient par ID
         Patient *p = liste->tete;
         while (p != NULL && strcmp(p->id, idPatient) != 0)
             p = p->suivant;
@@ -251,23 +259,31 @@ Observation *chargerObservations(ListePatient *liste, int *numeroPrecedent) {
         if (p != NULL) {
             Observation *obs = malloc(sizeof(Observation));
             if (obs == NULL) break;
-            obs->lit  = numlit;
+            obs->lit     = numlit;
             obs->patient = p;
+            obs->finObservation   = fin;  
+            obs->debutObservation = debut;  
+            strcpy(obs->traitement, traitement);
             obs->suivant = NULL;
 
-            /* Ajouter a la fin */
-            if (lits == NULL) {
-                lits = obs;
-            } else {
-                Observation *tmp = lits;
+            // Retrouver et marquer le lit comme occupé
+            if (numlit >= 1 && numlit <= ListeL->total) {
+                ListeL->Tlit[numlit-1].etat    = OCCUPE;
+                ListeL->Tlit[numlit-1].patient = p;
+                ListeL->indispo++;
+            }
+
+            // Ajouter à la liste
+            if (ListeO->tete == NULL)
+                ListeO->tete = obs;
+            else {
+                Observation *tmp = ListeO->tete;
                 while (tmp->suivant != NULL) tmp = tmp->suivant;
                 tmp->suivant = obs;
             }
-
-            if (numlit > *numeroPrecedent)
-                *numeroPrecedent = numlit;
+            ListeO->compteur++;
         }
     }
     fclose(f);
-    return lits; /* Retourner au lieu de ** */
 }
+

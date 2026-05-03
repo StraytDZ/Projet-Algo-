@@ -48,3 +48,19 @@ ListeUrgence* AddUrgence(ListeUrgence *ListeU, ListeTicket *ListeT){
 
     return ListeU; 
 }  
+
+void afficherUrgence(ListeUrgence *ListeU) {
+        if(ListeU->tete == NULL) {
+            printf("Aucun patient en urgence.\n");
+            return;
+        }
+        int i = 1;
+        Urgence *courant = ListeU->tete;
+        while(courant != NULL) {
+            char buffer[20];
+            strftime(buffer, 20, "%H/%M/%S", localtime(&courant->patient->heure.arrive));
+            printf("[%d] - %s  %s | %d Ans | %s | %s | Ticket  %d | Debut d'attente : %s\n", i, courant->patient->nom, courant->patient->prenom, courant->patient->age, courant->patient->sexe, courant->patient->id,courant->patient->ticket->numero,buffer);
+        i++;
+        courant = courant->suivant;
+        }
+}

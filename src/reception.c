@@ -79,17 +79,13 @@ ListePatient *AddPatient(ListePatient *ListeP,ListeTicket *ListeT) {
     P->index = ListeP->total;
     return ListeP;
 }
-void DisplayQueue(ListePatient *ListeP) {
-    Patient *courant = ListeP->tete;
-    
+void afficherAttente(ListeTicket *ListeT) {
+    Ticket *courant = ListeT->tete;
     int i = 1;
     while(courant != NULL) {
-        printf("Patient %d \n",i);
-        printf("\tNom : %s\n",courant->nom);
-        printf("\tPrenom : %s\n",courant->prenom);
-        printf("\tID : %s\n",courant->id);
-        printf("\tAge : %d\n",courant->age);
-        printf("\tSexe(H/F): %s\n",courant->sexe);
+        char buffer[20];
+        strftime(buffer, 20, "%H/%M/%S", localtime(&courant->client->heure.arrive));
+        printf("[%d] - %s  %s | %d Ans | %s | %s | Ticekt  %d | Debut d'attente : %s\n", i, courant->client->nom, courant->client->prenom, courant->client->age, courant->client->sexe, courant->client->id,courant->numero,buffer);
         courant = courant->suivant;
         i++;
     }
@@ -104,8 +100,8 @@ void SaveTicket(ListeTicket *listeT) {
     fclose(f);
 }
 
-void chargerTicket(ListeTicket *listeT) {
-    FILE *f = fopen("systeme.bin", "rb");
+void chargerTickets(ListeTicket *listeT) {
+    FILE *f = fopen("data/systeme.bin", "rb");
     if (f == NULL) return;
 
     fread(&listeT->compteur,     sizeof(int),    1, f);

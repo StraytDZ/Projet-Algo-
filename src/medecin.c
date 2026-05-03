@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "medecin.h"
+#include <string.h>
 
 Patient *CallPatient(ListeTicket *ListT, ListeUrgence *ListU){
     if(ListU->tete != NULL) {

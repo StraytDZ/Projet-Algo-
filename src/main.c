@@ -5,19 +5,20 @@
 #include "medecin.h"
 #include "menu.h"
 #include "observation.h"
-
-
+#include "urgence.h"
+#include "fichier.h"
 
 int main() {
-    int choix,choixReception,choixMedecin,choixConsult,choixObservation;
+    int choix,choixReception,choixMedecin,choixConsult,choixObservation,ChoixUrgence;
     ListePatient patients = {NULL, 0, 0, 0, 0, 0};
     ListeTicket tickets = {NULL, 0};
     Patient *PatientEnConsult;
     ListeObservation observations = {NULL,0};
     ListeUrgence urgences = {NULL, 0, 0};
     ListeLit lit = {{0}, 0 , 0};
-    chargerTicket(&tickets);
-    chargerPatient(&patients);
+    chargerTickets(&tickets);
+    chargerPatients(&patients,&tickets);
+    chargerObservations(&patients,&observations,&lit);
     verifierNouveauJour(&tickets); // Pour réinitialiser le compteur de ticket a chaque minuit.
 
     do {
@@ -44,8 +45,11 @@ int main() {
                                     case 3 : 
                                         AddObservation(PatientEnConsult,&observations,&lit);
                                     break;
+                                    case 4: 
+                                        transferer(PatientEnConsult);
+                                    break;
                                 }
-                            }while(choixConsult != 6);
+                            }while(choixConsult != 5);
                         break;
                         case 2 : 
                             AfficherAttente(&tickets);
@@ -59,13 +63,20 @@ int main() {
                                     ModifierObservation(&observations,&lit);
                                 break;
                                 case 2 : 
-                                    AfficherObservation(&observations);
+                                    AfficherListeObservation(&observations);
                                 break;
                                 case 3 : 
                                     RechercheObservation(&observations);
                                 break;
+                                case 4 : 
+                                    AfficherListeObservation(&observations);
+                                    int numlit;
+                                    printf("Numero du lit a liberer : ");
+                                    scanf("%d", &numlit);
+                                    SupprimerObservation(&observations,&lit,numlit);
+                                break;
                             }
-                        }while(choixObservation != 4);
+                        }while(choixObservation != 5);
                         break;
                      }
                 }while(choixMedecin != 3);
@@ -80,15 +91,36 @@ int main() {
                                 AddPatient(&patients,&tickets);
                             break;
                             case 2 :
-                                DisplayQueue(&patients);
+                                do{ 
+                                menuUrgence();
+                                scanf("%d", &ChoixUrgence);
+                                switch(ChoixUrgence) {
+                                    case 1: 
+                                        AddUrgence(&urgences,&tickets);
+                                    break;
+                                    case 2 :
+                                        afficherUrgence(&urgences);
+                                    break;
+                                }
+                                }while(ChoixUrgence != 3);
                             break;
-                            case 3 :
+                            case 3 : 
+                                afficherAttente(&tickets);
+                            break;
+                            case 4 :
                                 afficherHistorique();
-                                break;
-                        }
-                    }while(choixReception != 3);
+                            break;
+                              }   
+                    }while(choixReception != 5);
+            break;
+
+            case 4 :
+                sauvegarderPatients(&patients);
+                sauvegarderObservations(&observations);
+                SaveTicket(&tickets);
+                printf("Au revoir !\n");
             break;
         }  
-    }while(choix != 3);
+    }while(choix != 4);
     return 0;
 }

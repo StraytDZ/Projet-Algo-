@@ -9,4 +9,6 @@ void menuConsultation(Patient *patientEnConsultation);
 void menuReception();
 void menuObservation();
 void menuModifierObservation(Observation *patientEnObservation);
+void menuUrgence();
+void menuAdmin();
 #endif

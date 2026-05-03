@@ -6,9 +6,9 @@
 Ticket *CreateTicket(Patient *, int num);
 Ticket * AddTicket(ListeTicket *, Patient *);
 ListePatient * AddPatient(ListePatient *,ListeTicket*);
-void DisplayQueue(ListePatient *ListeP);
+void afficherAttente(ListeTicket *ListeT);
 void SaveTicket(ListeTicket *listeT);
-void chargerTicket(ListeTicket *listeT);
+void chargerTickets(ListeTicket *listeT);
 void verifierNouveauJour(ListeTicket *ListeT);
 
 #endif

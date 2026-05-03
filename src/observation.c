@@ -3,7 +3,8 @@
 #include <time.h>
 #include "observation.h"
 #include "structure.h"
-
+#include "menu.h"
+#include <string.h>
 
 
 int AddLit(Patient *patientEnonsultation,ListeLit *ListeL) { // Fonciton juste pour cree le ' noeud ', ici on ne l'ajoute pas encore vers notre 'lsite de noeud' (ListeLit)
@@ -77,7 +78,7 @@ void afficherObservation(ListeObservation *ListeO){
     }
 }
 
-Observation * supprimerObservation(ListeObservation *ListeO,ListeLit *ListeL, int numlit){
+Observation * SupprimerObservation(ListeObservation *ListeO,ListeLit *ListeL, int numlit){
     Observation *courant   = ListeO->tete;
     Observation *precedent = NULL;
 
