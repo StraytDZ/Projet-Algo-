@@ -67,7 +67,8 @@ typedef struct Observation{ // Un noeud Observation
     Patient *patient;
     int lit;
     char traitement[100];
-    Heure duree;
+    time_t finObservation;
+    time_t debutObservation;
     struct Observation *suivant;
 }Observation;
 typedef struct ListeObservation { // Liste de tout les noeuds Observation
@@ -75,58 +76,11 @@ typedef struct ListeObservation { // Liste de tout les noeuds Observation
     int compteur;
 }ListeObservation;
 
-typedef enum {
-    DISPONIBLE,
-    EN_UTILISATION,
-    EN_MAINTENANCE,
-    HORS_SERVICE,
-} EtatEquipement;
-
-typedef enum {
-    MEDICAL,        // Stethoscope, tensiometre...
-    CHIRURGICAL,    // Scalpel, pince...
-    INFORMATIQUE,   // Ordinateur, imprimante...
-    MOBILIER,       // Lit, chaise... 
-    AUTRE,
-} TypeEquipement;
-typedef struct Equipement{
-    int id;
-    char nom[50];
-    TypeEquipement type;
-    EtatEquipement etat;
-    int quantite;
-    int quantiteDisponible;
-    char service[30];       // quel service l'utilise
-    time_t dateAchat;
-    float prix;
-}Equipement;
-
-typedef struct Medicament {
-    char nom[50];
-    char forme[30];       // comprimé, injection, perfusion...
-    int quantite;
-    int quantiteMin;      // seuil d'alerte stock bas
-    float prix;
-} Medicament;
-
-#define NB_MEDICAMENTS 50
-#define NB_EQUIPEMENTS 30
-
-typedef struct {
-    Medicament medicaments[NB_MEDICAMENTS];
-    int total;
-} ListeMedicament;
-
-typedef struct {
-    Equipement equipements[NB_EQUIPEMENTS];
-    int total;
-} ListeEquipement;
-
 typedef struct Urgence{
     char nom[30];
     char prenom[30];
-    Urgence *suivant;
     char traitement[100];  
+    struct Urgence *suivant;
 } Urgence;
 
 typedef struct ListeUrgence {
