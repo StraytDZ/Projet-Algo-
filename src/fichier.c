@@ -48,7 +48,6 @@ void sauvegarderPatients(ListePatient *liste) {
         data.age          = courant->age;
         data.etat         = courant->etat;
         data.heure        = courant->heure;
-        data.lit          = courant->lit;
         data.numeroTicket = courant->ticket->numero;
 
         fwrite(&data, sizeof(PatientData), 1, f);
@@ -89,7 +88,6 @@ void chargerPatients(ListePatient *liste, ListeTicket *listeT) {
         p->age     = data.age;
         p->etat    = data.etat;
         p->heure   = data.heure;
-        p->lit     = data.lit;
         p->suivant = NULL;
 
         /* Recreer le ticket avec le bon numero */
@@ -149,7 +147,6 @@ void sauvegarderHistorique(Patient *p) {
     data.age          = p->age;
     data.etat         = p->etat;
     data.heure        = p->heure;
-    data.lit          = p->lit;
     data.numeroTicket = p->ticket->numero;
 
     fwrite(&data, sizeof(PatientData), 1, f);
@@ -213,7 +210,7 @@ void sauvegarderObservations(ListeObservation *ListeO) {
     }
     Observation *courant = ListeO->tete;
     while (courant != NULL) {
-        int  numlit = courant->lit->num;
+        int  numlit = courant->lit;
         char idPatient[20];
         strcpy(idPatient, courant->patient->id);
 
@@ -254,7 +251,7 @@ Observation *chargerObservations(ListePatient *liste, int *numeroPrecedent) {
         if (p != NULL) {
             Observation *obs = malloc(sizeof(Observation));
             if (obs == NULL) break;
-            obs->lit->num  = numlit;
+            obs->lit  = numlit;
             obs->patient = p;
             obs->suivant = NULL;
 

@@ -3,7 +3,7 @@
 
 #include "structure.h"
 
-Patient *CallPatient(ListeTicket *listT);
+Patient *CallPatient(ListeTicket *listT,ListeUrgence *ListeU);
 void PatientDiagnostic(Patient *patientEnConsult);
 void PatientTraitement(Patient *patientEnConsult);
 void PatientOrdonnance(Patient *patientEnConsult);

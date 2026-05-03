@@ -35,6 +35,7 @@ struct Patient{
     Ticket *ticket;
     Etat etat;
     Heure heure;
+    int index;
     char diagnostique[100];
     char ordonnance[100];
     char departement[30];

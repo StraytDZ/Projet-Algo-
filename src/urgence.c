@@ -8,38 +8,43 @@
 ListeUrgence* AddUrgence(ListeUrgence *ListeU, ListeTicket *ListeT){
     Patient *patientEnUrgence = (Patient*)malloc(sizeof(Patient));
     patientEnUrgence->etat = URGENCE;
-     ListeTicket *listeCible = ListeT;
-    listeCible->compteur++;
-    Ticket *nouveauTicket = CreateTicket(patientEnUrgence,listeCible->compteur);
-    if(listeCible->tete == NULL) { 
-        listeCible->tete = nouveauTicket;  
-        patientEnUrgence->ticket = nouveauTicket;
+    ListeT->compteur++;
+    Ticket *nouveauTicket = CreateTicket(patientEnUrgence,ListeT->compteur);
+    if(ListeT->tete == NULL) { 
+        ListeT->tete = nouveauTicket;  
     }
     else{    
-        Ticket *courant = listeCible->tete;
+        Ticket *courant = ListeT->tete;
         while(courant->suivant != NULL) {
         courant = courant->suivant;
     }
     courant->suivant = nouveauTicket;
    }
     patientEnUrgence->ticket = nouveauTicket;
+    printf("Nom : ");    scanf(" %[^\n]", patientEnUrgence->nom);
+    printf("Prenom : "); scanf(" %[^\n]", patientEnUrgence->prenom);
+    printf("ID : ");     scanf(" %[^\n]", patientEnUrgence->id);
+    printf("Age : ");    scanf("%d", &patientEnUrgence->age);
+    printf("Sexe : ");   scanf("%s", patientEnUrgence->sexe);
     strcpy(patientEnUrgence->departement,"");
     strcpy(patientEnUrgence->diagnostique,"");
     strcpy(patientEnUrgence->ordonnance,"");
     patientEnUrgence->heure.arrive = time(NULL);
     patientEnUrgence->suivant = NULL;
-    if(ListeU->tete == NULL) {
-        ListeU->tete = patientEnUrgence;
-        ListeU->attente++;
-        ListeU->total++;
-        return ListeU;  
+
+    Urgence *noeud  = malloc(sizeof(Urgence));
+    noeud->patient  = patientEnUrgence;
+    noeud->suivant  = NULL;
+
+    if (ListeU->tete == NULL)
+        ListeU->tete = noeud;
+    else {
+        Urgence *courant = ListeU->tete;
+        while (courant->suivant != NULL) courant = courant->suivant;
+        courant->suivant = noeud;
     }
-    Patient *courant = ListeU->tete;
-    while(courant->suivant != NULL){
-        courant = courant->suivant;
-    }
-    courant->suivant = patientEnUrgence;
-    ListeU->attente++;
     ListeU->total++;
+    ListeU->attente++;
+
     return ListeU; 
 }  

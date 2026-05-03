@@ -11,6 +11,6 @@ void transferer(Patient *patientEnConsult);
 void saisirduree(Patient *patientEnConsult);
 void modifiertraitement(Patient *patientEnConsult);
 void verifierStatut(Patient *patientEnConsult);
-void ModifierObservation(ListeObservation *ListeO);
+void ModifierObservation(ListeObservation *ListeO,ListeLit *ListeL);
 void RechercheObservation(ListeObservation *ListeO);
 #endif
