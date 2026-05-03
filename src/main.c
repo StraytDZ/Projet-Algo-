@@ -43,6 +43,7 @@ int main() {
                                     break;
                                     case 2 :
                                         PatientOrdonnance(PatientEnConsult);
+                                        choixConsult = 5;
                                         pause();
                                     break;
                                     case 3 : 

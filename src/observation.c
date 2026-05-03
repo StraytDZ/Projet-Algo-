@@ -23,11 +23,15 @@ int AddLit(Patient *patientEnonsultation,ListeLit *ListeL) { // Fonciton juste p
 }
 
 
-ListeObservation *AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, ListeLit *ListeL) {
+void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, ListeLit *ListeL) {
+    if(strcmp(patientEnConsultation->diagnostique,"" == 0)) {
+        printf("Veuilelz d'abord saisir un diagnostique.\n");
+
+    }
     Observation *patientOB = (Observation*)malloc(sizeof(Observation));
         if(patientOB == NULL) {
             printf("Erreur : Impossible d'enregister une observation.\n");
-            return ListeO;
+            return;
         }
     int duree;
     printf("Duree de l'oservations :");
@@ -43,7 +47,7 @@ ListeObservation *AddObservation(Patient *patientEnConsultation, ListeObservatio
     if (numLit == -1) {
         printf("Hopital complet !\n");
         free(patientOB);
-        return ListeO;
+        return;
     }
     patientOB->lit = numLit;
     patientOB->patient = patientEnConsultation;
@@ -60,7 +64,7 @@ ListeObservation *AddObservation(Patient *patientEnConsultation, ListeObservatio
     courant->suivant = patientOB;
     }
     ListeO->compteur++;
-    return ListeO;
+    return;
 }
 
 

@@ -31,8 +31,9 @@ void PatientOrdonnance(Patient *patientEnConsult) {
     if(strcmp(patientEnConsult->diagnostique, "") != 0) {
     printf("Inscrire l'ordonnance : \n");
     scanf(" %[^\n]",patientEnConsult->ordonnance);
+    printf("L'ordonnance a bien été inscrite a %s %s", patientEnConsult->nom,patientEnConsult->prenom);
     }
-    else printf("Veuillez d'abord saisir un traitement.\n");
+    else printf("Veuillez d'abord saisir un diagnostique.\n");
 }
 
 void transferer(Patient *patientEnConsult){
@@ -40,7 +41,7 @@ void transferer(Patient *patientEnConsult){
     printf("Saisi du nom du departement de transfert : ");
     scanf(" %[^\n]",patientEnConsult->departement);
     patientEnConsult->etat=TRANSFERER;
-    printf("Le patient %s %s a été transfere vers un departement de %s.\n",patientEnConsult->prenom,patientEnConsult->nom, patientEnConsult->departement);
+    printf("Le patient %s %s a ete transfere vers un departement de %s.\n",patientEnConsult->prenom,patientEnConsult->nom, patientEnConsult->departement);
     }else printf("Veuillez d'abord saisir un diagnostique.\n");
 }
 void AfficherAttente(ListeTicket *ListeT) {
