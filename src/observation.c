@@ -23,10 +23,10 @@ int AddLit(Patient *patientEnonsultation,ListeLit *ListeL) { // Fonciton juste p
 }
 
 
-void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, ListeLit *ListeL) {
+void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, ListeLit *ListeL, ListeTicket *ListeT, ListePatient *ListeP) {
     if(strcmp(patientEnConsultation->diagnostique,"") == 0) {
         printf("Veuilelz d'abord saisir un diagnostique.\n");
-
+        return;
     }
     Observation *patientOB = (Observation*)malloc(sizeof(Observation));
         if(patientOB == NULL) {
@@ -53,7 +53,20 @@ void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, Li
     patientOB->patient = patientEnConsultation;
     patientEnConsultation->etat = OBSERVATION;
     printf("Le patient est transeferer au lit %d.",patientOB->lit);
-
+    if(patientEnConsultation->ticket == ListeT->tete)
+        free(patientEnConsultation->ticket); // On l'enleve de la liste d'attente ( debut)
+    else { // millieu et fin
+        Ticket *courant = ListeT->tete;
+        Ticket *precedent = NULL;
+        while(courant != patientEnConsultation->ticket) {
+        precedent = courant;
+        courant = courant->suivant;
+        }
+        precedent->suivant = courant->suivant;
+        free(courant);
+    } 
+    ListeP->observation++;
+    ListeP->attente--;
     patientOB->suivant = NULL; // onl l'ajoute a notre liste chainer de patient en observation
     if(ListeO->tete == NULL) 
         ListeO->tete = patientOB;

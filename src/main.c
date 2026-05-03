@@ -50,7 +50,7 @@ int main() {
                                         pause();
                                     break;
                                     case 3 : 
-                                        AddObservation(PatientEnConsult,&observations,&lit);
+                                        AddObservation(PatientEnConsult,&observations,&lit,&tickets,&patients);
                                         choixConsult = 5;
                                         pause();
                                     break;

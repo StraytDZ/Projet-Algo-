@@ -64,5 +64,4 @@ void afficherUrgence(ListeUrgence *ListeU) {
         i++;
         courant = courant->suivant;
         }
-        pause();
 }
