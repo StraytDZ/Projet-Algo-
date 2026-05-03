@@ -29,8 +29,11 @@ ListeObservation *AddObservation(Patient *patientEnConsultation, ListeObservatio
             printf("Erreur : Impossible d'enregister une observation.\n");
             return ListeO;
         }
-    printf("Veuillez indiquer la duree de l'observation : (En jour)");
-    scanf("%d",&patientOB->duree);
+    int duree;
+    printf("Veilleez indiquer la duree de l'observation en jours : ");
+    scanf("%d",&duree);
+    patientOB->debutObservation = time(NULL);
+    patientOB->finObservation = patientOB->debutObservation + (duree * 24 * 60 * 60); 
     printf("Veuillez indiquer le traitement a suivre : ");
     scanf(" %[^\n]", patientOB->traitement);
     patientOB->lit = AddLit(patientOB,ListeL);
@@ -39,7 +42,7 @@ ListeObservation *AddObservation(Patient *patientEnConsultation, ListeObservatio
         free(patientOB);
         return ListeO;
     }
-    printf("Le patient est transeferer au lit %d.",patientOB->lit.num);
+    printf("Le patient est transeferer au lit %d.",patientOB->lit);
 
     patientOB->suivant = NULL; // onl l'ajoute a notre liste chainer de patient en observation
     if(ListeO == NULL) 
@@ -63,7 +66,7 @@ void afficherObservation(ListeObservation *ListeO){
     }
     printf("Patients en observation :\n");
     while (tete != NULL){
-        printf("Lit %d : %s %s\n", tete->lit.num, tete->patient->nom, tete->patient->prenom);
+        printf("Lit %d : %s %s\n", tete->lit, tete->patient->nom, tete->patient->prenom);
         tete=tete->suivant;
     }
 }
@@ -75,14 +78,14 @@ Observation * supprimerObservation(ListeObservation *ListeO, int numlit){
     }
     Observation *tete = ListeO->tete;
     Observation *temp=tete; // Pour pas perdre l'adresse a free
-    if (tete->lit.num == 1){ // Enlever au debut de la liste chainer ListeObservation
+    if (tete->lit == 1){ // Enlever au debut de la liste chainer ListeObservation
         temp->patient->etat=SORTI;
         temp->lit.etat = NOCCUPE;
         tete=tete->suivant;
         free(temp); // On free de la liste chainer ListeObservation, Mais le patient est toujours present dans ListePatient
         return tete;
     }
-    while( tete != NULL && tete->lit.num != numlit ) {
+    while( tete != NULL && tete->lit != numlit ) {
          tete=tete->suivant;
     }
     temp->patient->etat=SORTI;
@@ -114,7 +117,7 @@ void AfficherListeObservation(ListeObservation *ListeO) {
     while(courant != NULL) {
         char buffer[30];
         strftime(buffer, 30, "%H:%M:%S", localtime(&courant->debutObservation));
-        printf("[%d] - %s  %s | %d Ans | %s | %s | Lit  %d | Traitement : %s | Sortie : %s\n", i, courant->patient->nom, courant->patient->prenom, courant->patient->age, courant->patient->sexe, courant->patient->id,courant->lit.num,courant->traitement,buffer);
+        printf("[%d] - %s  %s | %d Ans | %s | %s | Lit  %d | Traitement : %s | Sortie : %s\n", i, courant->patient->nom, courant->patient->prenom, courant->patient->age, courant->patient->sexe, courant->patient->id,courant->lit,courant->traitement,buffer);
         i++;
         courant = courant->suivant;
     }
@@ -181,7 +184,7 @@ void RechercheObservation(ListeObservation *ListeO) {
                 if(strcmp(courant->patient->id, IDcible) == 0) {
                     char buffer[30];
                     strftime(buffer, 30, "%d/%m/%Y", localtime(&courant->finObservation));
-                    printf("%s  %s | %d Ans | %s | %s | Lit  %d | Traitement : %s | Sortie : %s\n",courant->patient->nom, courant->patient->prenom, courant->patient->age, courant->patient->sexe, courant->patient->id,courant->lit->num,courant->traitement,buffer);
+                    printf("%s  %s | %d Ans | %s | %s | Lit  %d | Traitement : %s | Sortie : %s\n",courant->patient->nom, courant->patient->prenom, courant->patient->age, courant->patient->sexe, courant->patient->id,courant->lit,courant->traitement,buffer);
                     trouve = 1;
                 }
                 courant = courant->suivant;
@@ -200,7 +203,7 @@ void RechercheObservation(ListeObservation *ListeO) {
                 if((strcmp(courant->patient->nom, nomCible) == 0) && (strcmp(courant->patient->prenom, prenomCible) == 0)) {
                     char buffer[20];
                     strftime(buffer, 20, "%d/%m/%Y", localtime(&courant->finObservation));
-                    printf("%s  %s | %d Ans | %s | %s | Lit  %d | Traitement : %s | Sortie : %s\n",courant->patient->nom, courant->patient->prenom, courant->patient->age, courant->patient->sexe, courant->patient->id,courant->lit->num,courant->traitement,buffer);
+                    printf("%s  %s | %d Ans | %s | %s | Lit  %d | Traitement : %s | Sortie : %s\n",courant->patient->nom, courant->patient->prenom, courant->patient->age, courant->patient->sexe, courant->patient->id,courant->lit,courant->traitement,buffer);
                     trouve = 1;
                 }
                 courant = courant->suivant;
