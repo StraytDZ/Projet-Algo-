@@ -77,14 +77,13 @@ typedef struct ListeObservation { // Liste de tout les noeuds Observation
 }ListeObservation;
 
 typedef struct Urgence{
-    char nom[30];
-    char prenom[30];
+    Patient *patient;
     char traitement[100];  
     struct Urgence *suivant;
 } Urgence;
 
 typedef struct ListeUrgence {
-    Patient *tete;
+    Urgence *tete;
     int attente;
     int total;
 } ListeUrgence;

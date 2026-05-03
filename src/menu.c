@@ -57,7 +57,7 @@ void menuModifierObservation(Observation *patientEnObservation) {
     char buffer[30];
     strftime(buffer, 30, "%d/%m/%Y", localtime(&patientEnObservation->finObservation));
     printf("\n=======================================\n");
-    printf("\t%s %s | Lit %d | Traitement : %s. | Fin Observation : %s\n", patientEnObservation->patient->nom, patientEnObservation->patient->prenom,patientEnObservation->lit->num,patientEnObservation->traitement,buffer);
+    printf("\t%s %s | Lit %d | Traitement : %s. | Fin Observation : %s\n", patientEnObservation->patient->nom, patientEnObservation->patient->prenom,patientEnObservation->lit,patientEnObservation->traitement,buffer);
     printf("=======================================\n\n");
     printf("\t 1 - Modifier le lit\n");
     printf("\t 2 - Modifier le traitement");
