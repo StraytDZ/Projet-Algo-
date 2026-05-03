@@ -3,9 +3,9 @@
 
 #include "structure.h"
 
-Patient *CallPatient(ListeTicket *listT,ListeUrgence *ListeU);
+Patient *CallPatient(ListeTicket *listT,ListeUrgence *ListeU,ListePatient *ListeP);
 void PatientDiagnostic(Patient *patientEnConsult);
-void PatientOrdonnance(Patient *patientEnConsult);
+void PatientOrdonnance(Patient *patientEnConsult,ListePatient *ListeP);
 void AfficherAttente(ListeTicket *ListeT);
-void transferer(Patient *patientEnConsult);
+void transferer(Patient *patientEnConsult,ListePatient *ListeP);
 #endif

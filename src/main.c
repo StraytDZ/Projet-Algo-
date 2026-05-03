@@ -32,7 +32,7 @@ int main() {
                      scanf("%d",&choixMedecin);
                      switch(choixMedecin) {
                         case 1 : 
-                            PatientEnConsult = CallPatient(&tickets,&urgences);
+                            PatientEnConsult = CallPatient(&tickets,&urgences,&patients);
                             if(PatientEnConsult == NULL){
                                 pause();
                                 break;
@@ -46,7 +46,7 @@ int main() {
                                         pause();
                                     break;
                                     case 2 :
-                                        PatientOrdonnance(PatientEnConsult);
+                                        PatientOrdonnance(PatientEnConsult,&patients);
                                         if(strcmp(PatientEnConsult->diagnostique,"") !=0)choixConsult = 5;
                                         pause();
                                     break;
@@ -56,7 +56,7 @@ int main() {
                                         pause();
                                     break;
                                     case 4: 
-                                        transferer(PatientEnConsult);
+                                        transferer(PatientEnConsult,&patients);
                                         if(strcmp(PatientEnConsult->diagnostique,"") !=0)choixConsult = 5;
                                         pause();
                                         continue;
