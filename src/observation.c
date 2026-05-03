@@ -109,12 +109,12 @@ void AfficherListeObservation(ListeObservation *ListeO) {
         printf("Aucun patient en observations.\n");
         return;
     }
-    int i = 0;
+    int i = 1;
     Observation *courant = ListeO->tete;
     while(courant != NULL) {
         char buffer[30];
         strftime(buffer, 30, "%H:%M:%S", localtime(&courant->debutObservation));
-        printf("[%d] - %s  %s | %d Ans | %s | %s | Lit  %d | Traitement : %s | Sortie : %s\n", i, courant->patient->nom, courant->patient->age, courant->patient->sexe, courant->patient->id,courant->lit->num,courant->traitement,buffer);
+        printf("[%d] - %s  %s | %d Ans | %s | %s | Lit  %d | Traitement : %s | Sortie : %s\n", i, courant->patient->nom, courant->patient->prenom, courant->patient->age, courant->patient->sexe, courant->patient->id,courant->lit.num,courant->traitement,buffer);
         i++;
         courant = courant->suivant;
     }
