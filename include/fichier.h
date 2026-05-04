@@ -4,9 +4,9 @@
 #include "structure.h"
 
 /* wayi pour Sauvegarder */
-void         sauvegarderPatients(ListePatient *liste);
-void         sauvegarderObservations(ListeObservation *ListeO);
-void         sauvegarderHistorique(Patient *p);
+void         sauvegarderPatients(Patient *patient);
+void         sauvegarderObservations(Observation *patient);
+void         sauvegarderHistorique();
 
 /* pour  Chargement */
 void         chargerPatients(ListePatient *liste, ListeTicket *listeT);

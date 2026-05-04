@@ -3,33 +3,36 @@
 #include "medecin.h"
 #include <string.h>
 #include "menu.h"
+#include "fichier.h"
 
-Patient *CallPatient(ListeTicket *ListT, ListeUrgence *ListU,ListePatient *ListeP){
-    if(ListU->tete != NULL) {
-        Urgence *urgence = ListU->tete;           
+Patient *CallPatient(ListeTicket *ListeT, ListeUrgence *ListeU,ListePatient *ListeP){
+    if(ListeU->tete != NULL) {
+        Urgence *urgence = ListeU->tete;           
         Patient *patientUrgence = urgence->patient; 
         patientUrgence->etat = CONSULTATION;
-        ListU->tete = ListU->tete->suivant;
+        ListeU->tete = ListeU->tete->suivant;
         ListeP->attente--;
-         sauvegarderHistorique(patientUrgence);
+        patientUrgence->debutConsulation = time(NULL);
+        sauvegarderPatients(patientUrgence);
         return patientUrgence;
     }
-    if(ListT->tete == NULL) {
+    if(ListeT->tete == NULL) {
         printf("Aucun patient en fille d'attente.\n");
         return NULL;
         }
-    Patient *patient = ListT->tete->client;
+    Patient *patient = ListeT->tete->client;
     patient->etat = CONSULTATION;
-    ListT->tete = ListT->tete->suivant;
+    patient->debutConsulation = time(NULL);
+    ListeT->tete = ListeT->tete->suivant;
     ListeP->attente--;
-    sauvegarderHistorique(patient);
+    sauvegarderPatients(patient);
     return patient;
 }
 
 void PatientDiagnostic(Patient *patientEnConsult) {
     printf("Saisir le diagnostique :\n");
     scanf(" %[^\n]",patientEnConsult->diagnostique);
-    sauvegarderHistorique(patientEnConsult);
+    sauvegarderPatients(patientEnConsult);
 }
 
 void PatientOrdonnance(Patient *patientEnConsult, ListePatient *ListeP) {
@@ -40,6 +43,7 @@ void PatientOrdonnance(Patient *patientEnConsult, ListePatient *ListeP) {
     patientEnConsult->etat = SORTI;
     patientEnConsult->heure.sorti = time(NULL);
     ListeP->sortis++;
+    sauvegarderPatients(patientEnConsult);
     }
     else printf("Veuillez d'abord saisir un diagnostique.\n");
 }
@@ -48,11 +52,11 @@ void transferer(Patient *patientEnConsult,ListePatient *ListeP){
     if(strcmp(patientEnConsult->diagnostique, "") != 0) {
     printf("Saisi du nom du departement de transfert : ");
     scanf(" %[^\n]",patientEnConsult->departement);
-     printf("Le patient %s %s a ete transfere vers un departement de %s.\n",patientEnConsult->prenom,patientEnConsult->nom, patientEnConsult->departement);
+    printf("Le patient %s %s a ete transfere vers un departement de %s.\n",patientEnConsult->prenom,patientEnConsult->nom, patientEnConsult->departement);
     patientEnConsult->etat=TRANSFERER;
     patientEnConsult->heure.sorti = time(NULL);
     ListeP->transferes++;
-    sauvegarderHistorique(patientEnConsult);
+    sauvegarderPatients(patientEnConsult);
     }else printf("Veuillez d'abord saisir un diagnostique.\n");
 }
 void AfficherAttente(ListeTicket *ListeT) {

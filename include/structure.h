@@ -39,6 +39,7 @@ struct Patient{
     char diagnostique[100];
     char ordonnance[100];
     char departement[30];
+    time_t debutConsulation;
     struct Patient *suivant;
 
 };
@@ -70,6 +71,7 @@ typedef struct Observation{ // Un noeud Observation
     char traitement[100];
     time_t finObservation;
     time_t debutObservation;
+    int index;
     struct Observation *suivant;
 }Observation;
 typedef struct ListeObservation { // Liste de tout les noeuds Observation

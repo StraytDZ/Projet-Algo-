@@ -1,11 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <string.h>
 #include "observation.h"
 #include "structure.h"
 #include "menu.h"
-#include <string.h>
-
+#include "fichier.h"
 
 int AddLit(Patient *patientEnonsultation,ListeLit *ListeL) { // Fonciton juste pour cree le ' noeud ', ici on ne l'ajoute pas encore vers notre 'lsite de noeud' (ListeLit)
     if(ListeL->indispo >= ListeL->total ) {  // Si on depasse le nombre de lit disponible dans l'hopitale, tel que ListeL->total est donner dans le main,
@@ -51,6 +51,7 @@ void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, Li
     }
     patientOB->lit = numLit;
     patientOB->patient = patientEnConsultation;
+    patientOB->index = patientEnConsultation->index;
     patientEnConsultation->etat = OBSERVATION;
     printf("Le patient est transeferer au lit %d.",patientOB->lit);
     if(patientEnConsultation->ticket == ListeT->tete)
@@ -64,6 +65,7 @@ void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, Li
         }
         precedent->suivant = courant->suivant;
         free(courant);
+        patientEnConsultation->ticket = NULL;
     } 
     ListeP->observation++;
     ListeP->attente--;
@@ -76,6 +78,7 @@ void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, Li
         courant = courant->suivant;
     courant->suivant = patientOB;
     }
+    sauvegarderObservations(patientOB);
     ListeO->compteur++;
     return;
 }
@@ -115,10 +118,11 @@ void SupprimerObservation(ListeObservation *ListeO,ListeLit *ListeL){
         return;
     }
     courant->patient->etat         = SORTI;
+    courant->patient->heure.sorti = time(NULL);
     ListeL->Tlit[numlit-1].etat    = NOCCUPE;
     ListeL->Tlit[numlit-1].patient = NULL;
     ListeL->indispo--;
-
+    sauvegarderObservations(courant);
     if (precedent == NULL)
         ListeO->tete = courant->suivant;
     else
@@ -178,12 +182,10 @@ void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL) {
             scanf("%d", &numlit);
             if (numlit < 1 || numlit > ListeL->total) {
                 printf("Erreur : lit invalide.\n");
-                pause();
                 break;
             }
             if (ListeL->Tlit[numlit-1].etat == OCCUPE) {
               printf("Erreur : lit %d deja occupe.\n", numlit);
-              pause();
               break;
             }
             ListeL->Tlit[patientCible->lit - 1].etat =  NOCCUPE;
@@ -191,10 +193,12 @@ void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL) {
             patientCible->lit = numlit;
             ListeL->Tlit[numlit-1].etat =  OCCUPE;
             ListeL->Tlit[numlit-1].patient = patientCible->patient;
+            sauvegarderObservations(patientCible);
         break; }
         case 2 : {
             printf("Donner le nouveau traitement a suivre : ");
             scanf(" %[^\n]", patientCible->traitement);
+            sauvegarderObservations(patientCible);
         break; }
         case 3 : {
             int duree;
@@ -205,7 +209,7 @@ void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL) {
             char buffer[20];
             strftime(buffer, 20, "%d/%m/%Y", localtime(&patientCible->finObservation));
             printf("Nouvelle date de fin : %s\n", buffer);
-            pause();
+            sauvegarderObservations(patientCible);
         break;}
         }
     }while(choix != 4);
