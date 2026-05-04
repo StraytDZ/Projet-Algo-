@@ -18,6 +18,8 @@ typedef struct {
     int  numeroTicket;   /* On sauvegarde le NUMERO, pas le pointeur */
     Etat etat;
     Heure heure;
+    time_t debutConsultation;
+    time_t dureeConsultation;
     char departement[30];
     char diagnostique[100];
     char ordonnance[100];
@@ -48,6 +50,8 @@ typedef struct {
     char traitement[100];
     time_t finObservation;
     time_t debutObservation;
+    time_t debutConsultation;
+    time_t dureeConsultation;
     int index;
 }Data;
 
@@ -80,6 +84,7 @@ void sauvegarderPatients(Patient *patient) {
         data.age          = patient->age;
         data.etat         = patient->etat;
         data.heure        = patient->heure;
+        data.dureeConsultation = patient->dureeConsultation;
         data.index = patient->index;
         data.numeroTicket = patient->ticket ? patient->ticket->numero : 0; /*C'est un opérateur ternaire — c'est une façon courte d'écrire un if/else en une ligne :
             Version longue
@@ -88,7 +93,8 @@ void sauvegarderPatients(Patient *patient) {
         else
             data.numeroTicket = 0; on la pas etudié, mais pourquoi ce limiter*/
         fwrite(&data, sizeof(PatientData), 1, f);
-        /*  suntaxe is fwrite(adresse, taille d'un element, nombre, fichier) */    
+        /*  suntaxe is fwrite(adresse, taille d'un element, nombre, fichier) */ 
+        if(patient->etat == CONSULTATION) data.debutConsultation = patient->debutConsulation;
 
     fclose(f);
     printf("Patients sauvegarder dans patients.bin\n");
@@ -124,19 +130,6 @@ void chargerPatients(ListePatient *liste, ListeTicket *listeT) {
         p->heure   = data.heure;
         p->suivant = NULL;
 
-        /* Recreer le ticket avec le bon numero */
-        Ticket *t  = (Ticket*)malloc(sizeof(Ticket));
-        if (t == NULL) { free(p); fclose(f); return; }
-        t->numero  = data.numeroTicket;
-        t->client  = p;
-        t->suivant = NULL;
-        p->ticket  = t;
-
-        /* Mettre a jour le compteur pour que les prochains tickets
-           continuent depuis le bon numero */
-        if (data.numeroTicket > listeT->compteur)
-            listeT->compteur = data.numeroTicket;
-
         /* Ajouter a la fin de la liste */
         if (liste->tete == NULL) {
             liste->tete = p;
@@ -158,11 +151,6 @@ void chargerPatients(ListePatient *liste, ListeTicket *listeT) {
     printf("Donnees chargees depuis patients.bin\n");
 }
 
-/*
-   SAUVEGARDER HISTORIQUE
-   - "ab" = append binary : ajoute a la fin sans ecraser
-   - Appeler quand un patient est SORTI ou TRANSFERE
-    */
 void sauvegarderHistorique() {
     FILE *h = fopen("data/historique.bin", "r+b");
     if (h == NULL) {
@@ -197,6 +185,7 @@ void sauvegarderHistorique() {
         data.etat = dataP.etat;
         data.numeroTicket = dataP.numeroTicket;
         data.heure = dataP.heure;
+        data.dureeConsultation = dataP.dureeConsultation;
         data.index = dataP.index;
         if(dataP.etat == OBSERVATION){
             ObservationData dataO;
@@ -207,7 +196,6 @@ void sauvegarderHistorique() {
             data.debutObservation = dataO.debutObservation;
             data.finObservation = dataO.finObservation;
             data.lit = dataO.lit;
-            
         }
         else {
             data.lit = 0;
@@ -225,21 +213,18 @@ void sauvegarderHistorique() {
     fclose(o);
 }
 
-/* 
-   AFFICHER HISTORIQUE
-   - Lit historique.bin et affiche tous les patients sortis
-    */
 void afficherHistorique() {
-    FILE *f = fopen("data/historique.bin", "rb");
+    FILE *f = fopen("data/historique.bin", "r+b");
     if (f == NULL) {
+        f = fopen("data/historique.bin","wb");
         printf("Aucun historique disponible.\n");
         return;
     }
 
-    PatientData data;
+    Data data;
     int i = 1;
     printf("\n========== HISTORIQUE DES PATIENTS ==========\n");
-    while (fread(&data, sizeof(PatientData), 1, f) == 1) {
+    while (fread(&data, sizeof(Data), 1, f) == 1) {
         char *etatStr;
         if      (data.etat == SORTI)     etatStr = "SORTI";
         else if (data.etat == TRANSFERER) etatStr = "TRANSFERE";
@@ -251,17 +236,39 @@ void afficherHistorique() {
         /* Convertir time_t en date lisible */
         char heureArrive[30];
         strftime(heureArrive, 30, "%d/%m/%Y %H:%M", localtime(&data.heure.arrive));
+        printf("[%d] - %s  %s | %d Ans | %s | %s | %s | Arrive : %s\n", i, data.nom, data.prenom, data.age, data.sexe, data.id,etatStr,heureArrive);
+        i++;
+        }
+        int choix;
+        printf("----Choix : ");
+        scanf("%d",&choix);
+        while(fread(&data, sizeof(Data), 1, f) == 1) { // aller jusqu'a patient choisis depuis le scanf 
+            if(data.index == choix - 1) break; // on commence de la ligne 0 dans le ficheir binaire
+        }
 
+        char *etatStr;
+        if      (data.etat == SORTI)     etatStr = "SORTI";
+        else if (data.etat == TRANSFERER) etatStr = "TRANSFERE";
+        else if (data.etat == CONSULTATION) etatStr = "CONSULTION";
+        else if (data.etat == ATTENTE ) etatStr = "ATTENTE";
+        else if (data.etat == OBSERVATION) etatStr = "OBSERVATION";
+        else if (data.etat == URGENCE)     etatStr = "URGENCE";
+
+        
+        char heureArrive[30];
+        strftime(heureArrive, 30, "%d/%m/%Y %H:%M", localtime(&data.heure.arrive));
+        time_t DureeConsulation;
         printf("--- Patient %d ---\n", i++);
         printf("  Nom      : %s %s\n",      data.prenom, data.nom);
         printf("  ID       : %s | Age : %d | Sexe : %s\n", data.id, data.age, data.sexe);
-        printf("  Ticket   : %d\n",       data.numeroTicket);
+        if (data.numeroTicket != 0) 
+            printf("  Ticket   : %d\n",       data.numeroTicket);
         printf("  Etat     : %s\n",          etatStr);
         printf("  Arrivee  : %s\n",          heureArrive);
-        if(data.heure.sorti != 0) {
-            char heureSorti[30];
-            strftime(heureSorti,  30, "%d/%m/%Y %H:%M", localtime(&data.heure.sorti));
-            printf("  Sortie   : %s\n",heureSorti);
+        if (data.heure.sorti != 0) {
+            char heureSortie[30];
+            strftime(heureSortie, 30, "%d/%m/%Y %H:%M", localtime(&data.heure.sorti));
+            printf("  Sortie   : %s\n", heureSortie);
         }
         if (strlen(data.diagnostique) > 0)
             printf("  Diagnostic  : %s\n",  data.diagnostique);
@@ -269,8 +276,13 @@ void afficherHistorique() {
             printf("  Ordonnance  : %s\n",  data.ordonnance);
         if (strlen(data.departement) > 0)
             printf("  Departement : %s\n",  data.departement);
+        if (data.dureeConsultation != 0) {
+            char dureConsultation[4];
+            strftime(dureConsultation, 30, "%M", localtime(&data.dureeConsultation));
+            printf("  Duree Consultation : %sMin", dureConsultation);
+        }
         printf("\n");
-    }
+    
     fclose(f);
 }
 

@@ -41,6 +41,7 @@ struct Patient{
     char ordonnance[100];
     char departement[30];
     time_t debutConsulation;
+    time_t dureeConsultation;
     struct Patient *suivant;
 
 };

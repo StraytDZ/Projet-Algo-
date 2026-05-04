@@ -42,6 +42,7 @@ void PatientOrdonnance(Patient *patientEnConsult, ListePatient *ListeP) {
     printf("L'ordonnance a bien ete inscrite a %s %s, le patient peut disposse.", patientEnConsult->nom,patientEnConsult->prenom);
     patientEnConsult->etat = SORTI;
     patientEnConsult->heure.sorti = time(NULL);
+    patientEnConsult->dureeConsultation = time(NULL) - patientEnConsult->debutConsulation;
     ListeP->sortis++;
     sauvegarderPatients(patientEnConsult);
     }

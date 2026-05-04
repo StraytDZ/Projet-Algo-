@@ -64,6 +64,8 @@ void AddPatient(ListePatient *ListeP,ListeTicket *ListeT) {
     strcpy(P->departement,""); // Pas encore transeferer, c'est le medecin qui en decidera
     P->heure.arrive = time(NULL); // Recuperer l'heure actuelle (De l'enregistrment du patient du coup)
     P->heure.sorti = 0; // Pas encore sortie, on initialise a 0
+    P->dureeConsultation = 0;
+    P->debutConsulation = 0;
     strcpy(P->diagnostique,"");
     strcpy(P->ordonnance,"");
     if(ListeP->tete == NULL) {
