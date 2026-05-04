@@ -101,6 +101,26 @@ typedef struct Statistique {
     int totalUrgence;
     int attenteUrgence;
 } Statistique;  
+ 
+typedef struct Medicament {
+    char nom[30];
+    int quantite;
+} Medicament;
+
+typedef struct ListeMedicament {
+    Medicament medicaments[100];
+    int total;
+} ListeMedicament;
+
+typedef struct Equipement {
+    char nom[30];
+    int quantite;
+} Equipement;
+
+typedef struct ListeEquipement {
+    Equipement equipements[100];
+    int total;
+} ListeEquipement;
 
 
 #endif
