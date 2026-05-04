@@ -12,5 +12,7 @@ void afficherstockequipement(ListeEquipement *LE);
 void verfierfindeMedoc(ListeMedicament *LM, ListeEquipement *LE);
 void ajoutermedicament(ListeMedicament *LM);
 void ajouterequipement(ListeEquipement *LE);
+void utilisermedicament(ListeMedicament *LM);
+void utiliserequipement(ListeEquipement *LE);
 
 #endif

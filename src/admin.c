@@ -110,3 +110,40 @@ void ajouterequipement(ListeEquipement *LE){
     LE->total++;
 }
 
+void utilisermedicament(ListeMedicament *LM){
+    char nom[30];
+     printf("Veuillez entrer le nom du medicament a utiliser  : ");
+    scanf("%s", nom);
+    for(int i = 0; i < LM->total; i++){
+        if(strcmp(LM->medicaments[i].nom, nom) == 0){
+            if(LM->medicaments[i].quantite >= 1){
+                LM->medicaments[i].quantite -= 1;
+            }else{
+                printf("Quantite insuffisante pour le medicament %s\n", nom);
+            }
+            return;
+        }
+    }
+    printf("Medicament %s non trouve\n", nom);
+}
+
+
+void utiliserequipement(ListeEquipement *LE){
+    char nom[30];
+     printf("Veuillez entrer le nom de l'equipement a utiliser  : ");
+    scanf("%s", nom);
+    for(int i = 0; i < LE->total; i++){
+        if(strcmp(LE->equipements[i].nom, nom) == 0){
+            if(LE->equipements[i].quantite >= 1){
+                LE->equipements[i].quantite -= 1;
+            }else{
+                printf("Quantite insuffisante pour l'equipement %s\n", nom);
+            }
+            return;
+        }
+    }
+    printf("Equipement %s non trouve\n", nom);
+}
+
+
+
