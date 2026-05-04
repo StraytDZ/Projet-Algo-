@@ -34,7 +34,7 @@ void afficherstatistique(ListePatient *LP, ListeLit *LL, ListeUrgence *LU, Stati
     printf("Nombre total de lits : %d\n", stat->Littotal);
     printf("Nombre de lits occupes : %d\n", stat->LitIndispo);
     printf("Nombre de lits disponibles : %d\n", stat->Littotal - stat->LitIndispo);
-    printf("Nombre de patients en urgence : %d\n", stat->totalUrgence);
+    printf("Nombre de patients en totale passe en urgence : %d\n", stat->totalUrgence);
     printf("Nombre de patients en attente d'urgence : %d\n", stat->attenteUrgence);
 }
 
