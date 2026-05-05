@@ -88,6 +88,7 @@ void ajoutermedicament(ListeMedicament *LM, char fichiermedicaments[20]){
     for(int i = 0; i < LM->total; i++){
         if(strcmp(LM->medicaments[i].nom, nom) == 0){
             LM->medicaments[i].quantite += quantite;
+            fichiermedicament(LM, fichiermedicaments);
             return;
         }
     }
@@ -105,6 +106,7 @@ void ajouterequipement(ListeEquipement *LE, char fichierequipements[20]){
     for(int i = 0; i < LE->total; i++){
         if(strcmp(LE->equipements[i].nom, nom) == 0){
             LE->equipements[i].quantite += quantite;
+            fichierequipement(LE, fichierequipements);
             return;
         }
     }
@@ -122,13 +124,14 @@ void utilisermedicament(ListeMedicament *LM, char fichiermedicaments[20]){
         if(strcmp(LM->medicaments[i].nom, nom) == 0){
             if(LM->medicaments[i].quantite >= 1){
                 LM->medicaments[i].quantite -= 1;
+                fichiermedicament(LM, fichiermedicaments);
             }else{
                 printf("Quantite insuffisante pour le medicament %s\n", nom);
             }
             return;
         }
     }
-    fichiermedicament(LM, fichiermedicaments);
+    
     printf("Medicament %s non trouve\n", nom);
 }
 
@@ -141,13 +144,14 @@ void utiliserequipement(ListeEquipement *LE, char fichierequipements[20]){
         if(strcmp(LE->equipements[i].nom, nom) == 0){
             if(LE->equipements[i].quantite >= 1){
                 LE->equipements[i].quantite -= 1;
+                fichierequipement(LE, fichierequipements);
             }else{
                 printf("Quantite insuffisante pour l'equipement %s\n", nom);
             }
             return;
         }
     }
-    fichierequipement(LE, fichierequipements);
+    
     printf("Equipement %s non trouve\n", nom);
 }
 
@@ -157,7 +161,6 @@ void fichiermedicament(ListeMedicament *LM, char fichiermedicaments[20]){
         printf("Erreur d'ouverture du fichier %s\n", fichiermedicaments);
         return;
     }
-    fprintf(f, "Stock de medicament :\n");
     for(int i = 0; i < LM->total; i++){
         fprintf(f, "%s %d\n", LM->medicaments[i].nom, LM->medicaments[i].quantite);
     }
@@ -170,7 +173,6 @@ void fichierequipement(ListeEquipement *LE, char fichierequipements[20]){
         printf("Erreur d'ouverture du fichier %s\n", fichierequipements);
         return;
     }
-    fprintf(f, "Stock de equipement :\n");
     for(int i = 0; i < LE->total; i++){
         fprintf(f, "%s %d\n", LE->equipements[i].nom, LE->equipements[i].quantite);
     }
@@ -208,5 +210,5 @@ void raffraichirequipement(ListeEquipement *LE, char fichierequipements[20]){
     }
     fclose(f);
 }
-//utiliser cette ferniere fonction a chaque lancement du programme pour raffraichir les stocks de medicaments et equipements a partir des fichiers de stockage.
+//utiliser cette derniere fonction a chaque lancement du programme pour raffraichir les stocks de medicaments et equipements a partir des fichiers de stockage.
 
