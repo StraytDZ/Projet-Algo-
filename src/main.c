@@ -26,7 +26,6 @@ int main() {
     verifierNouveauJour(&tickets); // Pour réinitialiser le compteur de ticket a chaque minuit.
 
     do {
-        menuPrincipal();
         menuMessage();
         scanf("%d",&choix);
         switch(choix) {
@@ -149,10 +148,9 @@ int main() {
                             scanf("%d", &ChoixAdmin);
                             switch(ChoixAdmin) {
                                 case 1 :
-                                    gerer
                                 break;
                             }
-                        }while(ChoixAdmin != 5)
+                        }while(ChoixAdmin != 5);
                     }   
             break;
             case 4 :

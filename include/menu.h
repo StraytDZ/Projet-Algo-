@@ -12,4 +12,5 @@ void menuObservation();
 void menuModifierObservation(Observation *patientEnObservation);
 void menuUrgence();
 void menuAdmin();
+void menuMessage();
 #endif

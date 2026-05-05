@@ -124,9 +124,5 @@ void menuAdmin() {
 }
 
 void menuMessage(){
-
     printf("======== MESSAGES : ");
-    printf("%s %s peut maitetant sortir de l'observation")
-
-
 } 

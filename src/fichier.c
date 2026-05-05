@@ -178,7 +178,7 @@ void sauvegarderHistorique() {
     if (o == NULL) {
         printf("Erreur : Impossible d'ouvrir observations.bin\n");
         fclose(p);
-        fclose(h)
+        fclose(h);
         return;
         }
 
@@ -267,7 +267,6 @@ void afficherHistorique() {
         
         char heureArrive[30];
         strftime(heureArrive, 30, "%d/%m/%Y %H:%M", localtime(&data.heure.arrive));
-        time_t DureeConsulation;
         printf("+==== Patient %d ====\n", i++);
         printf("|--Nom      : %s %s\n",      data.prenom, data.nom);
         printf("|--ID       : %s | Age : %d | Sexe : %s\n", data.id, data.age, data.sexe);
@@ -348,15 +347,10 @@ void sauvegarderObservations(Observation *patientOB) {
 void chargerObservations(ListePatient *ListeP, ListeObservation *ListeO, ListeLit *ListeL) {
     FILE *f = fopen("data/observations.bin", "rb");
     if (f == NULL) return;
-
-    int  numlit;
-    char idPatient[20];
-    char traitement[100];
-    time_t fin, debut;
     ObservationData data;
     while (fread(&data, sizeof(ObservationData), 1, f) == 1) {
 
-        // Retrouver le patient par ID
+        // Retrouver le patient par son index
         Patient *p = ListeP->tete;
         while (p != NULL && p->index != data.index)
             p = p->suivant;
@@ -372,11 +366,10 @@ void chargerObservations(ListePatient *ListeP, ListeObservation *ListeO, ListeLi
             obs->suivant = NULL;
 
             // Retrouver et marquer le lit comme occupé
-            if (numlit >= 1 && numlit <= ListeL->total) {
-                ListeL->Tlit[numlit-1].etat    = OCCUPE;
-                ListeL->Tlit[numlit-1].patient = p;
+                ListeL->Tlit[obs->lit-1].etat    = OCCUPE;
+                ListeL->Tlit[obs->lit-1].patient = p;
                 ListeL->indispo++;
-            }
+            
 
             // Ajouter à la liste
             if (ListeO->tete == NULL)
