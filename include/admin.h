@@ -18,5 +18,7 @@ void fichiermedicament(ListeMedicament *LM, char fichiermedicaments[20]);
 void fichierequipement(ListeEquipement *LE, char fichierequipements[20]);
 void raffraichirmedicament(ListeMedicament *LM, char fichiermedicaments[20]);
 void raffraichirequipement(ListeEquipement *LE, char fichierequipements[20]);
+void menuequipement();
+void menumedicament();
 
 #endif
