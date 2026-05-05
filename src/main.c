@@ -8,20 +8,25 @@
 #include "observation.h"
 #include "urgence.h"
 #include "fichier.h"
+#include "admin.h"
 
 int main() {
-    int choix,choixReception,choixMedecin,choixConsult,choixObservation,ChoixUrgence;
+    int choix,choixReception,choixMedecin,choixConsult,choixObservation,ChoixUrgence, choixAdmin, choixMedoc, choixEquip;
     ListePatient patients = {NULL, 0, 0, 0, 0, 0};
     ListeTicket tickets = {NULL, 0, 0};
     Patient *PatientEnConsult;
     ListeObservation observations = {NULL,0};
     ListeUrgence urgences = {NULL, 0, 0};
     ListeLit lit = {{0}, MAX_LIT , 0};
+    ListeEquipement LE = {{0}, 0};
+    ListeMedicament LM = {{0}, 0};
+    Statistique stat = {0,0,0,0,0,0,0,0,0};
     chargerTickets(&tickets);
     chargerPatients(&patients,&tickets);
     chargerObservations(&patients,&observations,&lit);
     verifierNouveauJour(&tickets); // Pour réinitialiser le compteur de ticket a chaque minuit.
-
+    raffraichirequipement(&LE, "equipements.txt");
+    raffraichirmedicament(&LM, "medicaments.txt");
     do {
         menuPrincipal();
         scanf("%d",&choix);
@@ -132,8 +137,64 @@ int main() {
                               }   
                     }while(choixReception != 5);
             break;
-
-            case 4 :
+            case 3 : 
+                do{
+                    menuAdmin();
+                    scanf("%d",&choixAdmin);
+                    switch(choixAdmin) {
+                        case 1 : 
+                            menuequipement();
+                            scanf("%d",&choixEquip);
+                            switch(choixEquip) {
+                                case 1 : 
+                                    saisirequipement(&LE, "equipements.txt");
+                                    pause();
+                                break;
+                                case 2 : 
+                                    ajouterequipement(&LE, "equipements.txt");
+                                    pause();
+                                    break;
+                                case 3 :
+                                    printf("Stock d'equipements :\n");
+                                    afficherstockequipement(&LE);
+                                    pause();
+                                break;
+                                case 4 : 
+                                break; 
+                            }  
+                        break;
+                        case 2 : 
+                            menumedicament();
+                            scanf("%d",&choixMedoc);
+                            switch(choixMedoc) {
+                                case 1 : 
+                                    saisirmedicament(&LM, "medicaments.txt");
+                                    pause();
+                                break;
+                                case 2 : 
+                                    ajoutermedicament(&LM, "medicaments.txt");
+                                    pause();
+                                break;
+                                case 3 :
+                                    printf("Stock de medicaments :\n");
+                                    afficherstock(&LM);
+                                    pause();
+                                break;
+                                case 4 : 
+                                break; 
+                            }    
+                        break;
+                        case 3 :
+                            gererlit(&lit);
+                        break;
+                        case 4 :
+                            afficherstatistique(&patients, &lit, &urgences, &stat);
+                        break; 
+                        }    
+                }while(choixAdmin != 5);
+                
+                break;
+                case 4 :
                 sauvegarderPatients(&patients);
                 sauvegarderObservations(&observations);
                 SaveTicket(&tickets);
