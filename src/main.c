@@ -8,9 +8,12 @@
 #include "observation.h"
 #include "urgence.h"
 #include "fichier.h"
+#include "admin.h"
+
 
 int main() {
-    int choix,choixReception,choixMedecin,choixConsult,choixObservation,ChoixUrgence;
+    int choix,choixReception,choixMedecin,choixConsult,choixObservation,ChoixUrgence,ChoixAdmin;
+    char mdp[] = "admin123Algo", mdpdonner[20];
     ListePatient patients = {NULL, 0, 0, 0, 0, 0};
     ListeTicket tickets = {NULL, 0, 0};
     Patient *PatientEnConsult;
@@ -24,6 +27,7 @@ int main() {
 
     do {
         menuPrincipal();
+        menuMessage();
         scanf("%d",&choix);
         switch(choix) {
             case 1 : 
@@ -132,10 +136,27 @@ int main() {
                               }   
                     }while(choixReception != 5);
             break;
-
+            case 3 : 
+                    printf("Veuiller saisir le mot de passe : ");
+                    scanf("%s", mdpdonner);
+                    if(strcmp(mdp, mdpdonner) != 0 ) {
+                        printf("Mot de passe incorrect ! ");
+                        pause();
+                    }
+                    else { 
+                        do{
+                            menuAdmin();
+                            scanf("%d", &ChoixAdmin);
+                            switch(ChoixAdmin) {
+                                case 1 :
+                                    gerer
+                                break;
+                            }
+                        }while(ChoixAdmin != 5)
+                    }   
+            break;
             case 4 :
-                sauvegarderPatients(&patients);
-                sauvegarderObservations(&observations);
+                sauvegarderHistorique();
                 SaveTicket(&tickets);
                 printf("Au revoir !\n");
             break;
