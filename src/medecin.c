@@ -70,8 +70,9 @@ void AfficherAttente(ListeTicket *ListeT) {
     while(courant != NULL) {
         char buffer[30];
         strftime(buffer, 30, "%d/%m/%Y %H:%M:%S", localtime(&courant->client->heure.arrive));
-        printf("[%d] - %s  %s | %d Ans | %s | %s | Ticket  %d | Depuis : %s\n", i, courant->client->nom, courant->client->prenom, courant->client->age, courant->client->sexe, courant->client->id,courant->numero,buffer);
+        printf("[%d] - %s  %s | %d Ans | %s | %s | Ticket  %d | Depuis : %s", i, courant->client->nom, courant->client->prenom, courant->client->age, courant->client->sexe, courant->client->id,courant->numero,buffer);
         if(courant->client->etat == URGENCE) printf(" | URGENCE !");
+        printf("\n");
         i++;
         courant = courant->suivant;
     }

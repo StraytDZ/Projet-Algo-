@@ -28,7 +28,7 @@ int main() {
     raffraichirequipement(&LE, "equipements.txt");
     raffraichirmedicament(&LM, "medicaments.txt");
     do {
-        menuPrincipal();
+        menuMessage();
         scanf("%d",&choix);
         switch(choix) {
             case 1 : 

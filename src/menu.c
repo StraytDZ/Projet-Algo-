@@ -123,4 +123,6 @@ void menuAdmin() {
     printf("                          Choix : ");
 }
 
-
+void menuMessage(){
+    printf("======== MESSAGES : ");
+} 

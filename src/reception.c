@@ -81,7 +81,7 @@ void AddPatient(ListePatient *ListeP,ListeTicket *ListeT) {
     ListeP->attente++;
     ListeP->total++;
     P->index = ListeP->total;
-    sauvegarderHistorique(P);
+    sauvegarderHistorique();
 }
 void afficherAttente(ListeTicket *ListeT) {
     if(ListeT->tete == NULL) {
@@ -94,7 +94,7 @@ void afficherAttente(ListeTicket *ListeT) {
         char buffer[20];
         if(courant->client->etat == CONSULTATION) {
             strftime(buffer, 20, "%H:%M:%S", localtime(&courant->client->debutConsulation));
-            printf("[%d] - %s  %s | %d Ans | %s | %s | EN CONSULTATION | Depuis :  %s\n", i, courant->client->nom, courant->client->prenom, courant->client->age, courant->client->sexe, courant->client->id,courant->numero,buffer);
+            printf("[%d] - %s  %s | %d Ans | %s | %s | EN CONSULTATION | Depuis :  %s\n", i, courant->client->nom, courant->client->prenom, courant->client->age, courant->client->sexe, courant->client->id,buffer);
             } else {
             strftime(buffer, 20, "%H:%M:%S", localtime(&courant->client->heure.arrive));    
             printf("[%d] - %s  %s | %d Ans | %s | %s | Ticket  %d | Debut d'attente : %s\n", i, courant->client->nom, courant->client->prenom, courant->client->age, courant->client->sexe, courant->client->id,courant->numero,buffer);
