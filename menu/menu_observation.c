@@ -60,7 +60,6 @@ void menuObservation(ListeObservation *observations, ListeLit *lit,
             switch (selected) {
             case 0:
                 ModifierObservation(observations, lit);
-                menu_nav_pause();
                 break;
             case 1:
                 AfficherListeObservation(observations);

@@ -67,14 +67,15 @@ void menuMedecin(ListeTicket *tickets, ListeUrgence *urgences, ListePatient *pat
             case 0:
                 PatientEnConsult = CallPatient(tickets, urgences, patients);
                 if(PatientEnConsult != NULL)
-                menuConsultation(PatientEnConsult, observations, lit, tickets, patients);
-            break;
+                  menuConsultation(PatientEnConsult, observations, lit, tickets, patients);
+                else
+                   menu_nav_pause();  
                 break;
             case 1:
-                med_placeholder("Liste d'attente");
+                AfficherAttente(tickets);  
                 break;
             case 2:
-                med_placeholder("Observation");
+                menuObservation(observations, lit, patients);
                 break;
             case 3:
                 running = 0;

@@ -176,11 +176,14 @@ void sauvegarderHistorique() {
         }
     FILE *o = fopen("data/observations.bin", "r+b");
     if (o == NULL) {
-        printf("Erreur : Impossible d'ouvrir observations.bin\n");
-        fclose(p);
-        fclose(h);
-        return;
+        o = fopen("data/observations.bin", "wb");  // créer si inexistant
+        if (o == NULL) {
+            printf("Erreur : Impossible d'ouvrir observations.bin\n");
+            fclose(p);
+            fclose(h);
+            return;
         }
+}
 
     Data data;
     PatientData dataP;
@@ -255,7 +258,7 @@ void afficherHistorique() {
         scanf("%d",&choix);
         long position = (long)(choix - 1) * sizeof(Data);
         fseek(f, position, SEEK_SET);
-
+        fread(&data, sizeof(Data), 1, f);
         char *etatStr;
         if      (data.etat == SORTI)     etatStr = "SORTI";
         else if (data.etat == TRANSFERER) etatStr = "TRANSFERE";

@@ -60,12 +60,10 @@ void menuAdmin(ListePatient *patients, ListeLit *lit,
         } else if (key == MENU_NAV_KEY_ENTER) {
             switch (selected) {
             case 0:
-                afficherstockequipement(equipements);
-                menu_nav_pause();
+                menuEquipement(equipements);
                 break;
             case 1:
-                afficherstock(medicaments);
-                menu_nav_pause();
+                menuMedicament(medicaments);
                 break;
             case 2:
                 gererlit(lit);

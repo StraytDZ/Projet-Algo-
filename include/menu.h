@@ -25,4 +25,6 @@ void menuAdmin(ListePatient *patients, ListeLit *lit,
                ListeUrgence *urgences, ListeMedicament *medicaments,
                ListeEquipement *equipements);
 
+void menuEquipement(ListeEquipement *equipements);
+void menuMedicament(ListeMedicament *medicaments);
 #endif
