@@ -4,7 +4,7 @@
 #include "structure.h"
 
 void gererlit(ListeLit *L);
-void afficherstatistique(ListePatient *LP, ListeLit *LL, ListeUrgence *LU);
+void afficherstatistique(ListePatient *LP, ListeLit *LL, ListeUrgence *LU, Statistique *stat);
 void saisirmedicament(ListeMedicament *LM, char fichiermedicaments[20]);
 void afficherstock(ListeMedicament *LM);
 void saisirequipement(ListeEquipement *LE, char fichierequipements[20]);

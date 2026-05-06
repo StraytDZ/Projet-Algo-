@@ -3,6 +3,8 @@
 #include <string.h>
 #include "structure.h"
 
+void fichiermedicament(ListeMedicament *LM, char fichiermedicaments[20]);
+void fichierequipement(ListeEquipement *LE, char fichierequipements[20]);
 
 
 void gererlit(ListeLit *L){

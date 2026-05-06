@@ -173,7 +173,7 @@ void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL) {
     }
     Observation *patientCible = courant;
     do {
-        menuModifierObservation(patientCible);
+        menuModifierObservation(patientCible, ListeL);
         scanf("%d",&choix);
     switch(choix)  {
         case 1 : {
@@ -265,4 +265,41 @@ void RechercheObservation(ListeObservation *ListeO) {
         break; }
         }
     }while(choix != 3);
+}
+
+void verifierFinObservations(ListeObservation *ListeO, ListeLit *ListeL, ListePatient *ListeP) {
+    time_t maintenant = time(NULL);
+    Observation *courant   = ListeO->tete;
+    Observation *precedent = NULL;
+
+    while (courant != NULL) {
+        if (maintenant >= courant->finObservation) {
+            printf("Observation terminee : %s %s (Lit %d) peut sortir.\n",
+                   courant->patient->nom, courant->patient->prenom, courant->lit);
+
+            courant->patient->etat        = SORTI;
+            courant->patient->heure.sorti = time(NULL);
+            ListeP->sortis++;
+            ListeP->observation--;
+
+            ListeL->Tlit[courant->lit-1].etat    = NOCCUPE;
+            ListeL->Tlit[courant->lit-1].patient = NULL;
+            ListeL->indispo--;
+
+            sauvegarderPatients(courant->patient);
+
+            Observation *aSupprimer = courant;
+            if (precedent == NULL)
+                ListeO->tete = courant->suivant;
+            else
+                precedent->suivant = courant->suivant;
+
+            courant = courant->suivant;
+            free(aSupprimer);
+            ListeO->compteur--;
+        } else {
+            precedent = courant;
+            courant   = courant->suivant;
+        }
+    }
 }

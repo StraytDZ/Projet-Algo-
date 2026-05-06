@@ -3,14 +3,26 @@
 
 #include "structure.h"
 
-void pause();
-void menuPrincipal();
-void menuMedecin();
-void menuConsultation(Patient *patientEnConsultation);
-void menuReception();
-void menuObservation();
-void menuModifierObservation(Observation *patientEnObservation);
-void menuUrgence();
-void menuAdmin();
-void menuMessage();
+void menuMedecin(ListeTicket *tickets, ListeUrgence *urgences,
+                 ListePatient *patients, ListeObservation *observations,
+                 ListeLit *lit);
+
+void menuConsultation(Patient *patientEnConsult, ListeObservation *observations,
+                      ListeLit *lit, ListeTicket *tickets, ListePatient *patients);
+
+void menuObservation(ListeObservation *observations, ListeLit *lit,
+                     ListePatient *patients);
+
+void menuModifierObservation(Observation *patientEnObservation,
+                             ListeLit *lit);
+
+void menuReception(ListePatient *patients, ListeTicket *tickets,
+                   ListeUrgence *urgences);
+
+void menuUrgence(ListeUrgence *urgences, ListeTicket *tickets);
+
+void menuAdmin(ListePatient *patients, ListeLit *lit,
+               ListeUrgence *urgences, ListeMedicament *medicaments,
+               ListeEquipement *equipements);
+
 #endif

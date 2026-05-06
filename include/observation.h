@@ -9,4 +9,5 @@ void AddObservation(Patient *patientEnConsultation, ListeObservation *tete, List
 void SupprimerObservation(ListeObservation *ListeO, ListeLit *ListeL);
 void ModifierObservation(ListeObservation *ListeO,ListeLit *ListeL);
 void RechercheObservation(ListeObservation *ListeO);
+void verifierFinObservations(ListeObservation *ListeO, ListeLit *ListeL, ListePatient *ListeP);
 #endif
