@@ -167,17 +167,12 @@ void sauvegarderHistorique() {
         }
     FILE *o = fopen("data/observations.bin", "r+b");
     if (o == NULL) {
-<<<<<<< HEAD
         o = fopen("data/observations.bin", "wb");  // créer si inexistant
         if (o == NULL) {
             printf("Erreur : Impossible d'ouvrir observations.bin\n");
             fclose(p);
             fclose(h);
             return;
-=======
-        printf("Erreur : Impossible d'ouvrir observations.bin\n");
-        return;
->>>>>>> parent of f6ebe7c (admin encore et toujours)
         }
 }
 
@@ -252,16 +247,9 @@ void afficherHistorique() {
         int choix;
         printf("----Choix : ");
         scanf("%d",&choix);
-<<<<<<< HEAD
         long position = (long)(choix - 1) * sizeof(Data);
         fseek(f, position, SEEK_SET);
         fread(&data, sizeof(Data), 1, f);
-=======
-        while(fread(&data, sizeof(Data), 1, f) == 1) { // aller jusqu'a patient choisis depuis le scanf 
-            if(data.index == choix - 1) break; // on commence de la ligne 0 dans le ficheir binaire
-        }
-
->>>>>>> parent of f6ebe7c (admin encore et toujours)
         char *etatStr;
         if      (data.etat == SORTI)     etatStr = "SORTI";
         else if (data.etat == TRANSFERER) etatStr = "TRANSFERE";
