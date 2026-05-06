@@ -124,7 +124,7 @@ void SupprimerObservation(ListeObservation *ListeO,ListeLit *ListeL){
     ListeL->Tlit[numlit-1].etat    = NOCCUPE;
     ListeL->Tlit[numlit-1].patient = NULL;
     ListeL->indispo--;
-    sauvegarderPatients(courant->patient);
+    sauvegarderObservations(courant);
     if (precedent == NULL)
         ListeO->tete = courant->suivant;
     else
