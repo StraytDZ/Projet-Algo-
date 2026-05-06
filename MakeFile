@@ -1,13 +1,21 @@
 CC     = gcc
-SRCS   = $(wildcard src/*.c)
-OBJS   = $(SRCS:src/%.c=bin/%.o)
-TARGET = bin/hopital
+CFLAGS = -Wall -I include
+
+SRCS   = $(wildcard src/*.c) $(wildcard menu/*.c)
+OBJS   = $(SRCS:%.c=bin/%.o)
+
+TARGET = bin/hopital.exe
 
 $(TARGET): $(OBJS)
 	$(CC) $(OBJS) -o $(TARGET)
 
-bin/%.o: src/%.c
-	$(CC) -c $< -I include -o $@
+bin/%.o: %.c
+	@if not exist bin\src mkdir bin\src
+	@if not exist bin\menu mkdir bin\menu
+	$(CC) $(CFLAGS) -c $< -o $@
+
+run: $(TARGET)
+	.\bin\hopital.exe
 
 clean:
-	del bin\*.o bin\hopital.exe
+	del /Q bin\src\*.o bin\menu\*.o bin\hopital.exe 2>nul
