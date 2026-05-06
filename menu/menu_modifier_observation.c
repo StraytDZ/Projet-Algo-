@@ -37,7 +37,7 @@ static void mobs_show(int selected, Observation *o, const char *dateStr) {
                          : CYAN   "|    " RED "QUITTER" CYAN "                           |\n" RESET);
 
     printf(CYAN "|______________________________________|\n" RESET);
-    printf(GREEN "Selection (fleches + Entree) > " RESET);
+    printf(GREEN "Selection (fleches + Entree) > \n" RESET);
 }
 
 void menuModifierObservation(Observation *patientEnObservation, ListeLit *lit) {

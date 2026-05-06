@@ -35,7 +35,7 @@ static void rec_show(int selected) {
                          : CYAN   "|    " RED "QUITTER" CYAN "                           |\n" RESET);
 
     printf(CYAN "|______________________________________|\n" RESET);
-    printf(GREEN "Selection (fleches + Entree) > " RESET);
+    printf(GREEN "Selection (fleches + Entree) > \n" RESET);
 }
 
 void menuReception(ListePatient *patients, ListeTicket *tickets,

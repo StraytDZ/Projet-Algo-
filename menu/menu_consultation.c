@@ -39,7 +39,7 @@ static void cons_show(int selected, Patient *p) {
                          : CYAN   "|    " RED "QUITTER" CYAN "                           |\n" RESET);
 
     printf(CYAN "|______________________________________|\n" RESET);
-    printf(GREEN "Selection (fleches + Entree) > " RESET);
+    printf(GREEN "Selection (fleches + Entree) > \n" RESET);
 }
 
 void menuConsultation(Patient *patientEnConsult, ListeObservation *observations,

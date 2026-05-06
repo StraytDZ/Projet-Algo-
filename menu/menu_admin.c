@@ -34,7 +34,7 @@ static void admin_show(int selected) {
                          : CYAN   "|    " RED "QUITTER" CYAN "                           |\n" RESET);
 
     printf(CYAN "|______________________________________|\n" RESET);
-    printf(GREEN "Selection (fleches + Entree) > " RESET);
+    printf(GREEN "Selection (fleches + Entree) > \n" RESET);
 }
 
 void menuAdmin(ListePatient *patients, ListeLit *lit,

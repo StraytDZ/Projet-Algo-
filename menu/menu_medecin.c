@@ -36,7 +36,7 @@ static void med_show(int selected) {
                          : CYAN "|    " RED "QUITTER" CYAN "                           |\n" RESET);
 
     printf(CYAN "|______________________________________|\n" RESET);
-    printf(GREEN "Selection (fleches + Entree) > " RESET);
+    printf(GREEN "Selection (fleches + Entree) > \n" RESET);
 }
 
 static void med_placeholder(const char *titre) {
