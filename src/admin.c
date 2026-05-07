@@ -6,7 +6,6 @@
 void fichiermedicament(ListeMedicament *LM, char fichiermedicaments[20]);
 void fichierequipement(ListeEquipement *LE, char fichierequipements[20]);
 
-
 void gererlit(ListeLit *L){
     printf("veillez entrer le nombre maximal de lit dans l'hopital : ");
     scanf("%d",&L->total);
