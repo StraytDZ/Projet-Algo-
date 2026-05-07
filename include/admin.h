@@ -9,7 +9,7 @@ void saisirmedicament(ListeMedicament *LM, char fichiermedicaments[20]);
 void afficherstock(ListeMedicament *LM);
 void saisirequipement(ListeEquipement *LE, char fichierequipements[20]);
 void afficherstockequipement(ListeEquipement *LE);
-void verfierfindeMedoc(ListeMedicament *LM, ListeEquipement *LE);
+void verfierfindeStock(ListeMedicament *LM, ListeEquipement *LE);
 void ajoutermedicament(ListeMedicament *LM, char fichiermedicaments[20]);
 void ajouterequipement(ListeEquipement *LE, char fichierequipements[20]);
 void utilisermedicament(ListeMedicament *LM, char fichiermedicaments[20]);

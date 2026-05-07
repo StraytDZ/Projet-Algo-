@@ -66,7 +66,7 @@ void afficherstockequipement(ListeEquipement *LE){
     }
 }
 
-void verfierfindeMedoc(ListeMedicament *LM, ListeEquipement *LE){
+void verfierfindeStock(ListeMedicament *LM, ListeEquipement *LE){
     printf("Medicaments en rupture de stock :\n");
     for(int i = 0; i < LM->total; i++){
         if(LM->medicaments[i].quantite == 0){
