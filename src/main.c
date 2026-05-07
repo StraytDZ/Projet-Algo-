@@ -202,30 +202,10 @@ int main() {
                             }    
                     }while(choixAdmin != 5); 
                }   
-<<<<<<< HEAD
-                
-                break;
-                case 4 :
-                SaveTicket(&tickets);
-                menu_nav_clear();
-                printf(GREEN "Au revoir !\n" RESET);
-                running = 0;
-                break;
-            default:
-                break;
-            }
-        }
-#else
-        printf("\nCe mode interactif est configure pour Windows (_getch).\n");
-        running = 0;
-#endif
-    }
-=======
     
            }
     
     }while(choix != 4);
->>>>>>> 006e2b2e99bcbe6678ee13cb70109e9a155a3535
 
      return 0;
 }
