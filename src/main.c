@@ -2,12 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#ifdef _WIN32
-#include <conio.h>
-#endif
-
 #include "menu.h"
-#include "menu_nav.h"
 #include "reception.h"
 #include "medecin.h"
 #include "observation.h"
@@ -35,7 +30,6 @@ int main() {
     raffraichirmedicament(&LM, "medicaments.txt");
     do {
         menuPrincipal();
-        menuMessage();
         scanf("%d",&choix);
         switch(choix) {
             case 1 : 
@@ -208,6 +202,7 @@ int main() {
                             }    
                     }while(choixAdmin != 5); 
                }   
+<<<<<<< HEAD
                 
                 break;
                 case 4 :
@@ -225,6 +220,12 @@ int main() {
         running = 0;
 #endif
     }
+=======
+    
+           }
+    
+    }while(choix != 4);
+>>>>>>> 006e2b2e99bcbe6678ee13cb70109e9a155a3535
 
-    return 0;
+     return 0;
 }

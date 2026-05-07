@@ -48,7 +48,6 @@ typedef struct {
     char ordonnance[100];
     int lit;
     char traitement[100];
-    Medicament medicament;
     time_t finObservation;
     time_t debutObservation;
     time_t debutConsultation;
@@ -93,9 +92,9 @@ void sauvegarderPatients(Patient *patient) {
             data.numeroTicket = courant->ticket->numero;
         else
             data.numeroTicket = 0; on la pas etudié, mais pourquoi ce limiter*/
-        if(patient->etat == CONSULTATION) data.debutConsultation = patient->debutConsulation;
         fwrite(&data, sizeof(PatientData), 1, f);
         /*  suntaxe is fwrite(adresse, taille d'un element, nombre, fichier) */ 
+        if(patient->etat == CONSULTATION) data.debutConsultation = patient->debutConsulation;
 
     fclose(f);
     printf("Patients sauvegarder dans patients.bin\n");
@@ -130,14 +129,7 @@ void chargerPatients(ListePatient *liste, ListeTicket *listeT) {
         p->etat    = data.etat;
         p->heure   = data.heure;
         p->suivant = NULL;
-        p->index             = data.index;
-        p->debutConsulation  = data.debutConsultation;
-        p->dureeConsultation = data.dureeConsultation;
-        Ticket *t = malloc(sizeof(Ticket));
-        t->numero  = data.numeroTicket;
-        t->client  = p;
-        t->suivant = NULL;
-        p->ticket  = t;
+
         /* Ajouter a la fin de la liste */
         if (liste->tete == NULL) {
             liste->tete = p;
@@ -171,16 +163,18 @@ void sauvegarderHistorique() {
     FILE *p = fopen("data/patients.bin", "r+b");
     if (p == NULL) {
         printf("Erreur : Impossible d'ouvrir patients.bin\n");
-        fclose(h);
         return;
         }
     FILE *o = fopen("data/observations.bin", "r+b");
     if (o == NULL) {
-        printf("Erreur : Impossible d'ouvrir observations.bin\n");
-        fclose(p);
-        fclose(h);
-        return;
+        o = fopen("data/observations.bin", "wb");  // créer si inexistant
+        if (o == NULL) {
+            printf("Erreur : Impossible d'ouvrir observations.bin\n");
+            fclose(p);
+            fclose(h);
+            return;
         }
+}
 
     Data data;
     PatientData dataP;
@@ -255,7 +249,7 @@ void afficherHistorique() {
         scanf("%d",&choix);
         long position = (long)(choix - 1) * sizeof(Data);
         fseek(f, position, SEEK_SET);
-
+        fread(&data, sizeof(Data), 1, f);
         char *etatStr;
         if      (data.etat == SORTI)     etatStr = "SORTI";
         else if (data.etat == TRANSFERER) etatStr = "TRANSFERE";
@@ -267,40 +261,30 @@ void afficherHistorique() {
         
         char heureArrive[30];
         strftime(heureArrive, 30, "%d/%m/%Y %H:%M", localtime(&data.heure.arrive));
-        printf("+==== Patient %d ====\n", i++);
-        printf("|--Nom      : %s %s\n",      data.prenom, data.nom);
-        printf("|--ID       : %s | Age : %d | Sexe : %s\n", data.id, data.age, data.sexe);
+        time_t DureeConsulation;
+        printf("--- Patient %d ---\n", i++);
+        printf("  Nom      : %s %s\n",      data.prenom, data.nom);
+        printf("  ID       : %s | Age : %d | Sexe : %s\n", data.id, data.age, data.sexe);
         if (data.numeroTicket != 0) 
-            printf("|--Ticket   : %d\n",       data.numeroTicket);
-        printf("|--Etat     : %s\n",          etatStr);
-        printf("|--Arrivee  : %s\n",          heureArrive);
+            printf("  Ticket   : %d\n",       data.numeroTicket);
+        printf("  Etat     : %s\n",          etatStr);
+        printf("  Arrivee  : %s\n",          heureArrive);
         if (data.heure.sorti != 0) {
             char heureSortie[30];
             strftime(heureSortie, 30, "%d/%m/%Y %H:%M", localtime(&data.heure.sorti));
-            printf("|--Sortie   : %s\n", heureSortie);
+            printf("  Sortie   : %s\n", heureSortie);
         }
-        if(data.dureeConsultation != 0 || data.etat == CONSULTATION) { 
-            printf("____CONSULTATION____");
         if (strlen(data.diagnostique) > 0)
-            printf("|--Diagnostic  : %s\n",  data.diagnostique);
+            printf("  Diagnostic  : %s\n",  data.diagnostique);
         if (strlen(data.ordonnance) > 0)
-            printf("|--Ordonnance  : %s\n",  data.ordonnance);
+            printf("  Ordonnance  : %s\n",  data.ordonnance);
         if (strlen(data.departement) > 0)
-            printf("|--Departement : %s\n",  data.departement);
+            printf("  Departement : %s\n",  data.departement);
         if (data.dureeConsultation != 0) {
-            char dureConsultation[30];
+            char dureConsultation[4];
             strftime(dureConsultation, 30, "%M", localtime(&data.dureeConsultation));
-            printf("|--Duree Consultation : %sMin", dureConsultation);
-            }
-        }   
-        if(strlen(data.traitement) > 0 || data.etat == OBSERVATION) {
-            printf("____OBSERVATION____");
-        if(strlen(data.traitement) > 0) 
-            printf("|--Traitement : %s", data.traitement);
-        if(data.lit != 0)
-            printf("|--Lit : %d", data.lit);
+            printf("  Duree Consultation : %sMin", dureConsultation);
         }
-        printf("=====================");
         printf("\n");
     
     fclose(f);
@@ -344,32 +328,41 @@ void sauvegarderObservations(Observation *patientOB) {
    - Retourne la liste d'observations reconstruite
      (pas de ** : on retourne le pointeur directement)
    ============================================================ */
-void chargerObservations(ListePatient *ListeP, ListeObservation *ListeO, ListeLit *ListeL) {
+void chargerObservations(ListePatient *liste, ListeObservation *ListeO, ListeLit *ListeL) {
     FILE *f = fopen("data/observations.bin", "rb");
     if (f == NULL) return;
-    ObservationData data;
-    while (fread(&data, sizeof(ObservationData), 1, f) == 1) {
 
-        // Retrouver le patient par son index
-        Patient *p = ListeP->tete;
-        while (p != NULL && p->index != data.index)
+    int  numlit;
+    char idPatient[20];
+    char traitement[100];
+    time_t fin, debut;
+    while (fread(&numlit, sizeof(int), 1, f) == 1) {
+        fread(idPatient,  sizeof(char),   20,  f);
+        fread(traitement, sizeof(char),   100, f);
+        fread(&fin,       sizeof(time_t), 1,   f);
+        fread(&debut,     sizeof(time_t), 1,   f); 
+
+        // Retrouver le patient par ID
+        Patient *p = liste->tete;
+        while (p != NULL && strcmp(p->id, idPatient) != 0)
             p = p->suivant;
 
         if (p != NULL) {
             Observation *obs = malloc(sizeof(Observation));
-            obs->lit              = data.lit;
-            obs->patient          = p;
-            obs->finObservation   = data.finObservation;
-            obs->debutObservation = data.debutObservation;
-            obs->index            = data.index;
-            strcpy(obs->traitement, data.traitement);
+            if (obs == NULL) break;
+            obs->lit     = numlit;
+            obs->patient = p;
+            obs->finObservation   = fin;  
+            obs->debutObservation = debut;  
+            strcpy(obs->traitement, traitement);
             obs->suivant = NULL;
 
             // Retrouver et marquer le lit comme occupé
-                ListeL->Tlit[obs->lit-1].etat    = OCCUPE;
-                ListeL->Tlit[obs->lit-1].patient = p;
+            if (numlit >= 1 && numlit <= ListeL->total) {
+                ListeL->Tlit[numlit-1].etat    = OCCUPE;
+                ListeL->Tlit[numlit-1].patient = p;
                 ListeL->indispo++;
-            
+            }
 
             // Ajouter à la liste
             if (ListeO->tete == NULL)
@@ -383,4 +376,36 @@ void chargerObservations(ListePatient *ListeP, ListeObservation *ListeO, ListeLi
         }
     }
     fclose(f);
+}
+
+
+void afficherHistorique() {
+    FILE *P = fopen("data/patients.bin","rb");
+    if(P == NULL) {
+        printf("Erreur : Impossible d'afficher l'historique.\n");
+        return;
+    }
+    PatientData courant;
+    int i;
+    int choix;
+    while(fread(&courant,sizeof(PatientData),1,P)) {
+        char *etatStr; // pointeur vers les texte ecirt la dessous, on peux faire char etatStr[30] par exemple, masu vu que c'est des string fixe, autant pointer vers eux
+        if      (courant.etat == SORTI)     etatStr = "SORTI"; // Convertir en string
+        else if (courant.etat == TRANSFERER) etatStr = "TRANSFERE";
+        else if (courant.etat == CONSULTATION) etatStr = "CONSULTION";
+        else if (courant.etat == ATTENTE ) etatStr = "ATTENTE";
+        else if (courant.etat == OBSERVATION) etatStr = "OBSERVATION";
+        else if (courant.etat == URGENCE)     etatStr = "URGENCE";
+        char buffer[30];
+        strftime(buffer, 30, "%d/%m/%Y %H%M%S", localtime(&courant.heure.arrive));
+        printf("[%d] - %s  %s | %d Ans | %s | %s | %s | Arrivee: %s\n", i, courant.nom, courant.prenom, courant.age, courant.sexe, courant.id,etatStr,buffer);
+        if(courant.heure.sorti != 0 ) {
+            strftime(buffer, 30,"%d/%m/%Y %H:%M:%S", localtime(&courant.heure.sorti));
+            printf(" | Sortie : %s", buffer);
+        }
+        i++; 
+     }
+     printf("----Choix : ");
+     scanf("%d", &choix);
+     
 }

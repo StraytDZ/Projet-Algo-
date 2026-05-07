@@ -54,8 +54,10 @@ void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, Li
     patientOB->index = patientEnConsultation->index;
     patientEnConsultation->etat = OBSERVATION;
     printf("Le patient est transeferer au lit %d.",patientOB->lit);
-    if(patientEnConsultation->ticket == ListeT->tete)
+    if(patientEnConsultation->ticket == ListeT->tete) {
+        ListeT->tete = ListeT->tete->suivant;
         free(patientEnConsultation->ticket); // On l'enleve de la liste d'attente ( debut)
+    }
     else { // millieu et fin
         Ticket *courant = ListeT->tete;
         Ticket *precedent = NULL;
@@ -122,7 +124,7 @@ void SupprimerObservation(ListeObservation *ListeO,ListeLit *ListeL){
     ListeL->Tlit[numlit-1].etat    = NOCCUPE;
     ListeL->Tlit[numlit-1].patient = NULL;
     ListeL->indispo--;
-    sauvegarderPatients(courant->patient);
+    sauvegarderObservations(courant);
     if (precedent == NULL)
         ListeO->tete = courant->suivant;
     else
@@ -157,7 +159,7 @@ void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL) {
     }
     AfficherListeObservation(ListeO);
     printf("----");
-    int choix, index;
+    int index;
     int i = 1;
     do{
         printf("-Choix : ");
@@ -172,47 +174,7 @@ void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL) {
         i++;
     }
     Observation *patientCible = courant;
-    do {
         menuModifierObservation(patientCible, ListeL);
-        scanf("%d",&choix);
-    switch(choix)  {
-        case 1 : {
-            int numlit;
-            printf("Donner le numero du nouveau lit : ");
-            scanf("%d", &numlit);
-            if (numlit < 1 || numlit > ListeL->total) {
-                printf("Erreur : lit invalide.\n");
-                break;
-            }
-            if (ListeL->Tlit[numlit-1].etat == OCCUPE) {
-              printf("Erreur : lit %d deja occupe.\n", numlit);
-              break;
-            }
-            ListeL->Tlit[patientCible->lit - 1].etat =  NOCCUPE;
-            ListeL->Tlit[patientCible->lit - 1].patient =  NULL;
-            patientCible->lit = numlit;
-            ListeL->Tlit[numlit-1].etat =  OCCUPE;
-            ListeL->Tlit[numlit-1].patient = patientCible->patient;
-            sauvegarderObservations(patientCible);
-        break; }
-        case 2 : {
-            printf("Donner le nouveau traitement a suivre : ");
-            scanf(" %[^\n]", patientCible->traitement);
-            sauvegarderObservations(patientCible);
-        break; }
-        case 3 : {
-            int duree;
-            printf("Ajouter une retier des jours (Exemple : 2 ou -1) :");
-            scanf("%d",&duree);
-
-            patientCible->finObservation = patientCible->finObservation + (duree * 24 * 60 * 60); // on ajoute ou reduire par rapport a la date deja donnée
-            char buffer[20];
-            strftime(buffer, 20, "%d/%m/%Y", localtime(&patientCible->finObservation));
-            printf("Nouvelle date de fin : %s\n", buffer);
-            sauvegarderObservations(patientCible);
-        break;}
-        }
-    }while(choix != 4);
 }
 void RechercheObservation(ListeObservation *ListeO) {
      if(ListeO->tete == NULL) {
