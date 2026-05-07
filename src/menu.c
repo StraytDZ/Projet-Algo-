@@ -123,4 +123,32 @@ void menuAdmin() {
     printf("                          Choix : ");
 }
 
+void menuequipement() {
+    system("cls");
+    printf("\n=======================================\n");
+    printf("\t=+=+=+=MENU=+=+=+=\n");
+    printf("\t*+*+*EQUIPEMENT*+*+*\n");
+    printf("=======================================\n\n");
+    printf("\t 1 - ajouter un nouvel equipement\n");
+    printf("\t 2 - ajouter la quantite d'un equipement\n");
+    printf("\t 3 - affichez stock equipements\n");
+    printf("\t 4 - Quitter\n\n");
+    printf("=======================================\n");
+    printf("                          Choix : ");
+}
+
+void menumedicament() {
+    system("cls");
+    printf("\n=======================================\n");
+    printf("\t=+=+=+=MENU=+=+=+=\n");
+    printf("\t*+*+*MEDICAMENT*+*+*\n");
+    printf("=======================================\n\n");
+    printf("\t 1 - ajouter un nouvel medicament\n");
+    printf("\t 2 - ajouter la quantite d'un medicament\n");
+    printf("\t 3 - affichez stock medicaments\n");
+    printf("\t 4 - Quitter\n\n");
+    printf("=======================================\n");
+    printf("                          Choix : ");
+}
+
 

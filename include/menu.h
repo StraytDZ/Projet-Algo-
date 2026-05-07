@@ -13,4 +13,6 @@ void menuModifierObservation(Observation *patientEnObservation);
 void menuUrgence();
 void menuAdmin();
 void menuMessage();
+void menuequipement();
+void menumedicament();
 #endif
