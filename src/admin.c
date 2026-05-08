@@ -140,9 +140,15 @@ void ajouterequipement(ListeEquipement *LE){
     fichierequipement(LE);
 }
 
+<<<<<<< HEAD
 void utilisermedicament(ListeMedicament *LM, char *nomUtilise) {
     char nom[30];
     printf("Veuillez entrer le nom du medicament a utiliser : ");
+=======
+void utilisermedicament(ListeMedicament *LM, char nom[30]){
+    
+     printf("Veuillez entrer le nom du medicament a utiliser  : ");
+>>>>>>> 3db77aa23a59593d3fd2257b6c0ead8471e3cd81
     scanf("%s", nom);
     while(getchar() != '\n');
     for(int i = 0; i < LM->total; i++){
@@ -163,7 +169,7 @@ void utilisermedicament(ListeMedicament *LM, char *nomUtilise) {
 }
 
 
-void utiliserequipement(ListeEquipement *LE){
+void utiliserequipement(ListeEquipement *LE, char nom[30]){
     char nom[30];
      printf("Veuillez entrer le nom de l'equipement a utiliser  : ");
     scanf("%s", nom);
