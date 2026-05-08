@@ -75,6 +75,8 @@ typedef struct Observation{ // Un noeud Observation
     time_t debutObservation;
     int index;
     struct Observation *suivant;
+    Medicament *medicaments[10];
+    Equipement *equipements[10];
 }Observation;
 typedef struct ListeObservation { // Liste de tout les noeuds Observation
     Observation *tete;
