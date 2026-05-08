@@ -21,16 +21,31 @@ ListeUrgence* AddUrgence(ListeUrgence *ListeU, ListeTicket *ListeT){
     }
     courant->suivant = nouveauTicket;
    }
+   int Age;
+   char Sexe[4];
     patientEnUrgence->ticket = nouveauTicket;
     printf("Nom : ");    scanf(" %[^\n]", patientEnUrgence->nom);
     printf("Prenom : "); scanf(" %[^\n]", patientEnUrgence->prenom);
     printf("ID : ");     scanf(" %[^\n]", patientEnUrgence->id);
-    printf("Age : ");    scanf("%d", &patientEnUrgence->age); while(getchar() != '\n');
-    printf("Sexe : ");   scanf("%s", patientEnUrgence->sexe);
+    printf("\tAge : ");
+    do {
+    printf("\tAge : ");
+    Age = saisirChoix();
+    if(Age <= 0 || Age > 150)
+        printf(RED "\tAge invalide ! (1-150)\n" RESET);
+    } while(Age <= 0 || Age > 150);
+    do {
+    printf("\tSexe (H/F) : ");
+    scanf("%s", Sexe);
     while(getchar() != '\n');
+    if(strcmp(Sexe, "H") != 0 && strcmp(Sexe, "F") != 0)
+        printf(RED "\tSexe invalide ! (H ou F)\n" RESET);
+    } while(strcmp(Sexe, "H") != 0 && strcmp(Sexe, "F") != 0);
     strcpy(patientEnUrgence->departement,"");
     strcpy(patientEnUrgence->diagnostique,"");
     strcpy(patientEnUrgence->ordonnance,"");
+    strcpy(patientEnUrgence->sexe,Sexe);
+    patientEnUrgence->age = Age;
     patientEnUrgence->heure.arrive = time(NULL);
     patientEnUrgence->suivant = NULL;
 

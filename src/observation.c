@@ -34,10 +34,6 @@ void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, Li
             printf("Erreur : Impossible d'enregister une observation.\n");
             return;
         }
-    Ticket *tmp = ListeT->tete;
-    ListeT->tete = ListeT->tete->suivant;
-    free(tmp);
-    SaveTicket(ListeT);
     int duree;
     printf("Duree de l'oservations :");
     duree = saisirChoix();
@@ -60,6 +56,7 @@ void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, Li
     patientOB->index = patientEnConsultation->index;
     patientEnConsultation->etat = OBSERVATION;
     printf("Le patient est transeferer au lit %d.",patientOB->lit);
+    sauvegarderLit(ListeL);
     if(patientEnConsultation->ticket == ListeT->tete) {
         ListeT->tete = ListeT->tete->suivant;
         free(patientEnConsultation->ticket); // On l'enleve de la liste d'attente ( debut)

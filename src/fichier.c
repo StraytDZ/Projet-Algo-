@@ -537,3 +537,16 @@ void chargerUrgences(ListeUrgence *ListeU, ListeTicket *ListeT) {
     }
     fclose(f);
 }
+void sauvegarderLit(ListeLit *L) {
+    FILE *f = fopen("data/lit.bin", "wb");
+    if (f == NULL) return;
+    fwrite(&L->total, sizeof(int), 1, f);
+    fclose(f);
+}
+
+void chargerLit(ListeLit *L) {
+    FILE *f = fopen("data/lit.bin", "rb");
+    if (f == NULL) return; 
+    fread(&L->total, sizeof(int), 1, f);
+    fclose(f);
+}

@@ -6,8 +6,9 @@
 
 void pause() {
     int c;
-    while ((c = getchar()) != '\n' && c != EOF);
     printf(CYAN "\nAppuyez sur Entree pour continuer..." RESET);
+    fflush(stdout); // ← force l'affichage avant d'attendre
+    getchar();
 }
 
 int saisirChoix() { // Au cas ou l'utilisateurs donne un choix invalide, comme les caractere qui font out bug quand ils sont donner comme choix
@@ -66,11 +67,11 @@ void menuConsultation(Patient *p) {
     printf(CYAN "| %d ans | %s | %-24s|\n" RESET, p->age, p->sexe, p->id);
     printf(RED "+======================================+\n" RESET);
     printf(CYAN "|                                      |\n" RESET);
-    printf(CYAN "|  " YELLOW "1" CYAN " - Enregistrer le diagnostic      |\n" RESET);
-    printf(CYAN "|  " YELLOW "2" CYAN " - Inscrire une ordonnance        |\n" RESET);
-    printf(CYAN "|  " YELLOW "3" CYAN " - Mettre en observation          |\n" RESET);
-    printf(CYAN "|  " YELLOW "4" CYAN " - Transferer a un autre dpt      |\n" RESET);
-    printf(CYAN "|  " RED    "5" CYAN " - Quitter                        |\n" RESET);
+    printf(CYAN "|  " YELLOW "1" CYAN " - Enregistrer le diagnostic       |\n" RESET);
+    printf(CYAN "|  " YELLOW "2" CYAN " - Inscrire une ordonnance         |\n" RESET);
+    printf(CYAN "|  " YELLOW "3" CYAN " - Mettre en observation           |\n" RESET);
+    printf(CYAN "|  " YELLOW "4" CYAN " - Transferer a un autre dpt       |\n" RESET);
+    printf(CYAN "|  " RED    "5" CYAN " - Quitter                         |\n" RESET);
     printf(CYAN "|                                      |\n" RESET);
     printf(RED "+======================================+\n" RESET);
     printf(GREEN "                       Choix : " RESET);
