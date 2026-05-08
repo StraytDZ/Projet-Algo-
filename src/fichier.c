@@ -138,7 +138,6 @@ void chargerPatients(ListePatient *liste, ListeTicket *listeT) {
         p->debutConsulation  = data.debutConsultation;
         p->suivant           = NULL;
 
-        // ✅ Reconstruire le ticket pour les patients encore en attente
         if (p->etat == ATTENTE) {
             Ticket *t = (Ticket*)malloc(sizeof(Ticket));
             if (t != NULL) {
@@ -293,7 +292,7 @@ void afficherHistorique() {
         printf(CYAN "|    Aucun patient dans l'historique.            |\n" RESET);
         printf(RED  "+================================================+\n" RESET);
         fclose(f);
-        return; debutConsultation
+        return;
     }
 
     printf(GREEN "                       Choix : " RESET);
