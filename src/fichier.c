@@ -31,6 +31,8 @@ typedef struct {
     char traitement[100];
     time_t finObservation;
     time_t debutObservation;
+    char medicamentsUtilises[10][30];
+    int nbMedicaments;
     int index;
 }ObservationData;
 
@@ -52,6 +54,8 @@ typedef struct {
     time_t debutObservation;
     time_t debutConsultation;
     time_t dureeConsultation;
+    char medicamentsUtilises[10][30];
+    int nbMedicaments;
     int index;
 }Data;
 
@@ -225,6 +229,8 @@ void sauvegarderHistorique() {
             strcpy(data.traitement, dataO.traitement);
             data.debutObservation = dataO.debutObservation;
             data.finObservation = dataO.finObservation;
+            data.nbMedicaments = dataO.nbMedicaments; 
+            memcpy(data.medicamentsUtilises, dataO.medicamentsUtilises, sizeof(dataO.medicamentsUtilises)); 
             data.lit = dataO.lit;
         }
         else {
@@ -232,6 +238,8 @@ void sauvegarderHistorique() {
             data.finObservation   = 0;
             data.debutObservation = 0;
             strcpy(data.traitement, "");
+            data.nbMedicaments = 0;
+            memset(data.medicamentsUtilises, 0, sizeof(data.medicamentsUtilises)); 
         }
         long position = (long)(data.index - 1)*sizeof(Data);
         fseek(h,position,SEEK_SET);
@@ -362,6 +370,13 @@ void afficherHistorique() {
         printf(CYAN "| Lit         : %-33d|\n" RESET, data.lit);
         if (strcmp(data.traitement, "") != 0)
             printf(CYAN "| Traitement  : %-33s|\n" RESET, data.traitement);
+            if (data.nbMedicaments > 0) {
+                printf(RED  "+------------------------------------------------+\n" RESET);
+                printf(CYAN "| Medicaments pris :                             |\n" RESET);
+                for(int i = 0; i < data.nbMedicaments; i++) {
+                    printf(CYAN "|   - %-43s|\n" RESET, data.medicamentsUtilises[i]);
+                 }   
+            }
         if (data.debutObservation != 0) {
             char buffer[30];
             strftime(buffer, 30, "%d/%m/%Y %H:%M", localtime(&data.debutObservation));
@@ -401,7 +416,10 @@ void sauvegarderObservations(Observation *patientOB) {
     data.finObservation = patientOB->finObservation;
     data.index = patientOB->index;
     strcpy(data.traitement , patientOB->traitement);
-
+    // dans sauvegarderPatients()
+    data.nbMedicaments = patientOB->nbMedicaments;
+    memcpy(data.medicamentsUtilises, patientOB->medicamentsUtilises, sizeof(data.medicamentsUtilises));
+    
     fseek(f, position, SEEK_SET);
     fwrite(&data, sizeof(ObservationData),1,f);
 
@@ -437,6 +455,8 @@ void chargerObservations(ListePatient *liste, ListeObservation *ListeO, ListeLit
             obs->debutObservation = data.debutObservation;
             obs->index            = data.index;
             strcpy(obs->traitement, data.traitement);
+            obs->nbMedicaments = data.nbMedicaments;
+            memcpy(obs->medicamentsUtilises, data.medicamentsUtilises, sizeof(data.medicamentsUtilises));
             obs->suivant = NULL;
 
             if (data.lit >= 1 && data.lit <= ListeL->total) {
@@ -549,4 +569,40 @@ void chargerLit(ListeLit *L) {
     if (f == NULL) return; 
     fread(&L->total, sizeof(int), 1, f);
     fclose(f);
+}
+
+void NettoyerPatientsSortis(ListePatient *ListeP) {
+    if (ListeP == NULL || ListeP->tete == NULL) {
+        return;
+    }
+
+    Patient *courant = ListeP->tete;
+    Patient *precedent = NULL;
+    int patientsNettoyes = 0; // Petit compteur pour le suivi
+
+    while (courant != NULL) {
+        // On vérifie si l'état est SORTI (tu pourrais aussi ajouter TRANSFERER si tu veux les nettoyer aussi)
+        if (courant->etat == SORTI || courant->etat == TRANSFERER) {
+            sauvegarderPatients(courant);
+
+            Patient *aSupprimer = courant;
+            if (precedent == NULL) {
+                ListeP->tete = courant->suivant;
+                courant = courant->suivant;
+            } else {
+                precedent->suivant = courant->suivant;
+                courant = courant->suivant;
+            }
+            free(aSupprimer);
+            patientsNettoyes++;
+
+        } else {
+            precedent = courant;
+            courant = courant->suivant;
+        }
+    }
+
+    if (patientsNettoyes > 0) {
+        printf(GREEN "%d patient(s) SORTI(S) ont ete sauvegardes et liberes de la RAM.\\n" RESET, patientsNettoyes);
+    }
 }

@@ -64,7 +64,7 @@ void menuConsultation(Patient *p) {
     printf(RED "|         MENU : CONSULTATION          |\n" RESET);
     printf(RED "+======================================+\n" RESET);
     printf(CYAN "| Ticket %-3d : %s %-15s|\n" RESET, p->ticket->numero, p->nom, p->prenom);
-    printf(CYAN "| %d ans | %s | %-24s|\n" RESET, p->age, p->sexe, p->id);
+    printf(CYAN "|      %d ans | %s | %-20s|\n" RESET, p->age, p->sexe, p->id);
     printf(RED "+======================================+\n" RESET);
     printf(CYAN "|                                      |\n" RESET);
     printf(CYAN "|  " YELLOW "1" CYAN " - Enregistrer le diagnostic       |\n" RESET);

@@ -22,7 +22,7 @@ void gererlit(ListeLit *L) {
         if(L->total > MAX_LIT)
             printf("Erreur : maximum %d lits !\n", MAX_LIT);
     } while(L->total > MAX_LIT);
-    sauvgarder(L);
+    sauvegarderLit(L);
 }
 
 void afficherstatistique(ListePatient *LP, ListeLit *LL, ListeUrgence *LU, Statistique *stat){
@@ -140,9 +140,9 @@ void ajouterequipement(ListeEquipement *LE){
     fichierequipement(LE);
 }
 
-void utilisermedicament(ListeMedicament *LM){
+void utilisermedicament(ListeMedicament *LM, char *nomUtilise) {
     char nom[30];
-     printf("Veuillez entrer le nom du medicament a utiliser  : ");
+    printf("Veuillez entrer le nom du medicament a utiliser : ");
     scanf("%s", nom);
     while(getchar() != '\n');
     for(int i = 0; i < LM->total; i++){
@@ -150,14 +150,16 @@ void utilisermedicament(ListeMedicament *LM){
             if(LM->medicaments[i].quantite >= 1){
                 LM->medicaments[i].quantite -= 1;
                 fichiermedicament(LM);
-            }else{
-                printf("Quantite insuffisante pour le medicament %s\n", nom);
+                strcpy(nomUtilise, nom); //  retourner le nom
+            } else {
+                printf("Quantite insuffisante pour %s\n", nom);
+                strcpy(nomUtilise, ""); // rien retourner
             }
             return;
         }
     }
-    
     printf("Medicament %s non trouve\n", nom);
+    strcpy(nomUtilise, ""); //  rien retourner
 }
 
 

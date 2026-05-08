@@ -3,6 +3,8 @@
 
 #include "structure.h"
 
+void NettoyerPatientsSortis(ListePatient *ListeP);
+
 /* wayi pour Sauvegarder */
 void         sauvegarderPatients(Patient *patient);
 void         sauvegarderObservations(Observation *patient);

@@ -207,6 +207,7 @@ int main() {
                SaveTicket(&tickets);
                sauvegarderLit(&lit);
                sauvegarderUrgences(&urgences);
+               NettoyerPatientsSortis(&patients);
             break;
            }
     }while(choix != 4);

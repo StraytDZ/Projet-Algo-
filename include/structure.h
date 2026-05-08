@@ -74,6 +74,8 @@ typedef struct Observation{ // Un noeud Observation
     time_t finObservation;
     time_t debutObservation;
     int index;
+    char medicamentsUtilises[10][30]; // max 10 médicaments, 30 chars chacun
+    int nbMedicaments;
     struct Observation *suivant;
 }Observation;
 typedef struct ListeObservation { // Liste de tout les noeuds Observation
