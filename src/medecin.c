@@ -12,7 +12,7 @@ Patient *CallPatient(ListeTicket *ListeT, ListeUrgence *ListeU,ListePatient *Lis
         Patient *patientUrgence = urgence->patient; 
         patientUrgence->etat = CONSULTATION;
         ListeU->tete = ListeU->tete->suivant;
-        ListeP->attente--;
+        ListeU->attente--;
         patientUrgence->debutConsulation = time(NULL);
         sauvegarderPatients(patientUrgence);
         return patientUrgence;
@@ -62,6 +62,7 @@ void transferer(Patient *patientEnConsult,ListePatient *ListeP, ListeTicket *Lis
     printf("Saisi du nom du departement de transfert : ");
     scanf(" %[^\n]",patientEnConsult->departement);
     while(getchar() != '\n');
+
     printf("Le patient %s %s a ete transfere vers un departement de %s.\n",patientEnConsult->prenom,patientEnConsult->nom, patientEnConsult->departement);
     patientEnConsult->etat=TRANSFERER;
     patientEnConsult->heure.sorti = time(NULL);

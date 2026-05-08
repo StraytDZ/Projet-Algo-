@@ -21,10 +21,11 @@ int main() {
     Patient *PatientEnConsult;
     ListeObservation observations = {NULL,0};
     ListeUrgence urgences = {NULL, 0, 0};
-    ListeLit lit = {{{0}}, MAX_LIT , 0};
+    ListeLit lit = {{{0}}, 0 , 0};
     ListeEquipement LE = {{{0}}, 0};
     ListeMedicament LM = {{{0}}, 0};
     Statistique stat = {0,0,0,0,0,0,0,0,0};
+    chargerLit(&lit);
     chargerTickets(&tickets);
     chargerPatients(&patients,&tickets);
     chargerObservations(&patients,&observations,&lit);
@@ -63,6 +64,7 @@ int main() {
                                     case 3 :
                                         AddObservation(PatientEnConsult, &observations, &lit, &tickets, &patients, &LM, &LE);
                                         if(strcmp(PatientEnConsult->diagnostique,"") !=0)choixConsult = 5;
+                                        pause();
                                     break;
                                     case 4: 
                                         transferer(PatientEnConsult,&patients,&tickets);
@@ -189,9 +191,11 @@ int main() {
                             break;
                             case 3 :
                                 gererlit(&lit);
+                                pause();
                             break;
                             case 4 :
                                 afficherstatistique(&patients, &lit, &urgences, &stat);
+                                pause();
                             break; 
                             }    
                     }while(choixAdmin != 5); 
@@ -201,6 +205,7 @@ int main() {
             case 4 : 
                printf(GREEN " Au revoir !\n" RESET);
                SaveTicket(&tickets);
+               sauvegarderLit(&lit);
                sauvegarderUrgences(&urgences);
             break;
            }

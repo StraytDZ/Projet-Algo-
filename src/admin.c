@@ -12,6 +12,7 @@
 
 void fichiermedicament(ListeMedicament *LM);
 void fichierequipement(ListeEquipement *LE);
+void sauvegarderLit(ListeLit *L);
 
 void gererlit(ListeLit *L) {
     do {
@@ -21,6 +22,7 @@ void gererlit(ListeLit *L) {
         if(L->total > MAX_LIT)
             printf("Erreur : maximum %d lits !\n", MAX_LIT);
     } while(L->total > MAX_LIT);
+    sauvgarder(L);
 }
 
 void afficherstatistique(ListePatient *LP, ListeLit *LL, ListeUrgence *LU, Statistique *stat){
@@ -34,7 +36,7 @@ void afficherstatistique(ListePatient *LP, ListeLit *LL, ListeUrgence *LU, Stati
     stat->LitIndispo = LL->indispo;
     stat->totalUrgence = LU->total;
     stat->attenteUrgence = LU->attente;
-
+system("cls");
 printf(RED "+======================================+\n" RESET);
 printf(RED "|        STATISTIQUES HOPITAL          |\n" RESET);
 printf(RED "+======================================+\n" RESET);
@@ -95,8 +97,7 @@ void ajoutermedicament(ListeMedicament *LM){
     char nom[30];
     int quantite;
     printf("Veuillez entrer le nom du medicament a ajouter et sa quantite : ");
-    scanf("%s %d", nom, &quantite);
-    while(getchar() != '\n');   
+    scanf("%s %d", nom, &quantite);  
     for(int i = 0; i < LM->total; i++){
         if(strcmp(LM->medicaments[i].nom, nom) == 0){
             LM->medicaments[i].quantite += quantite;
