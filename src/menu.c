@@ -84,7 +84,7 @@ void menuObservation() {
     printf(CYAN "|                                      |\n" RESET);
     printf(CYAN "|  " YELLOW "1" CYAN " - Modifier une observation        |\n" RESET);
     printf(CYAN "|  " YELLOW "2" CYAN " - Afficher la liste d'observation |\n" RESET);
-    printf(CYAN "|  " YELLOW "3" CYAN " - Rechercher un patient           |\n" RESET);
+    printf(CYAN "|  " YELLOW "3" CYAN " - Rechercher un patient           |\n" RESET); 
     printf(CYAN "|  " YELLOW "4" CYAN " - Liberer un patient              |\n" RESET);
     printf(CYAN "|  " RED    "5" CYAN " - Quitter                         |\n" RESET);
     printf(CYAN "|                                      |\n" RESET);

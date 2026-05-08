@@ -60,8 +60,8 @@ int main() {
                                         if(strcmp(PatientEnConsult->diagnostique,"") !=0)choixConsult = 5;
                                         pause();
                                     break;
-                                    case 3 : 
-                                        AddObservation(PatientEnConsult,&observations,&lit,&tickets,&patients);
+                                    case 3 :
+                                        AddObservation(PatientEnConsult, &observations, &lit, &tickets, &patients, &LM, &LE);
                                         if(strcmp(PatientEnConsult->diagnostique,"") !=0)choixConsult = 5;
                                     break;
                                     case 4: 
