@@ -163,16 +163,13 @@ int main() {
                                         ajouterequipement(&LE);
                                         pause();
                                     break;
-                                    case 2 : 
-                                        ajouterequipement(&LE);
-                                        pause();
-                                        break;
-                                    case 3 :
+                                    
+                                    case 2 :
                                         afficherstockequipement(&LE);
                                         pause();
                                     break;
                                 }  
-                            }while(choixEquip != 4);
+                            }while(choixEquip != 3);
                             break;
                             case 2 : 
                             do{
@@ -182,17 +179,13 @@ int main() {
                                     case 1 : 
                                         ajoutermedicament(&LM);
                                         pause();
-                                    break;
-                                    case 2 : 
-                                        ajoutermedicament(&LM);
-                                        pause();
-                                    break;
-                                    case 3 :
+                                    break;                                    
+                                    case 2 :
                                         afficherstock(&LM);
                                         pause();
                                     break;
                                 } 
-                            }while(choixMedoc != 4);
+                            }while(choixMedoc != 3);
                             break;
                             case 3 :
                                 gererlit(&lit);
