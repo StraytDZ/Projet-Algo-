@@ -15,7 +15,7 @@ typedef struct ListeTicket {
     time_t dernierReset;
     int compteur;
 }ListeTicket;
-typedef enum {
+typedef enum { // 
     ATTENTE,
     CONSULTATION,
     OBSERVATION,
@@ -109,8 +109,10 @@ typedef struct Medicament {
     int quantite;
 } Medicament;
 
+#define MAX_MEDICAMENTS 100
+
 typedef struct ListeMedicament {
-    Medicament medicaments[100];
+    Medicament medicaments[MAX_MEDICAMENTS];
     int total;
 } ListeMedicament;
 
@@ -119,10 +121,18 @@ typedef struct Equipement {
     int quantite;
 } Equipement;
 
+#define MAX_EQUIPEMENTS 100
+
 typedef struct ListeEquipement {
-    Equipement equipements[100];
+    Equipement equipements[MAX_EQUIPEMENTS];
     int total;
 } ListeEquipement;
+
+#define RED    "\033[91m"
+#define CYAN   "\033[96m"
+#define GREEN  "\033[92m"
+#define YELLOW "\033[93m"
+#define RESET  "\033[0m"
 
 
 #endif

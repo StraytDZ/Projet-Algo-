@@ -10,6 +10,9 @@
 #include "fichier.h"
 #include "admin.h"
 
+
+
+
 int main() {
     int choix,choixReception,choixMedecin,choixConsult,choixObservation,ChoixUrgence, choixAdmin, choixMedoc, choixEquip;
     char mdp[] = "admin123", mdpdonner[10];
@@ -25,17 +28,18 @@ int main() {
     chargerTickets(&tickets);
     chargerPatients(&patients,&tickets);
     chargerObservations(&patients,&observations,&lit);
+    chargerUrgences(&urgences, &tickets); 
     verifierNouveauJour(&tickets); // Pour réinitialiser le compteur de ticket a chaque minuit.
-    raffraichirequipement(&LE, "equipements.txt");
-    raffraichirmedicament(&LM, "medicaments.txt");
+    raffraichirequipement(&LE);
+    raffraichirmedicament(&LM);
     do {
         menuPrincipal();
-        scanf("%d",&choix);
+        choix = saisirChoix();
         switch(choix) {
             case 1 : 
                 do {
                      menuMedecin();
-                     scanf("%d",&choixMedecin);
+                     choixMedecin = saisirChoix();
                      switch(choixMedecin) {
                         case 1 : 
                             PatientEnConsult = CallPatient(&tickets,&urgences,&patients);
@@ -45,24 +49,23 @@ int main() {
                             }
                             do{
                                 menuConsultation(PatientEnConsult);
-                                scanf("%d",&choixConsult);
+                                choixConsult = saisirChoix();
                                 switch(choixConsult) {
                                     case 1 : 
                                         PatientDiagnostic(PatientEnConsult);
                                         pause();
                                     break;
                                     case 2 :
-                                        PatientOrdonnance(PatientEnConsult,&patients);
+                                        PatientOrdonnance(PatientEnConsult,&patients,&tickets);
                                         if(strcmp(PatientEnConsult->diagnostique,"") !=0)choixConsult = 5;
                                         pause();
                                     break;
                                     case 3 : 
                                         AddObservation(PatientEnConsult,&observations,&lit,&tickets,&patients);
                                         if(strcmp(PatientEnConsult->diagnostique,"") !=0)choixConsult = 5;
-                                        pause();
                                     break;
                                     case 4: 
-                                        transferer(PatientEnConsult,&patients);
+                                        transferer(PatientEnConsult,&patients,&tickets);
                                         if(strcmp(PatientEnConsult->diagnostique,"") !=0)choixConsult = 5;
                                         pause();
                                         continue;
@@ -77,7 +80,7 @@ int main() {
                         case 3 : 
                             do {
                             menuObservation();
-                            scanf("%d",&choixObservation);
+                            choixObservation = saisirChoix();
                             switch(choixObservation) {
                                 case 1 : 
                                     ModifierObservation(&observations,&lit);
@@ -105,7 +108,7 @@ int main() {
             case 2 : 
                     do{
                         menuReception();
-                        scanf("%d",&choixReception);
+                        choixReception = saisirChoix();
                         switch(choixReception) {
                             case 1:
                                 AddPatient(&patients,&tickets);
@@ -114,7 +117,7 @@ int main() {
                             case 2 :
                                 do{ 
                                 menuUrgence();
-                                scanf("%d", &ChoixUrgence);
+                                ChoixUrgence = saisirChoix();
                                 switch(ChoixUrgence) {
                                     case 1: 
                                         AddUrgence(&urgences,&tickets);
@@ -149,49 +152,47 @@ int main() {
                     else {
                     do{
                         menuAdmin();
-                        scanf("%d",&choixAdmin);
+                        choixAdmin = saisirChoix();
                         switch(choixAdmin) {
                             case 1 : 
+                            do{
                                 menuequipement();
-                                scanf("%d",&choixEquip);
+                                choixEquip = saisirChoix();
                                 switch(choixEquip) {
                                     case 1 : 
-                                        saisirequipement(&LE, "equipements.txt");
+                                        ajouterequipement(&LE);
                                         pause();
                                     break;
                                     case 2 : 
-                                        ajouterequipement(&LE, "equipements.txt");
+                                        ajouterequipement(&LE);
                                         pause();
                                         break;
                                     case 3 :
-                                        printf("Stock d'equipements :\n");
                                         afficherstockequipement(&LE);
                                         pause();
                                     break;
-                                    case 4 : 
-                                    break; 
                                 }  
+                            }while(choixEquip != 4);
                             break;
                             case 2 : 
+                            do{
                                 menumedicament();
-                                scanf("%d",&choixMedoc);
+                                choixMedoc = saisirChoix();
                                 switch(choixMedoc) {
                                     case 1 : 
-                                        saisirmedicament(&LM, "medicaments.txt");
+                                        ajoutermedicament(&LM);
                                         pause();
                                     break;
                                     case 2 : 
-                                        ajoutermedicament(&LM, "medicaments.txt");
+                                        ajoutermedicament(&LM);
                                         pause();
                                     break;
                                     case 3 :
-                                        printf("Stock de medicaments :\n");
                                         afficherstock(&LM);
                                         pause();
                                     break;
-                                    case 4 : 
-                                    break; 
-                                }    
+                                } 
+                            }while(choixMedoc != 4);
                             break;
                             case 3 :
                                 gererlit(&lit);
@@ -201,11 +202,15 @@ int main() {
                             break; 
                             }    
                     }while(choixAdmin != 5); 
-               }   
-    
-           }
-    
-    }while(choix != 4);
+                    break;
+               }  
 
-     return 0;
+            case 4 : 
+               printf(GREEN " Au revoir !\n" RESET);
+               SaveTicket(&tickets);
+               sauvegarderUrgences(&urgences);
+            break;
+           }
+    }while(choix != 4);
+return 0;
 }

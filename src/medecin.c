@@ -4,6 +4,7 @@
 #include <string.h>
 #include "menu.h"
 #include "fichier.h"
+#include "reception.h"
 
 Patient *CallPatient(ListeTicket *ListeT, ListeUrgence *ListeU,ListePatient *ListeP){
     if(ListeU->tete != NULL) {
@@ -23,7 +24,6 @@ Patient *CallPatient(ListeTicket *ListeT, ListeUrgence *ListeU,ListePatient *Lis
     Patient *patient = ListeT->tete->client;
     patient->etat = CONSULTATION;
     patient->debutConsulation = time(NULL);
-    ListeT->tete = ListeT->tete->suivant;
     ListeP->attente--;
     sauvegarderPatients(patient);
     return patient;
@@ -32,31 +32,44 @@ Patient *CallPatient(ListeTicket *ListeT, ListeUrgence *ListeU,ListePatient *Lis
 void PatientDiagnostic(Patient *patientEnConsult) {
     printf("Saisir le diagnostique :\n");
     scanf(" %[^\n]",patientEnConsult->diagnostique);
+    while(getchar() != '\n');
     sauvegarderPatients(patientEnConsult);
 }
 
-void PatientOrdonnance(Patient *patientEnConsult, ListePatient *ListeP) {
+void PatientOrdonnance(Patient *patientEnConsult, ListePatient *ListeP, ListeTicket *ListeT) {
     if(strcmp(patientEnConsult->diagnostique, "") != 0) {
     printf("Inscrire l'ordonnance : \n");
     scanf(" %[^\n]",patientEnConsult->ordonnance);
-    printf("L'ordonnance a bien ete inscrite a %s %s, le patient peut disposse.", patientEnConsult->nom,patientEnConsult->prenom);
+    while(getchar() != '\n');
+    printf("L'ordonnance a bien ete inscrite a %s %s, le patient peut disposse.\n", patientEnConsult->nom,patientEnConsult->prenom);
     patientEnConsult->etat = SORTI;
     patientEnConsult->heure.sorti = time(NULL);
     patientEnConsult->dureeConsultation = time(NULL) - patientEnConsult->debutConsulation;
     ListeP->sortis++;
+    Ticket *tmp = ListeT->tete;
+    ListeT->tete = ListeT->tete->suivant;
+    free(tmp);
+    SaveTicket(ListeT);
     sauvegarderPatients(patientEnConsult);
     }
-    else printf("Veuillez d'abord saisir un diagnostique.\n");
+    else 
+        printf("Veuillez d'abord saisir un diagnostique.\n");
+
 }
 
-void transferer(Patient *patientEnConsult,ListePatient *ListeP){
+void transferer(Patient *patientEnConsult,ListePatient *ListeP, ListeTicket *ListeT){
     if(strcmp(patientEnConsult->diagnostique, "") != 0) {
     printf("Saisi du nom du departement de transfert : ");
     scanf(" %[^\n]",patientEnConsult->departement);
+    while(getchar() != '\n');
     printf("Le patient %s %s a ete transfere vers un departement de %s.\n",patientEnConsult->prenom,patientEnConsult->nom, patientEnConsult->departement);
     patientEnConsult->etat=TRANSFERER;
     patientEnConsult->heure.sorti = time(NULL);
     ListeP->transferes++;
+    Ticket *tmp = ListeT->tete;
+    ListeT->tete = ListeT->tete->suivant;
+    free(tmp);
+    SaveTicket(ListeT);
     sauvegarderPatients(patientEnConsult);
     }else printf("Veuillez d'abord saisir un diagnostique.\n");
 }

@@ -2,17 +2,25 @@
 #include <stdlib.h>
 #include <string.h>
 #include "structure.h"
+#include "menu.h"
 
-void fichiermedicament(ListeMedicament *LM, char fichiermedicaments[20]);
-void fichierequipement(ListeEquipement *LE, char fichierequipements[20]);
+#define RED    "\033[91m"
+#define CYAN   "\033[96m"
+#define GREEN  "\033[92m"
+#define YELLOW "\033[93m"
+#define RESET  "\033[0m"
 
-void gererlit(ListeLit *L){
-    printf("veillez entrer le nombre maximal de lit dans l'hopital : ");
-    scanf("%d",&L->total);
-    if(L->total > MAX_LIT){
-        printf("le nombre maximal de lit est %d\n",MAX_LIT);
-        gererlit(L);
-    }   
+void fichiermedicament(ListeMedicament *LM);
+void fichierequipement(ListeEquipement *LE);
+
+void gererlit(ListeLit *L) {
+    do {
+        printf("Nombre de lits (max %d) : ", MAX_LIT);
+       L->total = saisirChoix();
+    if(L->total == -1) L->total = MAX_LIT + 1; // force la revalidation
+        if(L->total > MAX_LIT)
+            printf("Erreur : maximum %d lits !\n", MAX_LIT);
+    } while(L->total > MAX_LIT);
 }
 
 void afficherstatistique(ListePatient *LP, ListeLit *LL, ListeUrgence *LU, Statistique *stat){
@@ -26,41 +34,43 @@ void afficherstatistique(ListePatient *LP, ListeLit *LL, ListeUrgence *LU, Stati
     stat->LitIndispo = LL->indispo;
     stat->totalUrgence = LU->total;
     stat->attenteUrgence = LU->attente;
-    printf("Statistiques de l'hopital :\n");
-    printf("Nombre total de patients : %d\n", stat->totalPatients);
-    printf("Nombre de patients en attente : %d\n", stat->totalAttente);
-    printf("Nombre de patients en observation : %d\n", stat->totalObservation);
-    printf("Nombre de patients sortis : %d\n", stat->totalsortis);
-    printf("Nombre de patients transferes a un autre departement : %d\n", stat->totaltransferes);
-    printf("Nombre total de lits : %d\n", stat->Littotal);
-    printf("Nombre de lits occupes : %d\n", stat->LitIndispo);
-    printf("Nombre de lits disponibles : %d\n", stat->Littotal - stat->LitIndispo);
-    printf("Nombre de patients en totale passe en urgence : %d\n", stat->totalUrgence);
-    printf("Nombre de patients en attente d'urgence : %d\n", stat->attenteUrgence);
+
+printf(RED "+======================================+\n" RESET);
+printf(RED "|        STATISTIQUES HOPITAL          |\n" RESET);
+printf(RED "+======================================+\n" RESET);
+
+printf(YELLOW "| PATIENTS                             |\n" RESET);
+printf(CYAN "|  Total         : " GREEN "%-20d" CYAN "|\n" RESET, stat->totalPatients);
+printf(CYAN "|  En attente    : " GREEN "%-20d" CYAN "|\n" RESET, stat->totalAttente);
+printf(CYAN "|  En observation: " GREEN "%-20d" CYAN "|\n" RESET, stat->totalObservation);
+printf(CYAN "|  Sortis        : " GREEN "%-20d" CYAN "|\n" RESET, stat->totalsortis);
+printf(CYAN "|  Transferes    : " GREEN "%-20d" CYAN "|\n" RESET, stat->totaltransferes);
+
+printf(RED "+--------------------------------------+\n" RESET);
+
+printf(YELLOW "| LITS                                 |\n" RESET);
+printf(CYAN "|  Total         : " GREEN "%-20d" CYAN "|\n" RESET, stat->Littotal);
+printf(CYAN "|  Occupes       : " RED    "%-20d" CYAN "|\n" RESET, stat->LitIndispo);
+printf(CYAN "|  Disponibles   : " GREEN "%-20d" CYAN "|\n" RESET, stat->Littotal - stat->LitIndispo);
+
+printf(RED "+--------------------------------------+\n" RESET);
+
+printf(YELLOW "| URGENCES                             |\n" RESET);
+printf(CYAN "|  Total urgences: " GREEN "%-20d" CYAN "|\n" RESET, stat->totalUrgence);
+printf(CYAN "|  En attente    : " RED    "%-20d" CYAN "|\n" RESET, stat->attenteUrgence);
+
+printf(RED "+======================================+\n" RESET);
 }
 
-void saisirmedicament(ListeMedicament *LM, char fichiermedicaments[20]){
-    printf("Veuillez entrer le nom de medicament a ajouter et ca quantite : ");
-    scanf("%s %d", LM->medicaments[LM->total].nom, &LM->medicaments[LM->total].quantite);
-    LM->total++;
-    fichiermedicament(LM, fichiermedicaments);
-}
-void afficherstock(ListeMedicament *LM){
-    printf("Stock de medicament :\n");
+void afficherstock(ListeMedicament *LM) {
+    printf("Stock de medicaments :\n");
     for(int i = 0; i < LM->total; i++){
         printf("%s : %d\n", LM->medicaments[i].nom, LM->medicaments[i].quantite);
     }
 }
 
-void saisirequipement(ListeEquipement *LE, char fichierequipements[20]){
-    printf("Veuillez entrer le nom de equipement a ajouter et ca quantite : ");
-    scanf("%s %d", LE->equipements[LE->total].nom, &LE->equipements[LE->total].quantite);
-    LE->total++;
-    fichierequipement(LE, fichierequipements);
-}
-
-void afficherstockequipement(ListeEquipement *LE){
-    printf("Stock de equipement :\n");
+void afficherstockequipement(ListeEquipement *LE) {
+    printf("Stock d'equipements :\n");
     for(int i = 0; i < LE->total; i++){
         printf("%s : %d\n", LE->equipements[i].nom, LE->equipements[i].quantite);
     }
@@ -81,51 +91,64 @@ void verfierfindeStock(ListeMedicament *LM, ListeEquipement *LE){
     }
 }
 
-void ajoutermedicament(ListeMedicament *LM, char fichiermedicaments[20]){
+void ajoutermedicament(ListeMedicament *LM){
     char nom[30];
     int quantite;
     printf("Veuillez entrer le nom du medicament a ajouter et sa quantite : ");
     scanf("%s %d", nom, &quantite);
+    while(getchar() != '\n');   
     for(int i = 0; i < LM->total; i++){
         if(strcmp(LM->medicaments[i].nom, nom) == 0){
             LM->medicaments[i].quantite += quantite;
-            fichiermedicament(LM, fichiermedicaments);
+            fichiermedicament(LM);
             return;
         }
+    }
+
+    if(LM->total >= MAX_MEDICAMENTS) { 
+        printf("Erreur : stock plein !\n");
+        return;
     }
     strcpy(LM->medicaments[LM->total].nom, nom);
     LM->medicaments[LM->total].quantite = quantite;
     LM->total++;
-    fichiermedicament(LM, fichiermedicaments);
+    fichiermedicament(LM);
 }
 
-void ajouterequipement(ListeEquipement *LE, char fichierequipements[20]){
+void ajouterequipement(ListeEquipement *LE){
     char nom[30];
     int quantite;
-    printf("Veuillez entrer le nom de equipement a ajouter et sa quantite : ");
+    printf("Veuillez entrer le nom d'equipement a ajouter et sa quantite : ");
     scanf("%s %d", nom, &quantite);
+    while(getchar() != '\n');
     for(int i = 0; i < LE->total; i++){
         if(strcmp(LE->equipements[i].nom, nom) == 0){
             LE->equipements[i].quantite += quantite;
-            fichierequipement(LE, fichierequipements);
+            fichierequipement(LE);
             return;
         }
     }
+    if(LE->total >= MAX_EQUIPEMENTS) { 
+        printf("Erreur : stock plein !\n");
+        return;
+    }
+
     strcpy(LE->equipements[LE->total].nom, nom);
     LE->equipements[LE->total].quantite = quantite;
     LE->total++;
-    fichierequipement(LE, fichierequipements);
+    fichierequipement(LE);
 }
 
-void utilisermedicament(ListeMedicament *LM, char fichiermedicaments[20]){
+void utilisermedicament(ListeMedicament *LM){
     char nom[30];
      printf("Veuillez entrer le nom du medicament a utiliser  : ");
     scanf("%s", nom);
+    while(getchar() != '\n');
     for(int i = 0; i < LM->total; i++){
         if(strcmp(LM->medicaments[i].nom, nom) == 0){
             if(LM->medicaments[i].quantite >= 1){
                 LM->medicaments[i].quantite -= 1;
-                fichiermedicament(LM, fichiermedicaments);
+                fichiermedicament(LM);
             }else{
                 printf("Quantite insuffisante pour le medicament %s\n", nom);
             }
@@ -137,15 +160,16 @@ void utilisermedicament(ListeMedicament *LM, char fichiermedicaments[20]){
 }
 
 
-void utiliserequipement(ListeEquipement *LE, char fichierequipements[20]){
+void utiliserequipement(ListeEquipement *LE){
     char nom[30];
      printf("Veuillez entrer le nom de l'equipement a utiliser  : ");
     scanf("%s", nom);
+    while(getchar() != '\n');
     for(int i = 0; i < LE->total; i++){
         if(strcmp(LE->equipements[i].nom, nom) == 0){
             if(LE->equipements[i].quantite >= 1){
                 LE->equipements[i].quantite -= 1;
-                fichierequipement(LE, fichierequipements);
+                fichierequipement(LE);
             }else{
                 printf("Quantite insuffisante pour l'equipement %s\n", nom);
             }
@@ -156,59 +180,37 @@ void utiliserequipement(ListeEquipement *LE, char fichierequipements[20]){
     printf("Equipement %s non trouve\n", nom);
 }
 
-void fichiermedicament(ListeMedicament *LM, char fichiermedicaments[20]){
-    FILE *f = fopen(fichiermedicaments, "w");
-    if(f == NULL){
-        printf("Erreur d'ouverture du fichier %s\n", fichiermedicaments);
-        return;
-    }
-    for(int i = 0; i < LM->total; i++){
-        fprintf(f, "%s %d\n", LM->medicaments[i].nom, LM->medicaments[i].quantite);
-    }
+void fichiermedicament(ListeMedicament *LM) {
+    FILE *f = fopen("data/medicaments.bin", "wb");
+    if (f == NULL) return;
+    fwrite(&LM->total,sizeof(int),1,f);
+    fwrite(LM->medicaments,sizeof(Medicament), LM->total, f);
     fclose(f);
 }
 
-void fichierequipement(ListeEquipement *LE, char fichierequipements[20]){
-    FILE *f = fopen(fichierequipements, "w");
-    if(f == NULL){
-        printf("Erreur d'ouverture du fichier %s\n", fichierequipements);
-        return;
-    }
-    for(int i = 0; i < LE->total; i++){
-        fprintf(f, "%s %d\n", LE->equipements[i].nom, LE->equipements[i].quantite);
-    }
+void fichierequipement(ListeEquipement *LE) {
+    FILE *f = fopen("data/equipements.bin", "wb");
+    if (f == NULL) return;
+    fwrite(&LE->total,       sizeof(int),        1,         f);
+    fwrite(LE->equipements,  sizeof(Equipement),  LE->total, f);
     fclose(f);
 }
 
-void raffraichirmedicament(ListeMedicament *LM, char fichiermedicaments[20]){
-    FILE *f = fopen(fichiermedicaments, "r");
-    if(f == NULL){
-        printf("Erreur d'ouverture du fichier %s\n", fichiermedicaments);
-        return;
-    }
-    char nom[30];
-    int quantite;
-    while(fscanf(f, "%s %d", nom, &quantite) == 2){
-        LM->total++;
-        LM->medicaments[LM->total - 1].quantite = quantite;
-        strcpy(LM->medicaments[LM->total - 1].nom, nom);
-    }
+void raffraichirmedicament(ListeMedicament *LM) {
+    FILE *f = fopen("data/medicaments.bin", "rb");
+    if (f == NULL) return;
+    LM->total = 0;
+    fread(&LM->total,       sizeof(int),       1,         f);
+    fread(LM->medicaments,  sizeof(Medicament), LM->total, f);
     fclose(f);
 }
 
-void raffraichirequipement(ListeEquipement *LE, char fichierequipements[20]){
-    FILE *f = fopen(fichierequipements, "r");
-    if(f == NULL){
-        printf("Erreur d'ouverture du fichier %s\n", fichierequipements);
-        return;
-    }
-    char nom[30];
-    int quantite;
-    while(fscanf(f, "%s %d", nom, &quantite) == 2){
-        LE->total++;
-        LE->equipements[LE->total - 1].quantite = quantite;
-        strcpy(LE->equipements[LE->total - 1].nom, nom);
-    }
+void raffraichirequipement(ListeEquipement *LE) {
+    FILE *f = fopen("data/equipements.bin", "rb");
+    if (f == NULL) return;
+    LE->total = 0;
+    fread(&LE->total,       sizeof(int),        1,         f);
+    fread(LE->equipements,  sizeof(Equipement),  LE->total, f);
     fclose(f);
 }//utiliser cette derniere fonction a chaque lancement du programme pour raffraichir les stocks de medicaments et equipements a partir des fichiers de stockage.
 

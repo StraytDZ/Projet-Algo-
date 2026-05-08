@@ -6,6 +6,7 @@
 #include "structure.h"
 #include "menu.h"
 #include "fichier.h"
+#include "reception.h"
 
 int AddLit(Patient *patientEnonsultation,ListeLit *ListeL) { // Fonciton juste pour cree le ' noeud ', ici on ne l'ajoute pas encore vers notre 'lsite de noeud' (ListeLit)
     if(ListeL->indispo >= ListeL->total ) {  // Si on depasse le nombre de lit disponible dans l'hopitale, tel que ListeL->total est donner dans le main,
@@ -33,9 +34,13 @@ void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, Li
             printf("Erreur : Impossible d'enregister une observation.\n");
             return;
         }
+    Ticket *tmp = ListeT->tete;
+    ListeT->tete = ListeT->tete->suivant;
+    free(tmp);
+    SaveTicket(ListeT);
     int duree;
     printf("Duree de l'oservations :");
-    scanf("%d",&duree);
+    duree = saisirChoix();
     patientOB->debutObservation = time(NULL);  // initialiser d'abord
     patientOB->finObservation = patientOB->debutObservation + (duree * 24 * 60 * 60); // on ajoute par rapport a la date deja donnée
     char buffer[20];
@@ -43,6 +48,7 @@ void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, Li
     printf("Date de fin : %s\n", buffer);
     printf("Veuillez indiquer le traitement a suivre : ");
     scanf(" %[^\n]", patientOB->traitement);
+    while(getchar() != '\n');
     int numLit = AddLit(patientEnConsultation, ListeL);
     if (numLit == -1) {
         printf("Hopital complet !\n");
@@ -107,7 +113,7 @@ void SupprimerObservation(ListeObservation *ListeO,ListeLit *ListeL){
     AfficherListeObservation(ListeO);
     int numlit;
     printf("Numero du lit a liberer : ");
-    scanf("%d", &numlit);
+    if(numlit == -1) { printf("Numero invalide.\n"); return; }
     Observation *courant   = ListeO->tete;
     Observation *precedent = NULL;
 
@@ -163,7 +169,7 @@ void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL) {
     int i = 1;
     do{
         printf("-Choix : ");
-        scanf("%d",&index);
+        index = saisirChoix();
         if(index < 0 || index > ListeO->compteur)
             printf("Erreur : Numero invalide ! Reessayez.\n");
             
@@ -174,7 +180,7 @@ void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL) {
         i++;
     }
     Observation *patientCible = courant;
-        menuModifierObservation(patientCible, ListeL);
+        menuModifierObservation(patientCible);
 }
 void RechercheObservation(ListeObservation *ListeO) {
      if(ListeO->tete == NULL) {
@@ -187,12 +193,13 @@ void RechercheObservation(ListeObservation *ListeO) {
         printf("\t 1 - ID\n");
         printf("\t 2 - Nom et Prenom\n");
         printf("\t 3 - Quitter\n");
-        scanf("%d", &choix);
+        choix = saisirChoix();
         switch(choix) {
         case 1 : {
             char IDcible[20];
             printf("ID :");
             scanf("%s", IDcible);
+            while(getchar() != '\n');
             int trouve = 0;
             Observation *courant = ListeO->tete;
             while(courant != NULL) {
@@ -212,6 +219,7 @@ void RechercheObservation(ListeObservation *ListeO) {
             scanf(" %[^\n]", nomCible);
             printf("Prenom :");
             scanf(" %[^\n]", prenomCible);
+            while(getchar() != '\n');
             int trouve = 0;
             Observation *courant = ListeO->tete; 
             while(courant != NULL) {

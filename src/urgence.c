@@ -27,6 +27,7 @@ ListeUrgence* AddUrgence(ListeUrgence *ListeU, ListeTicket *ListeT){
     printf("ID : ");     scanf(" %[^\n]", patientEnUrgence->id);
     printf("Age : ");    scanf("%d", &patientEnUrgence->age); while(getchar() != '\n');
     printf("Sexe : ");   scanf("%s", patientEnUrgence->sexe);
+    while(getchar() != '\n');
     strcpy(patientEnUrgence->departement,"");
     strcpy(patientEnUrgence->diagnostique,"");
     strcpy(patientEnUrgence->ordonnance,"");

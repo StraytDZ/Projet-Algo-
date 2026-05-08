@@ -1,154 +1,191 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "menu.h"
-
 #include "structure.h"
 
 void pause() {
     int c;
-    // Vider tout ce qui reste dans le buffer (le \n du scanf precedent)
     while ((c = getchar()) != '\n' && c != EOF);
-    // Maintenant attendre un vrai Entree de l'utilisateur
-    printf("\nAppuyez sur Entree pour continuer...");
-    getchar();
+    printf(CYAN "\nAppuyez sur Entree pour continuer..." RESET);
+}
+
+int saisirChoix() { // Au cas ou l'utilisateurs donne un choix invalide, comme les caractere qui font out bug quand ils sont donner comme choix
+    char buffer[20];
+    int choix;
+    char *end;
+
+    if (fgets(buffer, sizeof(buffer), stdin) == NULL)
+        return -1;
+
+    choix = (int)strtol(buffer, &end, 10);
+
+    if (end == buffer || (*end != '\n' && *end != '\0'))
+        return -1;
+
+    return choix;
 }
 
 void menuPrincipal() {
-
-    printf("\t ++++URGENCE+++++\n");
-    printf("\t=+=+=+=MENU=+=+=+=\n");
-    printf("=======================================\n\n");
-    printf("\t 1 - Medecin\n");
-    printf("\t 2 - Reception\n");
-    printf("\t 3 - Admin\n");
-    printf("\t 4 - Quitter\n\n");
-    printf("=======================================\n");
-    printf("                          Choix : ");
+    system("cls");
+    printf(RED "+======================================+\n" RESET);
+    printf(RED "|         SYSTEME D'URGENCES           |\n" RESET);
+    printf(RED "|           MENU PRINCIPAL             |\n" RESET);
+    printf(RED "+======================================+\n" RESET);
+    printf(CYAN "|                                      |\n" RESET);
+    printf(CYAN "|           " YELLOW "1" CYAN " - Medecin                |\n" RESET);
+    printf(CYAN "|           " YELLOW "2" CYAN " - Reception              |\n" RESET);
+    printf(CYAN "|           " YELLOW "3" CYAN " - Admin                  |\n" RESET);
+    printf(CYAN "|           " RED    "4" CYAN " - Quitter                |\n" RESET);
+    printf(CYAN "|                                      |\n" RESET);
+    printf(RED "+======================================+\n" RESET);
+    printf(GREEN "                       Choix : " RESET);
 }
+
 void menuMedecin() {
     system("cls");
-    printf("\n=======================================\n");
-    printf("\t=+=+=+=MENU=+=+=+=\n");
-    printf("\t*+*+*MEDECIN*+*+*\n");
-    printf("=======================================\n\n");
-    printf("\t 1 - Appeler le patient suivant\n");
-    printf("\t 2 - Afficher la liste d'attente\n");
-    printf("\t 3 - Observation\n");
-    printf("\t 4 - Quitter\n\n");
-    printf("=======================================\n");
-    printf("                          Choix : ");
+    printf(RED "+======================================+\n" RESET);
+    printf(RED "|           MENU : MEDECIN             |\n" RESET);
+    printf(RED "+======================================+\n" RESET);
+    printf(CYAN "|                                      |\n" RESET);
+    printf(CYAN "|  " YELLOW "1" CYAN " - Appeler le patient suivant      |\n" RESET);
+    printf(CYAN "|  " YELLOW "2" CYAN " - Afficher la liste d'attente     |\n" RESET);
+    printf(CYAN "|  " YELLOW "3" CYAN " - Observation                     |\n" RESET);
+    printf(CYAN "|  " RED    "4" CYAN " - Quitter                         |\n" RESET);
+    printf(CYAN "|                                      |\n" RESET);
+    printf(RED "+======================================+\n" RESET);
+    printf(GREEN "                       Choix : " RESET);
 }
-void menuConsultation(Patient *patientEnConsult) {
+
+void menuConsultation(Patient *p) {
     system("cls");
-    printf("\n=======================================\n");
-    printf("\tPatient %d : %s %s | %d | %s | %s \n",patientEnConsult->ticket->numero, patientEnConsult->nom,patientEnConsult->prenom, patientEnConsult->age,patientEnConsult->sexe,patientEnConsult->id);
-    printf("=======================================\n\n");
-    printf("\t 1 - Enregistrer le diagnostic\n");
-    printf("\t 2 - Inscrire une ordonnance\n");
-    printf("\t 3 - Mettre en observation\n");
-    printf("\t 4 - Transferer a un autre departement\n");
-    printf("\t 5- Quitter\n\n");
-    printf("=======================================\n");
-    printf("                          Choix : ");
+    printf(RED "+======================================+\n" RESET);
+    printf(RED "|         MENU : CONSULTATION          |\n" RESET);
+    printf(RED "+======================================+\n" RESET);
+    printf(CYAN "| Ticket %-3d : %s %-15s|\n" RESET, p->ticket->numero, p->nom, p->prenom);
+    printf(CYAN "| %d ans | %s | %-24s|\n" RESET, p->age, p->sexe, p->id);
+    printf(RED "+======================================+\n" RESET);
+    printf(CYAN "|                                      |\n" RESET);
+    printf(CYAN "|  " YELLOW "1" CYAN " - Enregistrer le diagnostic      |\n" RESET);
+    printf(CYAN "|  " YELLOW "2" CYAN " - Inscrire une ordonnance        |\n" RESET);
+    printf(CYAN "|  " YELLOW "3" CYAN " - Mettre en observation          |\n" RESET);
+    printf(CYAN "|  " YELLOW "4" CYAN " - Transferer a un autre dpt      |\n" RESET);
+    printf(CYAN "|  " RED    "5" CYAN " - Quitter                        |\n" RESET);
+    printf(CYAN "|                                      |\n" RESET);
+    printf(RED "+======================================+\n" RESET);
+    printf(GREEN "                       Choix : " RESET);
 }
+
 void menuObservation() {
     system("cls");
-    printf("\n=======================================\n");
-    printf("\t=+=+=+=MENU=+=+=+=\n");
-    printf("\t*+*+*OBSERVATION*+*+*\n");
-    printf("=======================================\n\n");
-    printf("\t 1 - Modifier une observation\n");
-    printf("\t 2 - Afficher la liste d'observation\n");
-    printf("\t 3 - Rechercher un patient\n");
-    printf("\t 4 - Liberer un patient\n");
-    printf("\t 5 - Quitter\n\n");
-    printf("=======================================\n");
-    printf("                          Choix : ");
+    printf(RED "+======================================+\n" RESET);
+    printf(RED "|         MENU : OBSERVATION           |\n" RESET);
+    printf(RED "+======================================+\n" RESET);
+    printf(CYAN "|                                      |\n" RESET);
+    printf(CYAN "|  " YELLOW "1" CYAN " - Modifier une observation        |\n" RESET);
+    printf(CYAN "|  " YELLOW "2" CYAN " - Afficher la liste d'observation |\n" RESET);
+    printf(CYAN "|  " YELLOW "3" CYAN " - Rechercher un patient           |\n" RESET);
+    printf(CYAN "|  " YELLOW "4" CYAN " - Liberer un patient              |\n" RESET);
+    printf(CYAN "|  " RED    "5" CYAN " - Quitter                         |\n" RESET);
+    printf(CYAN "|                                      |\n" RESET);
+    printf(RED "+======================================+\n" RESET);
+    printf(GREEN "                       Choix : " RESET);
 }
-void menuModifierObservation(Observation *patientEnObservation) {
+
+void menuModifierObservation(Observation *o) {
     char buffer[30];
-    strftime(buffer, 30, "%d/%m/%Y", localtime(&patientEnObservation->finObservation));
+    strftime(buffer, 30, "%d/%m/%Y", localtime(&o->finObservation));
     system("cls");
-    printf("\n=======================================\n");
-    printf("\t%s %s | Lit %d | Traitement : %s | Fin Observation : %s\n", patientEnObservation->patient->nom, patientEnObservation->patient->prenom,patientEnObservation->lit,patientEnObservation->traitement,buffer);
-    printf("=======================================\n\n");
-    printf("\t 1 - Modifier le lit\n");
-    printf("\t 2 - Modifier le traitement\n");
-    printf("\t 3 - Modifier la durée de l'observation\n");
-    printf("\t 4 - Quitter\n\n");
-    printf("=======================================\n");
-    printf("                          Choix : ");
+    printf(RED "+======================================+\n" RESET);
+    printf(RED "|      MENU : MODIFIER OBSERVATION     |\n" RESET);
+    printf(RED "+======================================+\n" RESET);
+    printf(CYAN "| Patient  : %-26s|\n" RESET, o->patient->nom); 
+    printf(CYAN "| Lit      : %-26d|\n" RESET, o->lit);
+    printf(CYAN "| Traitement : %-24s|\n" RESET, o->traitement);
+    printf(CYAN "| Fin observation  : %-26s|\n" RESET, buffer);
+    printf(RED "+======================================+\n" RESET);
+    printf(CYAN "|                                      |\n" RESET);
+    printf(CYAN "|  " YELLOW "1" CYAN " - Modifier le lit                 |\n" RESET);
+    printf(CYAN "|  " YELLOW "2" CYAN " - Modifier le traitement          |\n" RESET);
+    printf(CYAN "|  " YELLOW "3" CYAN " - Modifier la duree               |\n" RESET);
+    printf(CYAN "|  " RED    "4" CYAN " - Quitter                         |\n" RESET);
+    printf(CYAN "|                                      |\n" RESET);
+    printf(RED "+======================================+\n" RESET);
+    printf(GREEN "                       Choix : " RESET);
 }
 
 void menuReception() {
     system("cls");
-    printf("\n=======================================\n");
-    printf("\t=+=+=+=MENU=+=+=+=\n");
-    printf("\t*+*+*RECEPTION*+*+*\n");
-    printf("=======================================\n\n");
-    printf("\t 1 - Enregister un patient\n");
-    printf("\t 2 - Enregister une urgence\n");
-    printf("\t 3 - Afficher la liste d'attente\n");
-    printf("\t 4 - Afficher l'historique\n");    
-    printf("\t 5 - Quitter\n\n");
-    printf("=======================================\n");
-    printf("                          Choix : ");
+    printf(RED "+======================================+\n" RESET);
+    printf(RED "|          MENU : RECEPTION            |\n" RESET);
+    printf(RED "+======================================+\n" RESET);
+    printf(CYAN "|                                      |\n" RESET);
+    printf(CYAN "|  " YELLOW "1" CYAN " - Enregistrer un patient          |\n" RESET);
+    printf(CYAN "|  " YELLOW "2" CYAN " - Enregistrer une urgence         |\n" RESET);
+    printf(CYAN "|  " YELLOW "3" CYAN " - Afficher la liste d'attente     |\n" RESET);
+    printf(CYAN "|  " YELLOW "4" CYAN " - Afficher l'historique           |\n" RESET);
+    printf(CYAN "|  " RED    "5" CYAN " - Quitter                         |\n" RESET);
+    printf(CYAN "|                                      |\n" RESET);
+    printf(RED "+======================================+\n" RESET);
+    printf(GREEN "                       Choix : " RESET);
 }
 
 void menuUrgence() {
     system("cls");
-    printf("\n=======================================\n");
-    printf("\t=+=+=+=MENU=+=+=+=\n");
-    printf("\t*+*+*URGENEC*+*+*\n");
-    printf("=======================================\n\n");
-    printf("\t 1 - Enregister une urgence\n");
-    printf("\t 2 - Afficher la liste d'urgence\n"); 
-    printf("\t 3 - Quitter\n\n");
-    printf("=======================================\n");
-    printf("                          Choix : ");
+    printf(RED "+======================================+\n" RESET);
+    printf(RED "|           MENU : URGENCE             |\n" RESET);
+    printf(RED "+======================================+\n" RESET);
+    printf(CYAN "|                                      |\n" RESET);
+    printf(CYAN "|  " YELLOW "1" CYAN " - Enregistrer une urgence         |\n" RESET);
+    printf(CYAN "|  " YELLOW "2" CYAN " - Afficher la liste d'urgences    |\n" RESET);
+    printf(CYAN "|  " RED    "3" CYAN " - Quitter                         |\n" RESET);
+    printf(CYAN "|                                      |\n" RESET);
+    printf(RED "+======================================+\n" RESET);
+    printf(GREEN "                       Choix : " RESET);
 }
 
 void menuAdmin() {
     system("cls");
-    printf("\n=======================================\n");
-    printf("\t=+=+=+=MENU=+=+=+=\n");
-    printf("\t*+*+*ADMIN*+*+*\n");
-    printf("=======================================\n\n");
-    printf("\t 1 - Gerer les equipements\n");
-    printf("\t 2 - Gerer les medicaments\n");
-    printf("\t 3 - Gerer les lits\n");
-    printf("\t 4 - Statistiques\n");
-    printf("\t 5 - Quitter\n\n");
-    printf("=======================================\n");
-    printf("                          Choix : ");
+    printf(RED "+======================================+\n" RESET);
+    printf(RED "|           MENU : ADMIN               |\n" RESET);
+    printf(RED "+======================================+\n" RESET);
+    printf(CYAN "|                                      |\n" RESET);
+    printf(CYAN "|  " YELLOW "1" CYAN " - Gerer les equipements           |\n" RESET);
+    printf(CYAN "|  " YELLOW "2" CYAN " - Gerer les medicaments           |\n" RESET);
+    printf(CYAN "|  " YELLOW "3" CYAN " - Gerer les lits                  |\n" RESET);
+    printf(CYAN "|  " YELLOW "4" CYAN " - Statistiques                    |\n" RESET);
+    printf(CYAN "|  " RED    "5" CYAN " - Quitter                         |\n" RESET);
+    printf(CYAN "|                                      |\n" RESET);
+    printf(RED "+======================================+\n" RESET);
+    printf(GREEN "                       Choix : " RESET);
 }
 
 void menuequipement() {
     system("cls");
-    printf("\n=======================================\n");
-    printf("\t=+=+=+=MENU=+=+=+=\n");
-    printf("\t*+*+*EQUIPEMENT*+*+*\n");
-    printf("=======================================\n\n");
-    printf("\t 1 - ajouter un nouvel equipement\n");
-    printf("\t 2 - ajouter la quantite d'un equipement\n");
-    printf("\t 3 - affichez stock equipements\n");
-    printf("\t 4 - Quitter\n\n");
-    printf("=======================================\n");
-    printf("                          Choix : ");
+    printf(RED "+======================================+\n" RESET);
+    printf(RED "|          MENU : EQUIPEMENTS          |\n" RESET);
+    printf(RED "+======================================+\n" RESET);
+    printf(CYAN "|                                      |\n" RESET);
+    printf(CYAN "|  " YELLOW "1" CYAN " - Ajouter un equipement           |\n" RESET);
+    printf(CYAN "|  " YELLOW "2" CYAN " - Ajouter quantite equipement     |\n" RESET);
+    printf(CYAN "|  " YELLOW "3" CYAN " - Afficher stock equipements      |\n" RESET);
+    printf(CYAN "|  " RED    "4" CYAN " - Quitter                         |\n" RESET);
+    printf(CYAN "|                                      |\n" RESET);
+    printf(RED "+======================================+\n" RESET);
+    printf(GREEN "                       Choix : " RESET);
 }
 
 void menumedicament() {
     system("cls");
-    printf("\n=======================================\n");
-    printf("\t=+=+=+=MENU=+=+=+=\n");
-    printf("\t*+*+*MEDICAMENT*+*+*\n");
-    printf("=======================================\n\n");
-    printf("\t 1 - ajouter un nouvel medicament\n");
-    printf("\t 2 - ajouter la quantite d'un medicament\n");
-    printf("\t 3 - affichez stock medicaments\n");
-    printf("\t 4 - Quitter\n\n");
-    printf("=======================================\n");
-    printf("                          Choix : ");
+    printf(RED "+======================================+\n" RESET);
+    printf(RED "|          MENU : MEDICAMENTS          |\n" RESET);
+    printf(RED "+======================================+\n" RESET);
+    printf(CYAN "|                                      |\n" RESET);
+    printf(CYAN "|  " YELLOW "1" CYAN " - Ajouter un medicament           |\n" RESET);
+    printf(CYAN "|  " YELLOW "2" CYAN " - Ajouter quantite medicament     |\n" RESET);
+    printf(CYAN "|  " YELLOW "3" CYAN " - Afficher stock medicaments      |\n" RESET);
+    printf(CYAN "|  " RED    "4" CYAN " - Quitter                         |\n" RESET);
+    printf(CYAN "|                                      |\n" RESET);
+    printf(RED "+======================================+\n" RESET);
+    printf(GREEN "                       Choix : " RESET);
 }
-
-

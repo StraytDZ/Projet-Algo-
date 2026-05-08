@@ -55,6 +55,15 @@ typedef struct {
     int index;
 }Data;
 
+typedef struct {
+    char   nom[30];
+    char   prenom[30];
+    int    age;
+    char   id[20];
+    char   sexe[4];
+    Heure  heure;
+    int    numeroTicket;
+} UrgenceData;
     /*
     SAUVEGARDER PATIENTS
     - "wb" = write binary : ouvre en ecriture binaire
@@ -92,9 +101,8 @@ void sauvegarderPatients(Patient *patient) {
             data.numeroTicket = courant->ticket->numero;
         else
             data.numeroTicket = 0; on la pas etudié, mais pourquoi ce limiter*/
-        fwrite(&data, sizeof(PatientData), 1, f);
-        /*  suntaxe is fwrite(adresse, taille d'un element, nombre, fichier) */ 
         if(patient->etat == CONSULTATION) data.debutConsultation = patient->debutConsulation;
+        fwrite(&data, sizeof(PatientData), 1, f);
 
     fclose(f);
     printf("Patients sauvegarder dans patients.bin\n");
@@ -107,12 +115,9 @@ void sauvegarderPatients(Patient *patient) {
    */
 void chargerPatients(ListePatient *liste, ListeTicket *listeT) {
     FILE *f = fopen("data/patients.bin", "rb");
-    if (f == NULL)
-        return; /* Premiere execution, fichier inexistant : normal */
+    if (f == NULL) return;
 
     PatientData data;
-    /* fread retourne le nombre d'elements lus.
-       Quand il retourne 0, on est a la fin du fichier. */
     while (fread(&data, sizeof(PatientData), 1, f) == 1) {
 
         Patient *p = (Patient*)malloc(sizeof(Patient));
@@ -125,12 +130,36 @@ void chargerPatients(ListePatient *liste, ListeTicket *listeT) {
         strcpy(p->departement,  data.departement);
         strcpy(p->diagnostique, data.diagnostique);
         strcpy(p->ordonnance,   data.ordonnance);
-        p->age     = data.age;
-        p->etat    = data.etat;
-        p->heure   = data.heure;
-        p->suivant = NULL;
+        p->age               = data.age;
+        p->etat              = data.etat;
+        p->heure             = data.heure;
+        p->index             = data.index;             
+        p->dureeConsultation = data.dureeConsultation; 
+        p->debutConsulation  = data.debutConsultation;
+        p->suivant           = NULL;
 
-        /* Ajouter a la fin de la liste */
+        // ✅ Reconstruire le ticket pour les patients encore en attente
+        if (p->etat == ATTENTE) {
+            Ticket *t = (Ticket*)malloc(sizeof(Ticket));
+            if (t != NULL) {
+                t->client  = p;
+                t->numero  = data.numeroTicket;
+                t->suivant = NULL;
+                // Ajouter a la fin de la liste de tickets
+                if (listeT->tete == NULL) {
+                    listeT->tete = t;
+                } else {
+                    Ticket *tmp = listeT->tete;
+                    while (tmp->suivant != NULL) tmp = tmp->suivant;
+                    tmp->suivant = t;
+                }
+                p->ticket = t;
+            }
+        } else {
+            p->ticket = NULL;
+        }
+
+        // Ajouter a la fin de la liste patients
         if (liste->tete == NULL) {
             liste->tete = p;
         } else {
@@ -139,7 +168,6 @@ void chargerPatients(ListePatient *liste, ListeTicket *listeT) {
             tmp->suivant = p;
         }
 
-        /* Mettre a jour les compteurs */
         liste->total++;
         if      (p->etat == ATTENTE)     liste->attente++;
         else if (p->etat == OBSERVATION) liste->observation++;
@@ -148,9 +176,7 @@ void chargerPatients(ListePatient *liste, ListeTicket *listeT) {
     }
 
     fclose(f);
-    printf("Donnees chargees depuis patients.bin\n");
 }
-
 void sauvegarderHistorique() {
     FILE *h = fopen("data/historique.bin", "r+b");
     if (h == NULL) {
@@ -221,73 +247,137 @@ void sauvegarderHistorique() {
 void afficherHistorique() {
     FILE *f = fopen("data/historique.bin", "r+b");
     if (f == NULL) {
-        f = fopen("data/historique.bin","wb");
-        printf("Aucun historique disponible.\n");
+        f = fopen("data/historique.bin", "wb");
+        system("cls");
+        printf(RED  "+================================================+\n" RESET);
+        printf(RED  "|           HISTORIQUE DES PATIENTS              |\n" RESET);
+        printf(RED  "+================================================+\n" RESET);
+        printf(CYAN "|    " YELLOW "Aucun historique disponible.              " CYAN "  |\n" RESET);
+        printf(RED  "+================================================+\n" RESET);
+        pause();
         return;
     }
 
     Data data;
-    int i = 1;
-    printf("\n========== HISTORIQUE DES PATIENTS ==========\n");
+    int total = 0;
+
+    system("cls");
+    printf(RED  "+================================================+\n" RESET);
+    printf(RED  "|           HISTORIQUE DES PATIENTS              |\n" RESET);
+    printf(RED  "+================================================+\n" RESET);
+
     while (fread(&data, sizeof(Data), 1, f) == 1) {
         char *etatStr;
-        if      (data.etat == SORTI)     etatStr = "SORTI";
-        else if (data.etat == TRANSFERER) etatStr = "TRANSFERE";
-        else if (data.etat == CONSULTATION) etatStr = "CONSULTION";
-        else if (data.etat == ATTENTE ) etatStr = "ATTENTE";
-        else if (data.etat == OBSERVATION) etatStr = "OBSERVATION";
-        else if (data.etat == URGENCE)     etatStr = "URGENCE";
+        if      (data.etat == SORTI)        etatStr = "SORTI";
+        else if (data.etat == TRANSFERER)   etatStr = "TRANSFERE";
+        else if (data.etat == CONSULTATION) etatStr = "CONSULTATION";
+        else if (data.etat == ATTENTE)      etatStr = "ATTENTE";
+        else if (data.etat == OBSERVATION)  etatStr = "OBSERVATION";
+        else if (data.etat == URGENCE)      etatStr = "URGENCE";
+        else                                etatStr = "INCONNU";
 
-        /* Convertir time_t en date lisible */
         char heureArrive[30];
         strftime(heureArrive, 30, "%d/%m/%Y %H:%M", localtime(&data.heure.arrive));
-        printf("[%d] - %s  %s | %d Ans | %s | %s | %s | Arrive : %s\n", i, data.nom, data.prenom, data.age, data.sexe, data.id,etatStr,heureArrive);
-        i++;
-        }
-        int choix;
-        printf("----Choix : ");
-        scanf("%d",&choix);
-        long position = (long)(choix - 1) * sizeof(Data);
-        fseek(f, position, SEEK_SET);
-        fread(&data, sizeof(Data), 1, f);
-        char *etatStr;
-        if      (data.etat == SORTI)     etatStr = "SORTI";
-        else if (data.etat == TRANSFERER) etatStr = "TRANSFERE";
-        else if (data.etat == CONSULTATION) etatStr = "CONSULTION";
-        else if (data.etat == ATTENTE ) etatStr = "ATTENTE";
-        else if (data.etat == OBSERVATION) etatStr = "OBSERVATION";
-        else if (data.etat == URGENCE)     etatStr = "URGENCE";
 
-        
-        char heureArrive[30];
-        strftime(heureArrive, 30, "%d/%m/%Y %H:%M", localtime(&data.heure.arrive));
-        time_t DureeConsulation;
-        printf("--- Patient %d ---\n", i++);
-        printf("  Nom      : %s %s\n",      data.prenom, data.nom);
-        printf("  ID       : %s | Age : %d | Sexe : %s\n", data.id, data.age, data.sexe);
-        if (data.numeroTicket != 0) 
-            printf("  Ticket   : %d\n",       data.numeroTicket);
-        printf("  Etat     : %s\n",          etatStr);
-        printf("  Arrivee  : %s\n",          heureArrive);
-        if (data.heure.sorti != 0) {
-            char heureSortie[30];
-            strftime(heureSortie, 30, "%d/%m/%Y %H:%M", localtime(&data.heure.sorti));
-            printf("  Sortie   : %s\n", heureSortie);
-        }
-        if (strlen(data.diagnostique) > 0)
-            printf("  Diagnostic  : %s\n",  data.diagnostique);
+        total++;
+        printf(CYAN "| " YELLOW "[%2d]" CYAN " %-20s %-20s |\n" RESET,
+               total, data.nom, data.prenom);
+        printf(CYAN "|      ID     : %-33s|\n" RESET, data.id);
+        printf(CYAN "|      Age    : %d ans | Sexe : %-1s | %-12s |\n" RESET,
+               data.age, data.sexe, etatStr);
+        printf(CYAN "|      Arrive : %-33s|\n" RESET, heureArrive);
+        printf(RED  "+------------------------------------------------+\n" RESET);
+    }
+
+    if (total == 0) {
+        printf(CYAN "|    Aucun patient dans l'historique.            |\n" RESET);
+        printf(RED  "+================================================+\n" RESET);
+        fclose(f);
+        return; debutConsultation
+    }
+
+    printf(GREEN "                       Choix : " RESET);
+    int choix;
+    choix = saisirChoix();
+
+    if (choix < 1 || choix > total) {
+        printf(RED "+------------------------------------------------+\n" RESET);
+        printf(CYAN "|  " YELLOW "Choix invalide.                             " CYAN "|\n" RESET);
+        printf(RED "+================================================+\n" RESET);
+        fclose(f);
+        return;
+    }
+
+    long position = (long)(choix - 1) * sizeof(Data);
+    fseek(f, position, SEEK_SET);
+    fread(&data, sizeof(Data), 1, f);
+
+    char *etatStr;
+    if      (data.etat == SORTI)        etatStr = "SORTI";
+    else if (data.etat == TRANSFERER)   etatStr = "TRANSFERE";
+    else if (data.etat == CONSULTATION) etatStr = "CONSULTATION";
+    else if (data.etat == ATTENTE)      etatStr = "ATTENTE";
+    else if (data.etat == OBSERVATION)  etatStr = "OBSERVATION";
+    else if (data.etat == URGENCE)      etatStr = "URGENCE";
+    else                                etatStr = "INCONNU";
+
+    char heureArrive[30];
+    strftime(heureArrive, 30, "%d/%m/%Y %H:%M", localtime(&data.heure.arrive));
+
+    system("cls");
+    printf(RED  "+================================================+\n" RESET);
+    printf(RED  "|             DETAIL DU PATIENT                  |\n" RESET);
+    printf(RED  "+================================================+\n" RESET);
+    printf(CYAN "| Nom         : %-33s|\n" RESET, data.nom);
+    printf(CYAN "| Prenom      : %-33s|\n" RESET, data.prenom);
+    printf(CYAN "| ID          : %-33s|\n" RESET, data.id);
+    printf(CYAN "| Age         : %d ans                           |\n" RESET, data.age);
+    printf(CYAN "| Sexe        : %-33s|\n" RESET, data.sexe);
+    printf(CYAN "| Etat        : %-33s|\n" RESET, etatStr);
+    printf(CYAN "| Arrivee     : %-33s|\n" RESET, heureArrive);
+
+    if (data.heure.sorti != 0) {
+        char heureSortie[30];
+        strftime(heureSortie, 30, "%d/%m/%Y %H:%M", localtime(&data.heure.sorti));
+        printf(CYAN "| Sortie      : %-33s|\n" RESET, heureSortie);
+    }
+    if (data.numeroTicket != 0)
+        printf(CYAN "| Ticket      : %-33d|\n" RESET, data.numeroTicket);
+
+    if (strcmp(data.diagnostique, "") != 0) {
+        printf(RED  "+------------------------------------------------+\n" RESET);
+        printf(CYAN "| Diagnostic  : %-33s|\n" RESET, data.diagnostique);
         if (strlen(data.ordonnance) > 0)
-            printf("  Ordonnance  : %s\n",  data.ordonnance);
+            printf(CYAN "| Ordonnance  : %-33s|\n" RESET, data.ordonnance);
         if (strlen(data.departement) > 0)
-            printf("  Departement : %s\n",  data.departement);
+            printf(CYAN "| Departement : %-33s|\n" RESET, data.departement);
         if (data.dureeConsultation != 0) {
-            char dureConsultation[4];
-            strftime(dureConsultation, 30, "%M", localtime(&data.dureeConsultation));
-            printf("  Duree Consultation : %sMin", dureConsultation);
+            char duree[10];
+            strftime(duree, sizeof(duree), "%M", localtime(&data.dureeConsultation));
+            printf(CYAN "| Duree       : %s min                           |\n" RESET, duree);
         }
-        printf("\n");
-    
+    }
+
+    if (data.lit != 0) {
+        printf(RED  "+------------------------------------------------+\n" RESET);
+        printf(CYAN "| Lit         : %-33d|\n" RESET, data.lit);
+        if (strcmp(data.traitement, "") != 0)
+            printf(CYAN "| Traitement  : %-33s|\n" RESET, data.traitement);
+        if (data.debutObservation != 0) {
+            char buffer[30];
+            strftime(buffer, 30, "%d/%m/%Y %H:%M", localtime(&data.debutObservation));
+            printf(CYAN "| Debut obs   : %-33s|\n" RESET, buffer);
+        }
+        if (data.finObservation != 0) {
+            char buffer[30];
+            strftime(buffer, 30, "%d/%m/%Y %H:%M", localtime(&data.finObservation));
+            printf(CYAN "| Fin obs     : %-33s|\n" RESET, buffer);
+        }
+    }
+
+    printf(RED "+================================================+\n" RESET);
     fclose(f);
+
 }
 
 /* ============================================================
@@ -332,41 +422,31 @@ void chargerObservations(ListePatient *liste, ListeObservation *ListeO, ListeLit
     FILE *f = fopen("data/observations.bin", "rb");
     if (f == NULL) return;
 
-    int  numlit;
-    char idPatient[20];
-    char traitement[100];
-    time_t fin, debut;
-    while (fread(&numlit, sizeof(int), 1, f) == 1) {
-        fread(idPatient,  sizeof(char),   20,  f);
-        fread(traitement, sizeof(char),   100, f);
-        fread(&fin,       sizeof(time_t), 1,   f);
-        fread(&debut,     sizeof(time_t), 1,   f); 
-
-        // Retrouver le patient par ID
+    ObservationData data;
+    while (fread(&data, sizeof(ObservationData), 1, f) == 1) {
+        // Retrouver le patient par index
         Patient *p = liste->tete;
-        while (p != NULL && strcmp(p->id, idPatient) != 0)
+        while (p != NULL && p->index != data.index)
             p = p->suivant;
 
         if (p != NULL) {
             Observation *obs = malloc(sizeof(Observation));
             if (obs == NULL) break;
-            obs->lit     = numlit;
-            obs->patient = p;
-            obs->finObservation   = fin;  
-            obs->debutObservation = debut;  
-            strcpy(obs->traitement, traitement);
+            obs->lit              = data.lit;
+            obs->patient          = p;
+            obs->finObservation   = data.finObservation;
+            obs->debutObservation = data.debutObservation;
+            obs->index            = data.index;
+            strcpy(obs->traitement, data.traitement);
             obs->suivant = NULL;
 
-            // Retrouver et marquer le lit comme occupé
-            if (numlit >= 1 && numlit <= ListeL->total) {
-                ListeL->Tlit[numlit-1].etat    = OCCUPE;
-                ListeL->Tlit[numlit-1].patient = p;
+            if (data.lit >= 1 && data.lit <= ListeL->total) {
+                ListeL->Tlit[data.lit-1].etat    = OCCUPE;
+                ListeL->Tlit[data.lit-1].patient  = p;
                 ListeL->indispo++;
             }
 
-            // Ajouter à la liste
-            if (ListeO->tete == NULL)
-                ListeO->tete = obs;
+            if (ListeO->tete == NULL) ListeO->tete = obs;
             else {
                 Observation *tmp = ListeO->tete;
                 while (tmp->suivant != NULL) tmp = tmp->suivant;
@@ -377,35 +457,84 @@ void chargerObservations(ListePatient *liste, ListeObservation *ListeO, ListeLit
     }
     fclose(f);
 }
-
-
-void afficherHistorique() {
-    FILE *P = fopen("data/patients.bin","rb");
-    if(P == NULL) {
-        printf("Erreur : Impossible d'afficher l'historique.\n");
+void sauvegarderUrgences(ListeUrgence *ListeU) {
+    FILE *f = fopen("data/urgences.bin", "wb");
+    if (f == NULL) {
+        printf("Erreur : Impossible d'ouvrir urgences.bin\n");
         return;
     }
-    PatientData courant;
-    int i;
-    int choix;
-    while(fread(&courant,sizeof(PatientData),1,P)) {
-        char *etatStr; // pointeur vers les texte ecirt la dessous, on peux faire char etatStr[30] par exemple, masu vu que c'est des string fixe, autant pointer vers eux
-        if      (courant.etat == SORTI)     etatStr = "SORTI"; // Convertir en string
-        else if (courant.etat == TRANSFERER) etatStr = "TRANSFERE";
-        else if (courant.etat == CONSULTATION) etatStr = "CONSULTION";
-        else if (courant.etat == ATTENTE ) etatStr = "ATTENTE";
-        else if (courant.etat == OBSERVATION) etatStr = "OBSERVATION";
-        else if (courant.etat == URGENCE)     etatStr = "URGENCE";
-        char buffer[30];
-        strftime(buffer, 30, "%d/%m/%Y %H%M%S", localtime(&courant.heure.arrive));
-        printf("[%d] - %s  %s | %d Ans | %s | %s | %s | Arrivee: %s\n", i, courant.nom, courant.prenom, courant.age, courant.sexe, courant.id,etatStr,buffer);
-        if(courant.heure.sorti != 0 ) {
-            strftime(buffer, 30,"%d/%m/%Y %H:%M:%S", localtime(&courant.heure.sorti));
-            printf(" | Sortie : %s", buffer);
+
+    Urgence *courant = ListeU->tete;
+    while (courant != NULL) {
+        UrgenceData data;
+        strcpy(data.nom,    courant->patient->nom);
+        strcpy(data.prenom, courant->patient->prenom);
+        strcpy(data.id,     courant->patient->id);
+        strcpy(data.sexe,   courant->patient->sexe);
+        data.age          = courant->patient->age;
+        data.heure        = courant->patient->heure;
+        data.numeroTicket = courant->patient->ticket
+                            ? courant->patient->ticket->numero : 0;
+        fwrite(&data, sizeof(UrgenceData), 1, f);
+        courant = courant->suivant;
+    }
+    fclose(f);
+}
+
+void chargerUrgences(ListeUrgence *ListeU, ListeTicket *ListeT) {
+    FILE *f = fopen("data/urgences.bin", "rb");
+    if (f == NULL) return;
+
+    UrgenceData data;
+    while (fread(&data, sizeof(UrgenceData), 1, f) == 1) {
+
+        // Reconstruire le patient
+        Patient *p = (Patient*)malloc(sizeof(Patient));
+        if (p == NULL) break;
+        strcpy(p->nom,    data.nom);
+        strcpy(p->prenom, data.prenom);
+        strcpy(p->id,     data.id);
+        strcpy(p->sexe,   data.sexe);
+        p->age    = data.age;
+        p->heure  = data.heure;
+        p->etat   = URGENCE;
+        p->suivant = NULL;
+        strcpy(p->diagnostique, "");
+        strcpy(p->ordonnance,   "");
+        strcpy(p->departement,  "");
+
+        // Reconstruire le ticket avec le numero sauvegarde
+        Ticket *t = (Ticket*)malloc(sizeof(Ticket));
+        if (t == NULL) { free(p); break; }
+        t->client  = p;
+        t->numero  = data.numeroTicket;
+        t->suivant = NULL;
+        // Ajouter a la fin de la liste de tickets
+        if (ListeT->tete == NULL) {
+            ListeT->tete = t;
+        } else {
+            Ticket *tmp = ListeT->tete;
+            while (tmp->suivant != NULL) tmp = tmp->suivant;
+            tmp->suivant = t;
         }
-        i++; 
-     }
-     printf("----Choix : ");
-     scanf("%d", &choix);
-     
+        p->ticket = t;
+
+        // Reconstruire le noeud urgence
+        Urgence *noeud = (Urgence*)malloc(sizeof(Urgence));
+        if (noeud == NULL) { free(t); free(p); break; }
+        noeud->patient  = p;
+        noeud->suivant  = NULL;
+
+        if (ListeU->tete == NULL) {
+            ListeU->tete = noeud;
+        } else {
+            Urgence *tmp = ListeU->tete;
+            while (tmp->suivant != NULL) tmp = tmp->suivant;
+            tmp->suivant = noeud;
+        }
+
+        ListeU->total++;
+        ListeU->attente++;
+    }
+    fclose(f);
 }

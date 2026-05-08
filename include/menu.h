@@ -4,6 +4,7 @@
 #include "structure.h"
 
 void pause();
+int saisirChoix();
 void menuPrincipal();
 void menuMedecin();
 void menuConsultation(Patient *patientEnConsultation);

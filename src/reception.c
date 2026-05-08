@@ -4,6 +4,9 @@
 #include "reception.h"
 #include "structure.h"
 #include "fichier.h"
+#include "menu.h"
+
+void SaveTicket(ListeTicket *listeT);
 
 Ticket *CreateTicket(Patient *patient, int num) {
     Ticket *T = (Ticket*)malloc(sizeof(Ticket));
@@ -47,11 +50,20 @@ void AddPatient(ListePatient *ListeP,ListeTicket *ListeT) {
     scanf(" %[^\n]",Prenom);
     printf("\tID : ");
     scanf(" %[^\n]",ID);
-    printf("\tAge : ");
-    scanf("%d",&Age);
     while(getchar() != '\n');
-    printf("\tSexe(H/F): ");
+    do {
+    printf("\tAge : ");
+    Age = saisirChoix();
+    if(Age <= 0 || Age > 150)
+        printf(RED "\tAge invalide ! (1-150)\n" RESET);
+    } while(Age <= 0 || Age > 150);
+    do {
+    printf("\tSexe (H/F) : ");
     scanf("%s", Sexe);
+    while(getchar() != '\n');
+    if(strcmp(Sexe, "H") != 0 && strcmp(Sexe, "F") != 0)
+        printf(RED "\tSexe invalide ! (H ou F)\n" RESET);
+    } while(strcmp(Sexe, "H") != 0 && strcmp(Sexe, "F") != 0);
     strcpy(P->nom, Nom);
     strcpy(P->prenom, Prenom);
     strcpy(P->id, ID);
@@ -60,6 +72,7 @@ void AddPatient(ListePatient *ListeP,ListeTicket *ListeT) {
     P->suivant = NULL;
     P->ticket = AddTicket(ListeT,P);
     P->etat = ATTENTE;
+    ListeP->total++;
     P->index = ListeP->total;
     strcpy(P->departement,""); // Pas encore transeferer, c'est le medecin qui en decidera
     P->heure.arrive = time(NULL); // Recuperer l'heure actuelle (De l'enregistrment du patient du coup)
@@ -79,9 +92,9 @@ void AddPatient(ListePatient *ListeP,ListeTicket *ListeT) {
         courant = courant->suivant;
     courant->suivant = P;
     ListeP->attente++;
-    ListeP->total++;
-    P->index = ListeP->total;
-    sauvegarderHistorique(P);
+    SaveTicket(ListeT);
+    sauvegarderPatients(P);
+    sauvegarderHistorique();
 }
 void afficherAttente(ListeTicket *ListeT) {
     if(ListeT->tete == NULL) {
@@ -94,7 +107,7 @@ void afficherAttente(ListeTicket *ListeT) {
         char buffer[20];
         if(courant->client->etat == CONSULTATION) {
             strftime(buffer, 20, "%H:%M:%S", localtime(&courant->client->debutConsulation));
-            printf("[%d] - %s  %s | %d Ans | %s | %s | EN CONSULTATION | Depuis :  %s\n", i, courant->client->nom, courant->client->prenom, courant->client->age, courant->client->sexe, courant->client->id,courant->numero,buffer);
+            printf("[%d] - %s  %s | %d Ans | %s | %s | EN CONSULTATION | Depuis :  %s\n", i, courant->client->nom, courant->client->prenom, courant->client->age, courant->client->sexe, courant->client->id,buffer);
             } else {
             strftime(buffer, 20, "%H:%M:%S", localtime(&courant->client->heure.arrive));    
             printf("[%d] - %s  %s | %d Ans | %s | %s | Ticket  %d | Debut d'attente : %s\n", i, courant->client->nom, courant->client->prenom, courant->client->age, courant->client->sexe, courant->client->id,courant->numero,buffer);
@@ -133,5 +146,6 @@ void verifierNouveauJour(ListeTicket *ListeT) {
         ListeT->compteur     = 0;
         ListeT->dernierReset = maintenant;
         printf("Nouveau jour : compteur de tickets reinitialise.\n");
+        SaveTicket(ListeT);
     }
 }
