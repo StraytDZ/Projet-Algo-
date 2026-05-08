@@ -109,6 +109,7 @@ void menuModifierObservation(Observation *o) {
     printf(CYAN "|  " YELLOW "1" CYAN " - Modifier le lit                 |\n" RESET);
     printf(CYAN "|  " YELLOW "2" CYAN " - Modifier le traitement          |\n" RESET);
     printf(CYAN "|  " YELLOW "3" CYAN " - Modifier la duree               |\n" RESET);
+    printf(CYAN "|  " YELLOW "4" CYAN " - donner medicament               |\n" RESET);
     printf(CYAN "|  " RED    "5" CYAN " - Quitter                         |\n" RESET);
     printf(CYAN "|                                      |\n" RESET);
     printf(RED "+======================================+\n" RESET);

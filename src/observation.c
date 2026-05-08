@@ -193,7 +193,7 @@ void AfficherListeObservation(ListeObservation *ListeO) {
     }
 }
 
-void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL) {
+void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL, ListeMedicament *ListeMedicament) {
     if(ListeO->tete == NULL) {
         printf("Aucun patient en observation.\n");
         return;
@@ -254,8 +254,32 @@ void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL) {
             printf("Nouvelle date de fin : %s\n", buffer);
             pause();
         break;}
-        }
-    }while(choix != 4);
+        case 4 : { 
+            int reponse;
+            printf("voulez vous lui donnez un medicament ? (1 - oui / 0 - non) : ");
+            scanf("%d", &reponse);
+            while (reponse == 1) {
+            
+            char nomMed[30] = "";
+            utilisermedicament(ListeMedicament, nomMed);
+            if(strcmp(nomMed, "") != 0) { // si un médicament a bien été trouvé
+                if(patientCible->nbMedicaments < 10) {
+                    strcpy(patientCible->medicamentsUtilises[patientCible->nbMedicaments], nomMed);
+                    patientCible->nbMedicaments++;
+                }   else {
+                           printf("Maximum de medicaments atteint pour ce patient.\n");
+                }
+                
+            }
+            printf("voulez vous lui donnez un autre medicament ? (1 - oui / 0 - non) : ");
+            scanf("%d", &reponse);
+            }
+            break;
+            
+    }
+            
+}
+    }while(choix != 5);
 }
 void RechercheObservation(ListeObservation *ListeO) {
      if(ListeO->tete == NULL) {

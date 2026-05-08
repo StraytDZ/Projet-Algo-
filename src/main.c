@@ -85,7 +85,7 @@ int main() {
                             choixObservation = saisirChoix();
                             switch(choixObservation) {
                                 case 1 : 
-                                    ModifierObservation(&observations,&lit);
+                                    ModifierObservation(&observations,&lit, &LM);
                                     pause();
                                 break;
                                 case 2 : 

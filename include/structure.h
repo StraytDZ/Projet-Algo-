@@ -77,8 +77,8 @@ typedef struct Observation{ // Un noeud Observation
     char medicamentsUtilises[10][30]; // max 10 médicaments, 30 chars chacun
     int nbMedicaments;
     struct Observation *suivant;
-    Medicament *medicaments[10];
     Equipement *equipements[10];
+    int compteurEquipements;
 }Observation;
 typedef struct ListeObservation { // Liste de tout les noeuds Observation
     Observation *tete;
