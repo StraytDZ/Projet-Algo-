@@ -56,6 +56,29 @@ typedef struct ListePatient {
     int sortis;
     int transferes;
 }ListePatient;
+typedef struct Medicament {
+    char nom[30];
+    int quantite;
+} Medicament;
+
+#define MAX_MEDICAMENTS 100
+
+typedef struct ListeMedicament {
+    Medicament medicaments[MAX_MEDICAMENTS];
+    int total;
+} ListeMedicament;
+
+typedef struct Equipement {
+    char nom[30];
+    int quantite;
+} Equipement;
+
+#define MAX_EQUIPEMENTS 100
+
+typedef struct ListeEquipement {
+    Equipement equipements[MAX_EQUIPEMENTS];
+    int total;
+} ListeEquipement;
 typedef enum {
     OCCUPE,
     NOCCUPE,
@@ -80,8 +103,8 @@ typedef struct Observation{
     char medicamentsUtilises[10][30]; 
     int nbMedicaments;
     struct Observation *suivant;
-    Medicament *medicaments[10];
     Equipement *equipements[10];
+    int compteurEquipements;
 }Observation;
 typedef struct ListeObservation { // Liste de tout les noeuds Observation
     Observation *tete;

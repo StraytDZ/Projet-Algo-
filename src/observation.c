@@ -63,14 +63,15 @@ void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, Li
         }
     }
 }
+    char nomequip[30] = "";
     printf("voulez vous lui donnez un equipement ? (1 - oui / 0 - non) : ");
     scanf("%d", &choix); 
     int i=0;
     do {
     if (choix == 1) {
-        utiliserequipement(ListeEquipement, nom);
+        utiliserequipement(ListeEquipement, nomequip);
         for(int j = 0; j < ListeEquipement->total; j++){
-            if(strcmp(ListeEquipement->equipements[j].nom, nom) == 0){
+            if(strcmp(ListeEquipement->equipements[j].nom, nomequip) == 0){
                 patientOB->equipements[i] = &ListeEquipement->equipements[j];
             }
         }
@@ -144,9 +145,17 @@ void SupprimerObservation(ListeObservation *ListeO,ListeLit *ListeL){
         return;
     }
     AfficherListeObservation(ListeO);
-    int numlit;
+    int numlit=-1;
     printf("Numero du lit a liberer : ");
-    if(numlit == -1) { printf("Numero invalide.\n"); return; }
+    numlit = saisirChoix();
+    if (numlit == -1 || numlit <= 0 || numlit > ListeL->total){
+     do {    
+         printf(RED" Numero invalide.\n" RESET);
+         printf("Numero du lit a liberer : ");
+         numlit = saisirChoix();
+    } while (numlit <0 || numlit > ListeL->total || numlit==-1);
+   }
+    
     Observation *courant   = ListeO->tete;
     Observation *precedent = NULL;
 
@@ -158,11 +167,12 @@ void SupprimerObservation(ListeObservation *ListeO,ListeLit *ListeL){
         printf("Observation introuvable.\n");
         return;
     }
-    courant->patient->etat         = SORTI;
+    courant->patient->etat = SORTI;
     courant->patient->heure.sorti = time(NULL);
     ListeL->Tlit[numlit-1].etat    = NOCCUPE;
     ListeL->Tlit[numlit-1].patient = NULL;
     ListeL->indispo--;
+    sauvegarderLit(ListeL);
     sauvegarderObservations(courant);
     if (precedent == NULL)
         ListeO->tete = courant->suivant;
@@ -191,7 +201,7 @@ void AfficherListeObservation(ListeObservation *ListeO) {
     }
 }
 
-void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL) {
+void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL, ListeMedicament *ListeMedicament) {
     if(ListeO->tete == NULL) {
         printf("Aucun patient en observation.\n");
         return;
@@ -202,7 +212,7 @@ void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL) {
     int i = 1;
     do{
         printf("-Choix : ");
-        scanf("%d",&index);
+        index = saisirChoix();
         if(index < 0 || index > ListeO->compteur)
             printf("Erreur : Numero invalide ! Reessayez.\n");
             
@@ -215,7 +225,7 @@ void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL) {
     Observation *patientCible = courant;
     do {
         menuModifierObservation(courant);
-        scanf("%d",&choix);
+        choix = saisirChoix();
     switch(choix)  {
         case 1 : {
             int numlit;
@@ -252,8 +262,32 @@ void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL) {
             printf("Nouvelle date de fin : %s\n", buffer);
             pause();
         break;}
-        }
-    }while(choix != 4);
+        case 4 : { 
+            int reponse;
+            printf("voulez vous lui donnez un medicament ? (1 - oui / 0 - non) : ");
+            scanf("%d", &reponse);
+            while (reponse == 1) {
+            
+            char nomMed[30] = "";
+            utilisermedicament(ListeMedicament, nomMed);
+            if(strcmp(nomMed, "") != 0) { // si un médicament a bien été trouvé
+                if(patientCible->nbMedicaments < 10) {
+                    strcpy(patientCible->medicamentsUtilises[patientCible->nbMedicaments], nomMed);
+                    patientCible->nbMedicaments++;
+                }   else {
+                           printf("Maximum de medicaments atteint pour ce patient.\n");
+                }
+                
+            }
+            printf("voulez vous lui donnez un autre medicament ? (1 - oui / 0 - non) : ");
+            scanf("%d", &reponse);
+            }
+            break;
+            
+    }
+            
+}
+    }while(choix != 5);
 }
 void RechercheObservation(ListeObservation *ListeO) {
      if(ListeO->tete == NULL) {

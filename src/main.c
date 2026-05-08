@@ -22,8 +22,8 @@ int main() {
     ListeObservation observations = {NULL,0};
     ListeUrgence urgences = {NULL, 0, 0};
     ListeLit lit = {{{0}}, 0 , 0};
-    ListeEquipement LE = {{{0}}, 0};
-    ListeMedicament LM = {{{0}}, 0};
+    ListeEquipement LE =  {0};
+    ListeMedicament LM =  {0};
     Statistique stat = {0,0,0,0,0,0,0,0,0};
     chargerLit(&lit);
     chargerTickets(&tickets);
@@ -85,7 +85,7 @@ int main() {
                             choixObservation = saisirChoix();
                             switch(choixObservation) {
                                 case 1 : 
-                                    ModifierObservation(&observations,&lit);
+                                    ModifierObservation(&observations,&lit, &LM);
                                     pause();
                                 break;
                                 case 2 : 
@@ -162,7 +162,7 @@ int main() {
                                 choixEquip = saisirChoix();
                                 switch(choixEquip) {
                                     case 1 : 
-                                        ajouterequipement(&LE);
+                                        ajouterequipement(&LE); 
                                         pause();
                                     break;
                                     

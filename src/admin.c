@@ -3,6 +3,7 @@
 #include <string.h>
 #include "structure.h"
 #include "menu.h"
+#include "fichier.h"
 
 #define RED    "\033[91m" 
 #define CYAN   "\033[96m"
@@ -96,8 +97,11 @@ void verfierfindeStock(ListeMedicament *LM, ListeEquipement *LE){
 void ajoutermedicament(ListeMedicament *LM){
     char nom[30];
     int quantite;
-    printf("Veuillez entrer le nom du medicament a ajouter et sa quantite : ");
-    scanf("%s %d", nom, &quantite);  
+    printf("Veuillez entrer le nom du medicament a ajouter  : ");
+    scanf("%s", nom);
+    while(getchar() != '\n');  
+    printf("Quantite : ");
+    quantite = saisirChoix();
     for(int i = 0; i < LM->total; i++){
         if(strcmp(LM->medicaments[i].nom, nom) == 0){
             LM->medicaments[i].quantite += quantite;
@@ -119,9 +123,15 @@ void ajoutermedicament(ListeMedicament *LM){
 void ajouterequipement(ListeEquipement *LE){
     char nom[30];
     int quantite;
-    printf("Veuillez entrer le nom d'equipement a ajouter et sa quantite : ");
-    scanf("%s %d", nom, &quantite);
+    printf("Nom de l'equipement : ");
+    scanf("%s", nom);
     while(getchar() != '\n');
+    printf("Quantite : ");
+    quantite = saisirChoix();
+    if(quantite <= 0) {
+        printf("Quantite invalide.\n");
+        return;
+    }
     for(int i = 0; i < LE->total; i++){
         if(strcmp(LE->equipements[i].nom, nom) == 0){
             LE->equipements[i].quantite += quantite;
@@ -164,7 +174,6 @@ void utilisermedicament(ListeMedicament *LM, char *nomUtilise) {
 
 
 void utiliserequipement(ListeEquipement *LE, char nom[30]){
-    char nom[30];
      printf("Veuillez entrer le nom de l'equipement a utiliser  : ");
     scanf("%s", nom);
     while(getchar() != '\n');

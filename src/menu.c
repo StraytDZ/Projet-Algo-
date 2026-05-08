@@ -5,7 +5,6 @@
 #include "structure.h"
 
 void pause() {
-    int c;
     printf(CYAN "\nAppuyez sur Entree pour continuer..." RESET);
     fflush(stdout); // ← force l'affichage avant d'attendre
     getchar();
@@ -109,7 +108,8 @@ void menuModifierObservation(Observation *o) {
     printf(CYAN "|  " YELLOW "1" CYAN " - Modifier le lit                 |\n" RESET);
     printf(CYAN "|  " YELLOW "2" CYAN " - Modifier le traitement          |\n" RESET);
     printf(CYAN "|  " YELLOW "3" CYAN " - Modifier la duree               |\n" RESET);
-    printf(CYAN "|  " RED    "4" CYAN " - Quitter                         |\n" RESET);
+    printf(CYAN "|  " YELLOW "4" CYAN " - donner medicament               |\n" RESET);
+    printf(CYAN "|  " RED    "5" CYAN " - Quitter                         |\n" RESET);
     printf(CYAN "|                                      |\n" RESET);
     printf(RED "+======================================+\n" RESET);
     printf(GREEN "                       Choix : " RESET);
@@ -168,8 +168,8 @@ void menuequipement() {
     printf(RED "+======================================+\n" RESET);
     printf(CYAN "|                                      |\n" RESET);
     printf(CYAN "|  " YELLOW "1" CYAN " - Ajouter un equipement           |\n" RESET);
-    printf(CYAN "|  " YELLOW "3" CYAN " - Afficher stock equipements      |\n" RESET);
-    printf(CYAN "|  " RED    "4" CYAN " - Quitter                         |\n" RESET);
+    printf(CYAN "|  " YELLOW "2" CYAN " - Afficher stock equipements      |\n" RESET);
+    printf(CYAN "|  " RED    "3" CYAN " - Quitter                         |\n" RESET);
     printf(CYAN "|                                      |\n" RESET);
     printf(RED "+======================================+\n" RESET);
     printf(GREEN "                       Choix : " RESET);
@@ -182,8 +182,8 @@ void menumedicament() {
     printf(RED "+======================================+\n" RESET);
     printf(CYAN "|                                      |\n" RESET);
     printf(CYAN "|  " YELLOW "1" CYAN " - Ajouter un medicament           |\n" RESET);
-    printf(CYAN "|  " YELLOW "3" CYAN " - Afficher stock medicaments      |\n" RESET);
-    printf(CYAN "|  " RED    "4" CYAN " - Quitter                         |\n" RESET);
+    printf(CYAN "|  " YELLOW "2" CYAN " - Afficher stock medicaments      |\n" RESET);
+    printf(CYAN "|  " RED    "3" CYAN " - Quitter                         |\n" RESET);
     printf(CYAN "|                                      |\n" RESET);
     printf(RED "+======================================+\n" RESET);
     printf(GREEN "                       Choix : " RESET);

@@ -84,7 +84,9 @@ void AddPatient(ListePatient *ListeP,ListeTicket *ListeT) {
     if(ListeP->tete == NULL) {
        ListeP->tete = P;
         ListeP->attente++;
-        ListeP->total++;
+        SaveTicket(ListeT);
+         sauvegarderPatients(P);
+        sauvegarderHistorique();
     return;  
     }
     Patient *courant = ListeP->tete;
