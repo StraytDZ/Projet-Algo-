@@ -36,7 +36,6 @@ void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, Li
             return;
         }
     int duree;
-
     patientOB->nbMedicaments = 0;
     memset(patientOB->medicamentsUtilises, 0, sizeof(patientOB->medicamentsUtilises));
     printf("Duree de l'oservations :");

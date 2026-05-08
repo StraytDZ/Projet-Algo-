@@ -17,6 +17,10 @@ Patient *CallPatient(ListeTicket *ListeT, ListeUrgence *ListeU,ListePatient *Lis
         sauvegarderPatients(patientUrgence);
         return patientUrgence;
     }
+    else {
+        printf("Aucun patient en urgence en fille d'attente.\n");
+        return NULL;
+    }
     if(ListeT->tete == NULL) {
         printf("Aucun patient en fille d'attente.\n");
         return NULL;

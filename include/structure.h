@@ -4,6 +4,9 @@
 #include <time.h>  // Pour la structure de Heure, utile pour l'historique.
  
 #define MAX_LIT 100
+#define MAX_MEDICAMENTS 100
+#define MAX_EQUIPEMENTS 100
+
 typedef struct Patient Patient;
 typedef struct Ticket {
     int numero;
@@ -15,7 +18,7 @@ typedef struct ListeTicket {
     time_t dernierReset;
     int compteur;
 }ListeTicket;
-typedef enum { // 
+typedef enum {  
     ATTENTE,
     CONSULTATION,
     OBSERVATION,
@@ -57,24 +60,24 @@ typedef enum {
     OCCUPE,
     NOCCUPE,
 }EtatLit;
-typedef struct Lit{ // Un noeud Lit
+typedef struct Lit{ 
     Patient *patient;
     EtatLit etat;
     int num;
 }Lit;
-typedef struct ListeLit{ // // Liste de tout les noeuds Lit
+typedef struct ListeLit{
     Lit Tlit[MAX_LIT];
     int total;
     int indispo; 
 }ListeLit;
-typedef struct Observation{ // Un noeud Observation
+typedef struct Observation{
     Patient *patient;
     int lit;
     char traitement[100];
     time_t finObservation;
     time_t debutObservation;
     int index;
-    char medicamentsUtilises[10][30]; // max 10 médicaments, 30 chars chacun
+    char medicamentsUtilises[10][30]; 
     int nbMedicaments;
     struct Observation *suivant;
     Medicament *medicaments[10];
@@ -112,9 +115,6 @@ typedef struct Medicament {
     char nom[30];
     int quantite;
 } Medicament;
-
-#define MAX_MEDICAMENTS 100
-
 typedef struct ListeMedicament {
     Medicament medicaments[MAX_MEDICAMENTS];
     int total;
@@ -125,7 +125,6 @@ typedef struct Equipement {
     int quantite;
 } Equipement;
 
-#define MAX_EQUIPEMENTS 100
 
 typedef struct ListeEquipement {
     Equipement equipements[MAX_EQUIPEMENTS];

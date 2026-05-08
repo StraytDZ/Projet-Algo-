@@ -86,7 +86,7 @@ void AddPatient(ListePatient *ListeP,ListeTicket *ListeT) {
         ListeP->attente++;
         ListeP->total++;
     return;  
-}
+    }
     Patient *courant = ListeP->tete;
     while(courant->suivant != NULL)
         courant = courant->suivant;
