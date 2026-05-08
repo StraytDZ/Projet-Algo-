@@ -7,6 +7,7 @@
 #include "menu.h"
 #include "fichier.h"
 #include "reception.h"
+#include "admin.h"
 
 int AddLit(Patient *patientEnonsultation,ListeLit *ListeL) { // Fonciton juste pour cree le ' noeud ', ici on ne l'ajoute pas encore vers notre 'lsite de noeud' (ListeLit)
     if(ListeL->indispo >= ListeL->total ) {  // Si on depasse le nombre de lit disponible dans l'hopitale, tel que ListeL->total est donner dans le main,
@@ -24,7 +25,7 @@ int AddLit(Patient *patientEnonsultation,ListeLit *ListeL) { // Fonciton juste p
 }
 
 
-void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, ListeLit *ListeL, ListeTicket *ListeT, ListePatient *ListeP) {
+void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, ListeLit *ListeL, ListeTicket *ListeT, ListePatient *ListeP, ListeMedicament *ListeMedicament, ListeEquipement *ListeEquipement) {
     if(strcmp(patientEnConsultation->diagnostique,"") == 0) {
         printf("Veuilelz d'abord saisir un diagnostique.\n");
         return;
@@ -44,6 +45,18 @@ void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, Li
     printf("Date de fin : %s\n", buffer);
     printf("Veuillez indiquer le traitement a suivre : ");
     scanf(" %[^\n]", patientOB->traitement);
+    printf("voulez vous lui donnez un medicament ? (1 - oui / 0 - non) : ");
+    int choix;
+    scanf("%d", &choix);
+    if (choix == 1) {
+        utilisermedicament(ListeMedicament);
+    }
+    printf("voulez vous lui donnez un equipement ? (1 - oui / 0 - non) : ");
+    scanf("%d", &choix);
+    if (choix == 1) {
+        utiliserequipement(ListeEquipement);
+    }
+    
     while(getchar() != '\n');
     int numLit = AddLit(patientEnConsultation, ListeL);
     if (numLit == -1) {

@@ -4,7 +4,7 @@
 #include "structure.h"
 #include "menu.h"
 
-#define RED    "\033[91m"
+#define RED    "\033[91m" 
 #define CYAN   "\033[96m"
 #define GREEN  "\033[92m"
 #define YELLOW "\033[93m"
