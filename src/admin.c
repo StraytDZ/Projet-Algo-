@@ -3,6 +3,7 @@
 #include <string.h>
 #include "structure.h"
 #include "menu.h"
+#include "fichier.h"
 
 #define RED    "\033[91m" 
 #define CYAN   "\033[96m"

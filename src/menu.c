@@ -5,7 +5,6 @@
 #include "structure.h"
 
 void pause() {
-    int c;
     printf(CYAN "\nAppuyez sur Entree pour continuer..." RESET);
     fflush(stdout); // ← force l'affichage avant d'attendre
     getchar();

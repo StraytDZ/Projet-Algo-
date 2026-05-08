@@ -368,7 +368,7 @@ void afficherHistorique() {
     if (data.lit != 0) {
         printf(RED  "+------------------------------------------------+\n" RESET);
         printf(CYAN "| Lit         : %-33d|\n" RESET, data.lit);
-        if (strcmp(data.traitement, "") != 0)
+        if (strcmp(data.traitement, "") != 0){
             printf(CYAN "| Traitement  : %-33s|\n" RESET, data.traitement);
             if (data.nbMedicaments > 0) {
                 printf(RED  "+------------------------------------------------+\n" RESET);
@@ -377,6 +377,7 @@ void afficherHistorique() {
                     printf(CYAN "|   - %-43s|\n" RESET, data.medicamentsUtilises[i]);
                  }   
             }
+        }    
         if (data.debutObservation != 0) {
             char buffer[30];
             strftime(buffer, 30, "%d/%m/%Y %H:%M", localtime(&data.debutObservation));

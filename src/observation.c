@@ -168,7 +168,7 @@ void SupprimerObservation(ListeObservation *ListeO,ListeLit *ListeL){
         printf("Observation introuvable.\n");
         return;
     }
-    courant->patient->etat         = SORTI;
+    courant->patient->etat = SORTI;
     courant->patient->heure.sorti = time(NULL);
     ListeL->Tlit[numlit-1].etat    = NOCCUPE;
     ListeL->Tlit[numlit-1].patient = NULL;
@@ -212,7 +212,7 @@ void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL, ListeMedica
     int i = 1;
     do{
         printf("-Choix : ");
-        scanf("%d",&index);
+        index = saisirChoix();
         if(index < 0 || index > ListeO->compteur)
             printf("Erreur : Numero invalide ! Reessayez.\n");
             
@@ -225,7 +225,7 @@ void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL, ListeMedica
     Observation *patientCible = courant;
     do {
         menuModifierObservation(courant);
-        scanf("%d",&choix);
+        choix = saisirChoix();
     switch(choix)  {
         case 1 : {
             int numlit;

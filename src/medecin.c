@@ -15,6 +15,7 @@ Patient *CallPatient(ListeTicket *ListeT, ListeUrgence *ListeU,ListePatient *Lis
         ListeU->attente--;
         patientUrgence->debutConsulation = time(NULL);
         sauvegarderPatients(patientUrgence);
+        free(urgence);
         return patientUrgence;
     }
     if(ListeT->tete == NULL) {

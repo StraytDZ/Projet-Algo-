@@ -22,8 +22,8 @@ int main() {
     ListeObservation observations = {NULL,0};
     ListeUrgence urgences = {NULL, 0, 0};
     ListeLit lit = {{{0}}, 0 , 0};
-    ListeEquipement LE = {{{0}}, 0};
-    ListeMedicament LM = {{{0}}, 0};
+    ListeEquipement LE =  {0};
+    ListeMedicament LM =  {0};
     Statistique stat = {0,0,0,0,0,0,0,0,0};
     chargerLit(&lit);
     chargerTickets(&tickets);
