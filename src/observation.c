@@ -64,14 +64,15 @@ void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, Li
         }
     }
 }
+    char nomequip[30] = "";
     printf("voulez vous lui donnez un equipement ? (1 - oui / 0 - non) : ");
     scanf("%d", &choix); 
     int i=0;
     do {
     if (choix == 1) {
-        utiliserequipement(ListeEquipement, nom);
+        utiliserequipement(ListeEquipement, nomequip);
         for(int j = 0; j < ListeEquipement->total; j++){
-            if(strcmp(ListeEquipement->equipements[j].nom, nom) == 0){
+            if(strcmp(ListeEquipement->equipements[j].nom, nomequip) == 0){
                 patientOB->equipements[i] = &ListeEquipement->equipements[j];
             }
         }
