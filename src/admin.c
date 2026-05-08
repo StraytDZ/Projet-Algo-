@@ -97,8 +97,11 @@ void verfierfindeStock(ListeMedicament *LM, ListeEquipement *LE){
 void ajoutermedicament(ListeMedicament *LM){
     char nom[30];
     int quantite;
-    printf("Veuillez entrer le nom du medicament a ajouter et sa quantite : ");
-    scanf("%s %d", nom, &quantite);  
+    printf("Veuillez entrer le nom du medicament a ajouter  : ");
+    scanf("%s", nom);
+    while(getchar() != '\n');  
+    printf("Quantite : ");
+    quantite = saisirChoix();
     for(int i = 0; i < LM->total; i++){
         if(strcmp(LM->medicaments[i].nom, nom) == 0){
             LM->medicaments[i].quantite += quantite;
