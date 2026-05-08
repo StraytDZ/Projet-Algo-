@@ -52,14 +52,38 @@ void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, Li
     printf("voulez vous lui donnez un medicament ? (1 - oui / 0 - non) : ");
     int choix;
     scanf("%d", &choix);
+    int i=0;
+    char nom[30];
+    do{
     if (choix == 1) {
-        utilisermedicament(ListeMedicament);
+        utilisermedicament(ListeMedicament, nom);
+        for(int j = 0; j < ListeMedicament->total; j++){
+            if(strcmp(ListeMedicament->medicaments[j].nom, nom) == 0){
+                patientOB->medicaments[i] = &ListeMedicament->medicaments[j];
+            }
+        }
+        printf("voullez vous saisir un autre medicament ? (1 - oui / 0 - non) : ");
+        scanf("%d", &choix);
+        i++;
     }
+    }while(choix == 1);
+
     printf("voulez vous lui donnez un equipement ? (1 - oui / 0 - non) : ");
-    scanf("%d", &choix);
+    scanf("%d", &choix); 
+    i=0;
+    do {
     if (choix == 1) {
-        utiliserequipement(ListeEquipement);
+        utiliserequipement(ListeEquipement, nom);
+        for(int j = 0; j < ListeEquipement->total; j++){
+            if(strcmp(ListeEquipement->equipements[j].nom, nom) == 0){
+                patientOB->equipements[i] = &ListeEquipement->equipements[j];
+            }
+        }
+        printf("voullez vous saisir un autre equipement ? (1 - oui / 0 - non) : ");
+        scanf("%d", &choix);
+        i++;
     }
+    }while(choix ==1 );
     
     while(getchar() != '\n');
     int numLit = AddLit(patientEnConsultation, ListeL);

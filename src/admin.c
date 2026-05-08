@@ -139,8 +139,8 @@ void ajouterequipement(ListeEquipement *LE){
     fichierequipement(LE);
 }
 
-void utilisermedicament(ListeMedicament *LM){
-    char nom[30];
+void utilisermedicament(ListeMedicament *LM, char nom[30]){
+    
      printf("Veuillez entrer le nom du medicament a utiliser  : ");
     scanf("%s", nom);
     while(getchar() != '\n');
@@ -160,7 +160,7 @@ void utilisermedicament(ListeMedicament *LM){
 }
 
 
-void utiliserequipement(ListeEquipement *LE){
+void utiliserequipement(ListeEquipement *LE, char nom[30]){
     char nom[30];
      printf("Veuillez entrer le nom de l'equipement a utiliser  : ");
     scanf("%s", nom);
