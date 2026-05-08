@@ -146,14 +146,16 @@ void SupprimerObservation(ListeObservation *ListeO,ListeLit *ListeL){
         return;
     }
     AfficherListeObservation(ListeO);
-    int numlit;
-    do {
-        if (numlit != -1 || numlit <0 || numlit > ListeL->total){
-             printf(RED" Numero invalide.\n" RESET);
-        }
-        printf("Numero du lit a liberer : ");
-        numlit = saisirChoix();
+    int numlit=-1;
+    printf("Numero du lit a liberer : ");
+    numlit = saisirChoix();
+    if (numlit != -1 || numlit <0 || numlit > ListeL->total){
+     do {    
+         printf(RED" Numero invalide.\n" RESET);
+         printf("Numero du lit a liberer : ");
+         numlit = saisirChoix();
     } while (numlit <0 || numlit > ListeL->total || numlit==-1);
+   }
     
     Observation *courant   = ListeO->tete;
     Observation *precedent = NULL;

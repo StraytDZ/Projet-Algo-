@@ -183,8 +183,8 @@ void menumedicament() {
     printf(RED "+======================================+\n" RESET);
     printf(CYAN "|                                      |\n" RESET);
     printf(CYAN "|  " YELLOW "1" CYAN " - Ajouter un medicament           |\n" RESET);
-    printf(CYAN "|  " YELLOW "3" CYAN " - Afficher stock medicaments      |\n" RESET);
-    printf(CYAN "|  " RED    "4" CYAN " - Quitter                         |\n" RESET);
+    printf(CYAN "|  " YELLOW "2" CYAN " - Afficher stock medicaments      |\n" RESET);
+    printf(CYAN "|  " RED    "3" CYAN " - Quitter                         |\n" RESET);
     printf(CYAN "|                                      |\n" RESET);
     printf(RED "+======================================+\n" RESET);
     printf(GREEN "                       Choix : " RESET);
