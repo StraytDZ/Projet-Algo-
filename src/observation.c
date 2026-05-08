@@ -149,7 +149,7 @@ void SupprimerObservation(ListeObservation *ListeO,ListeLit *ListeL){
     int numlit=-1;
     printf("Numero du lit a liberer : ");
     numlit = saisirChoix();
-    if (numlit != -1 || numlit <0 || numlit > ListeL->total){
+    if (numlit == -1 || numlit <= 0 || numlit > ListeL->total){
      do {    
          printf(RED" Numero invalide.\n" RESET);
          printf("Numero du lit a liberer : ");
@@ -173,6 +173,7 @@ void SupprimerObservation(ListeObservation *ListeO,ListeLit *ListeL){
     ListeL->Tlit[numlit-1].etat    = NOCCUPE;
     ListeL->Tlit[numlit-1].patient = NULL;
     ListeL->indispo--;
+    sauvegarderLit(ListeL);
     sauvegarderObservations(courant);
     if (precedent == NULL)
         ListeO->tete = courant->suivant;
