@@ -23,8 +23,9 @@ Patient *CallPatient(ListeTicket *ListeT, ListeUrgence *ListeU,ListePatient *Lis
         }
     Patient *patient = ListeT->tete->client;
     patient->etat = CONSULTATION;
-    patient->debutConsulation = time(NULL);
+    ListeT->tete = ListeT->tete->suivant;
     ListeP->attente--;
+    patient->debutConsulation = time(NULL);
     sauvegarderPatients(patient);
     return patient;
 }

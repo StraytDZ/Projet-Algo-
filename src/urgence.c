@@ -27,7 +27,6 @@ ListeUrgence* AddUrgence(ListeUrgence *ListeU, ListeTicket *ListeT){
     printf("Nom : ");    scanf(" %[^\n]", patientEnUrgence->nom);
     printf("Prenom : "); scanf(" %[^\n]", patientEnUrgence->prenom);
     printf("ID : ");     scanf(" %[^\n]", patientEnUrgence->id);
-    printf("\tAge : ");
     do {
     printf("\tAge : ");
     Age = saisirChoix();

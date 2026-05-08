@@ -53,6 +53,29 @@ typedef struct ListePatient {
     int sortis;
     int transferes;
 }ListePatient;
+typedef struct Medicament {
+    char nom[30];
+    int quantite;
+} Medicament;
+
+#define MAX_MEDICAMENTS 100
+
+typedef struct ListeMedicament {
+    Medicament medicaments[MAX_MEDICAMENTS];
+    int total;
+} ListeMedicament;
+
+typedef struct Equipement {
+    char nom[30];
+    int quantite;
+} Equipement;
+
+#define MAX_EQUIPEMENTS 100
+
+typedef struct ListeEquipement {
+    Equipement equipements[MAX_EQUIPEMENTS];
+    int total;
+} ListeEquipement;
 typedef enum {
     OCCUPE,
     NOCCUPE,
@@ -108,29 +131,6 @@ typedef struct Statistique {
     int attenteUrgence;
 } Statistique;  
  
-typedef struct Medicament {
-    char nom[30];
-    int quantite;
-} Medicament;
-
-#define MAX_MEDICAMENTS 100
-
-typedef struct ListeMedicament {
-    Medicament medicaments[MAX_MEDICAMENTS];
-    int total;
-} ListeMedicament;
-
-typedef struct Equipement {
-    char nom[30];
-    int quantite;
-} Equipement;
-
-#define MAX_EQUIPEMENTS 100
-
-typedef struct ListeEquipement {
-    Equipement equipements[MAX_EQUIPEMENTS];
-    int total;
-} ListeEquipement;
 
 #define RED    "\033[91m"
 #define CYAN   "\033[96m"

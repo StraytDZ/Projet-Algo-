@@ -603,6 +603,6 @@ void NettoyerPatientsSortis(ListePatient *ListeP) {
     }
 
     if (patientsNettoyes > 0) {
-        printf(GREEN "%d patient(s) SORTI(S) ont ete sauvegardes et liberes de la RAM.\\n" RESET, patientsNettoyes);
+        printf(GREEN "%d patient(s) SORTI(S) ont ete sauvegardes et liberes de la RAM.\n" RESET, patientsNettoyes);
     }
 }

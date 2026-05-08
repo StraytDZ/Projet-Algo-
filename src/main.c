@@ -162,7 +162,7 @@ int main() {
                                 choixEquip = saisirChoix();
                                 switch(choixEquip) {
                                     case 1 : 
-                                        ajouterequipement(&LE);
+                                        ajouterequipement(&LE); 
                                         pause();
                                     break;
                                     

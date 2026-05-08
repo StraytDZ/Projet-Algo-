@@ -7,7 +7,7 @@ void gererlit(ListeLit *L);
 void afficherstatistique(ListePatient *LP, ListeLit *LL, ListeUrgence *LU, Statistique *stat);
 void afficherstock(ListeMedicament *LM);
 void afficherstockequipement(ListeEquipement *LE);
-void verfierfindeMedoc(ListeMedicament *LM, ListeEquipement *LE);
+void verfierfindeStock(ListeMedicament *LM, ListeEquipement *LE);
 void ajoutermedicament(ListeMedicament *LM);
 void ajouterequipement(ListeEquipement *LE);
 void utilisermedicament(ListeMedicament *LM, char *nomUtilise);
