@@ -140,16 +140,17 @@ void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, Li
         }
     }
     patientOB->suivant = NULL;
-            if(ListeO->tete == NULL)
+    if(ListeO->tete == NULL)
         ListeO->tete = patientOB;
     else {
     Observation *courant = ListeO->tete;
     while(courant->suivant != NULL) courant = courant->suivant;
     courant->suivant = patientOB;
+    }
     ListeO->compteur++;
     ListeP->observation++;
     ListeP->attente--;
-}
+
 }
 
 void afficherObservation(ListeObservation *ListeO)

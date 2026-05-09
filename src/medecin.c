@@ -25,6 +25,7 @@ Patient *CallPatient(ListeTicket *ListeT, ListeUrgence *ListeU, ListePatient *Li
     if (ListeT->tete == NULL)
     {
         printf("Aucun patient en file d'attente.\n");
+        return NULL;
     }
     Patient *patient = ListeT->tete->client;
     patient->etat = CONSULTATION;
