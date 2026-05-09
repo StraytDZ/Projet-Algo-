@@ -19,13 +19,12 @@ Patient *CallPatient(ListeTicket *ListeT, ListeUrgence *ListeU, ListePatient *Li
         patientUrgence->debutConsulation = time(NULL);
         sauvegarderPatients(patientUrgence);
         free(urgence);
-        return patientUrgence;
+        return patientUrgence;   
     }
 
     if (ListeT->tete == NULL)
     {
         printf("Aucun patient en file d'attente.\n");
-        return NULL;
     }
     Patient *patient = ListeT->tete->client;
     patient->etat = CONSULTATION;
