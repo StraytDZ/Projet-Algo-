@@ -161,13 +161,12 @@ void chargerTickets(ListeTicket *listeT)
 void verifierNouveauJour(ListeTicket *ListeT)
 {
     time_t maintenant = time(NULL);
-    struct tm *tmMaintenant = localtime(&maintenant);
-    struct tm *tmDernier = localtime(&ListeT->dernierReset);
+    struct tm tmMaintenant = *localtime(&maintenant);           
+    struct tm tmDernier    = *localtime(&ListeT->dernierReset); 
     // Si le jour a changé alors on met le compteur a 0
-    if (tmMaintenant->tm_mday != tmDernier->tm_mday ||
-        tmMaintenant->tm_mon != tmDernier->tm_mon ||
-        tmMaintenant->tm_year != tmDernier->tm_year)
-    {
+    if (tmMaintenant.tm_mday != tmDernier.tm_mday ||  
+    tmMaintenant.tm_mon  != tmDernier.tm_mon  ||
+    tmMaintenant.tm_year != tmDernier.tm_year) {
 
         ListeT->compteur = 0;
         ListeT->dernierReset = maintenant;

@@ -208,6 +208,7 @@ int main() {
                sauvegarderLit(&lit);
                sauvegarderUrgences(&urgences);
                NettoyerPatientsSortis(&patients);
+               sauvegarderHistorique();
             break;
            }
     }while(choix != 4);

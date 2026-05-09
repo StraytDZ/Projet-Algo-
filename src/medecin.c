@@ -57,9 +57,6 @@ void PatientOrdonnance(Patient *patientEnConsult, ListePatient *ListeP, ListeTic
         patientEnConsult->heure.sorti = time(NULL);
         patientEnConsult->dureeConsultation = time(NULL) - patientEnConsult->debutConsulation;
         ListeP->sortis++;
-        Ticket *tmp = ListeT->tete;
-        ListeT->tete = ListeT->tete->suivant;
-        free(tmp);
         SaveTicket(ListeT);
         sauvegarderPatients(patientEnConsult);
     }
@@ -80,9 +77,6 @@ void transferer(Patient *patientEnConsult, ListePatient *ListeP, ListeTicket *Li
         patientEnConsult->etat = TRANSFERER;
         patientEnConsult->heure.sorti = time(NULL);
         ListeP->transferes++;
-        Ticket *tmp = ListeT->tete;
-        ListeT->tete = ListeT->tete->suivant;
-        free(tmp);
         SaveTicket(ListeT);
         sauvegarderPatients(patientEnConsult);
     }

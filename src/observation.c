@@ -139,9 +139,17 @@ void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, Li
             patientEnConsultation->ticket = NULL;
         }
     }
-
+    patientOB->suivant = NULL;
+            if(ListeO->tete == NULL)
+        ListeO->tete = patientOB;
+    else {
+    Observation *courant = ListeO->tete;
+    while(courant->suivant != NULL) courant = courant->suivant;
+    courant->suivant = patientOB;
+    ListeO->compteur++;
     ListeP->observation++;
     ListeP->attente--;
+}
 }
 
 void afficherObservation(ListeObservation *ListeO)
@@ -283,12 +291,14 @@ void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL, ListeMedica
             patientCible->lit = numlit;
             ListeL->Tlit[numlit - 1].etat = OCCUPE;
             ListeL->Tlit[numlit - 1].patient = patientCible->patient;
+            sauvegarderObservations(patientCible);
             break;
         }
         case 2:
         {
             printf("Donner le nouveau traitement a suivre : ");
             scanf(" %[^\n]", patientCible->traitement);
+            sauvegarderObservations(patientCible);
             break;
         }
         case 3:
@@ -301,6 +311,7 @@ void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL, ListeMedica
             char buffer[20];
             strftime(buffer, 20, "%d/%m/%Y", localtime(&patientCible->finObservation));
             printf("Nouvelle date de fin : %s\n", buffer);
+            sauvegarderObservations(patientCible);
             pause();
             break;
         }
@@ -329,6 +340,7 @@ void ModifierObservation(ListeObservation *ListeO, ListeLit *ListeL, ListeMedica
                 printf("voulez vous lui donnez un autre medicament ? (1 - oui / 0 - non) : ");
                 scanf("%d", &reponse);
             }
+            sauvegarderObservations(patientCible);
             break;
         }
         }
