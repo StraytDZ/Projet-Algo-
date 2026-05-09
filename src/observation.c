@@ -140,7 +140,7 @@ void AddObservation(Patient *patientEnConsultation, ListeObservation *ListeO, Li
         }
     }
     patientOB->suivant = NULL;
-            if(ListeO->tete == NULL)
+    if(ListeO->tete == NULL)
         ListeO->tete = patientOB;
     else {
     Observation *courant = ListeO->tete;
